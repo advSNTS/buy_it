@@ -59,6 +59,12 @@ fun CirclePreview(){
 }
 
 //panel principal
+/*
+Incluye los composables :
+Botones de login, otras formas, y checkbox
+Campos de texto
+Logo
+ */
 //TODO: volverlo vidrio
 @Composable
 fun GlassPanel(
@@ -110,6 +116,8 @@ fun GlassPanelPreview(){
     GlassPanel()
 }
 
+//Logo principal
+//TODO: Degradado
 @Composable
 fun LogoMessage(
     modifier: Modifier = Modifier,
@@ -134,6 +142,8 @@ fun LogoMessagePreview(){
     LogoMessage()
 }
 
+//Imput de texto
+//Recibe el texto como parámetro para ser reutilizado
 @Composable
 fun TextInput(
     modifier: Modifier = Modifier,
@@ -159,6 +169,7 @@ fun TextInputPreview(){
     TextInput(text="Default")
 
 }
+
 
 @Composable
 fun CheckAndText(
