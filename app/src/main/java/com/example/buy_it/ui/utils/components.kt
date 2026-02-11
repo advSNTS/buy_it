@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -63,7 +64,10 @@ fun GlassPanel(
         modifier = modifier
             .width(352.dp)
             .height(800.dp)
-            .background(color = colorResource(R.color.glasswhite), shape = RoundedCornerShape(size = 25.dp)),
+            .background(
+                color = colorResource(R.color.glasswhite),
+                shape = RoundedCornerShape(size = 25.dp)
+            ),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
@@ -71,15 +75,19 @@ fun GlassPanel(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LogoMessage(modifier = Modifier.padding(top = 35.dp, bottom = 40.dp))
-            TextInput(text="E-mail:")
+            TextInput(text= stringResource(R.string.e_mail))
             TextInput(text ="Contraseña")
             CheckAndText(modifier = Modifier.padding(top = 10.dp))
             Text(
                 text = "¿Olvidó su contraseña?",
                 textDecoration = TextDecoration.Underline,
             )
-            MainButton(modifier = Modifier.padding(top = 20.dp).fillMaxWidth(),text = "Iniciar Sesión")
-            SecondaryButton(modifier = Modifier.padding(bottom = 40.dp).fillMaxWidth(),text = "Crear Cuenta")
+            MainButton(modifier = Modifier
+                .padding(top = 20.dp)
+                .fillMaxWidth(),text = "Iniciar Sesión")
+            SecondaryButton(modifier = Modifier
+                .padding(bottom = 40.dp)
+                .fillMaxWidth(),text = "Crear Cuenta")
             Text(modifier = Modifier.padding(bottom = 20.dp),text = "Otras formas de iniciar sesión:", fontWeight = FontWeight(510), fontSize = 16.sp)
             Row() {
                 LoginOption(Modifier.size(74.dp),backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
