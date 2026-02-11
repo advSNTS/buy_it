@@ -84,7 +84,8 @@ fun GlassPanel(
             )
             MainButton(modifier = Modifier
                 .padding(top = 20.dp)
-                .fillMaxWidth(),text = "Iniciar Sesión")
+                .fillMaxWidth(),text = stringResource(R.string.iniciar_sesion)
+            )
             SecondaryButton(modifier = Modifier
                 .padding(bottom = 40.dp)
                 .fillMaxWidth(),text = "Crear Cuenta")

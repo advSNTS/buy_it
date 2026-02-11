@@ -3,4 +3,5 @@
     <string name="e_mail">E-mail:</string>
     <string name="contrasenna">Contraseña</string>
     <string name="olvido_su_contrasenna">¿Olvidó su contraseña?</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
 </resources>
