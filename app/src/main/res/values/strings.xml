@@ -4,4 +4,5 @@
     <string name="contrasenna">Contraseña</string>
     <string name="olvido_su_contrasenna">¿Olvidó su contraseña?</string>
     <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="crear_cuenta">Crear Cuenta</string>
 </resources>

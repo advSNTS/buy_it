@@ -88,7 +88,8 @@ fun GlassPanel(
             )
             SecondaryButton(modifier = Modifier
                 .padding(bottom = 40.dp)
-                .fillMaxWidth(),text = "Crear Cuenta")
+                .fillMaxWidth(),text = stringResource(R.string.crear_cuenta)
+            )
             Text(modifier = Modifier.padding(bottom = 20.dp),text = "Otras formas de iniciar sesión:", fontWeight = FontWeight(510), fontSize = 16.sp)
             Row() {
                 LoginOption(Modifier.size(74.dp),backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
