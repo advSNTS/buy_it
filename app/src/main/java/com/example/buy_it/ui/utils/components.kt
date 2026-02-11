@@ -79,7 +79,7 @@ fun GlassPanel(
             TextInput(text = stringResource(R.string.contrasenna))
             CheckAndText(modifier = Modifier.padding(top = 10.dp))
             Text(
-                text = "¿Olvidó su contraseña?",
+                text = stringResource(R.string.olvido_su_contrasenna),
                 textDecoration = TextDecoration.Underline,
             )
             MainButton(modifier = Modifier
