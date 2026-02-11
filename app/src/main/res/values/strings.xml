@@ -5,4 +5,5 @@
     <string name="olvido_su_contrasenna">¿Olvidó su contraseña?</string>
     <string name="iniciar_sesion">Iniciar Sesión</string>
     <string name="crear_cuenta">Crear Cuenta</string>
+    <string name="otras_formas_de_iniciar_sesion">Otras formas de iniciar sesión:</string>
 </resources>
