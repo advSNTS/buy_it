@@ -23,6 +23,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
@@ -119,6 +121,14 @@ fun GlassPanelPreview(){
 
 //Logo principal
 //TODO: Degradado, definir color por resource
+/*
+Idea del degradado: debe estar a -58 grados (de figma)
+con el primer color graybluebuyit en 17% y el segundo navybluebuyit en la posicion 100%
+Offset(x,y) usa coordenadas cartesianas, por lo que
+Posicion de x = cos(-58) = 0.5299
+posicion de y = sen(-58) = -0.848
+El degradado lo hace brush
+ */
 @Composable
 fun LogoMessage(
     modifier: Modifier = Modifier,
@@ -127,13 +137,20 @@ fun LogoMessage(
 ){
     Text(
         text = "buy it.",
-        modifier = modifier,
+
         style = TextStyle(
             fontSize = tamano,
             fontWeight = FontWeight(510),
-            color = Color(0xFF596884),
+            brush = Brush.linearGradient(
+                colorStops = arrayOf(
+                    0.17f to colorResource(R.color.graybluebuyit),
+                    1f to colorResource(R.color.navybluebuyit)
+                ),
+                start = Offset(0f, 0f),
+                end = Offset(0.5299f*1000f, -0.848f*100f) //x es el seno y y el cosenop
+            ), //libreria de gradientes
             textAlign = TextAlign.Center
-        )
+        ), modifier = modifier
     )
 }
 
