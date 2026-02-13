@@ -1,9 +1,8 @@
-package com.example.buy_it.ui
+package com.example.buy_it.ui.screens.login
 
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -13,8 +12,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
-import com.example.buy_it.ui.utils.Circle
-import com.example.buy_it.ui.utils.GlassPanel
+import com.example.buy_it.ui.components.Circle
+import com.example.buy_it.ui.components.GlassPanel
 
 
 /*

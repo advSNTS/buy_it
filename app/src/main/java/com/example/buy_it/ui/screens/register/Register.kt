@@ -1,4 +1,4 @@
-package com.example.buy_it.ui
+package com.example.buy_it.ui.screens.register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -23,11 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.R
-import com.example.buy_it.ui.utils.CheckAndText
-import com.example.buy_it.ui.utils.FondoBlancoRegister
-import com.example.buy_it.ui.utils.MainButton
-import com.example.buy_it.ui.utils.PanelGlass
-import com.example.buy_it.ui.utils.TextInput
+import com.example.buy_it.ui.components.CheckAndText
+import com.example.buy_it.ui.components.FondoBlancoRegister
+import com.example.buy_it.ui.components.MainButton
+import com.example.buy_it.ui.components.PanelGlass
+import com.example.buy_it.ui.components.TextInput
 
 @Composable
 fun Register(

@@ -1,4 +1,4 @@
-package com.example.buy_it.ui
+package com.example.buy_it.ui.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
-import com.example.buy_it.ui.utils.PictureWithCircle
-import com.example.buy_it.ui.utils.ProfileCircles
-import com.example.buy_it.ui.utils.ProfilePost
-import com.example.buy_it.ui.utils.ProfileText
+import com.example.buy_it.ui.components.PictureWithCircle
+import com.example.buy_it.ui.components.ProfileCircles
+import com.example.buy_it.ui.components.ProfilePost
+import com.example.buy_it.ui.components.ProfileText
 
 @Composable
 fun Profile(

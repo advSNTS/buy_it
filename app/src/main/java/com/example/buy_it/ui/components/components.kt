@@ -1,7 +1,6 @@
-package com.example.buy_it.ui.utils
+package com.example.buy_it.ui.components
 
 import androidx.annotation.ColorRes
-import androidx.annotation.OpenForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

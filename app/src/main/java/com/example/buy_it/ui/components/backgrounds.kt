@@ -1,4 +1,4 @@
-package com.example.buy_it.ui.utils
+package com.example.buy_it.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,7 +31,7 @@ fun FondoBlanco(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.TopStart).offset(x=-32.dp).size(270.dp)
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -32.dp).size(270.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -40,7 +40,7 @@ fun FondoBlanco(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.TopEnd).offset(x = 135.dp,y=200.dp).size(287.dp)
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 135.dp, y = 200.dp).size(287.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -49,7 +49,8 @@ fun FondoBlanco(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.TopStart).offset(x=-16.dp, y = 450.dp).size(270.dp)
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -16.dp, y = 450.dp)
+                .size(270.dp)
         )
     }
 }
@@ -75,7 +76,8 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.CenterStart).offset(x=-40.dp,y=-110.dp).size(239.dp)
+            modifier = Modifier.align(Alignment.CenterStart).offset(x = -40.dp, y = -110.dp)
+                .size(239.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -84,7 +86,7 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.TopEnd).offset(x = 105.dp,y=20.dp).size(270.dp)
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 105.dp, y = 20.dp).size(270.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -93,7 +95,8 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.BottomEnd).offset(x = 40.dp,y=-150.dp).size(200.dp)
+            modifier = Modifier.align(Alignment.BottomEnd).offset(x = 40.dp, y = -150.dp)
+                .size(200.dp)
         )
     }
 }
@@ -119,7 +122,7 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.Center).offset(x=-85.dp,y=-50.dp).size(239.dp)
+            modifier = Modifier.align(Alignment.Center).offset(x = -85.dp, y = -50.dp).size(239.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -128,7 +131,7 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.TopEnd).offset(x = 35.dp,y=20.dp).size(270.dp)
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 35.dp, y = 20.dp).size(270.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -137,7 +140,8 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.7f,
-            modifier = Modifier.align(Alignment.BottomEnd).offset(x = 40.dp,y=-150.dp).size(200.dp)
+            modifier = Modifier.align(Alignment.BottomEnd).offset(x = 40.dp, y = -150.dp)
+                .size(200.dp)
         )
     }
 }
@@ -189,7 +193,7 @@ fun ProfileCircles(
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.8f,
-            modifier = Modifier.align(Alignment.TopCenter).offset(y=-40.dp)
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -40.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -198,7 +202,7 @@ fun ProfileCircles(
             angulo = -101f,
             inicioGradiente = 0.1f,
             finGradiente = 0.5f,
-            modifier = Modifier.align(Alignment.TopStart).offset(x=-60.dp,y=-120.dp)
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -60.dp, y = -120.dp)
         )
         Elipse(
             colorStart = R.color.graybluebuyit,
@@ -207,7 +211,7 @@ fun ProfileCircles(
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.5f,
-            modifier = Modifier.align(Alignment.TopEnd).offset(x=60.dp,y=-120.dp)
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 60.dp, y = -120.dp)
         )
 
     }
