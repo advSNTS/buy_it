@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
-import com.example.buy_it.ui.components.PictureWithCircle
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.components.ProfilePost
 import com.example.buy_it.ui.components.ProfileText
+import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
 
 @Composable
 fun Profile(
@@ -39,9 +39,7 @@ fun Profile(
                 .offset(y = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            PictureWithCircle(
-                modifier = Modifier.offset(y=10.dp)
-            )
+            PictureWithCircle()
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
