@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.utils
 
 import androidx.annotation.ColorRes
+import androidx.annotation.OpenForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -113,6 +114,29 @@ fun ElipsePreview(){
         finGradiente = 0.7f
 
     )
+}
+
+@Composable
+fun CompleteELipse(
+    @ColorRes colorStart: Int = R.color.graybluebuyit,
+    modifier: Modifier = Modifier,
+    sizeDraw: Dp = 10.dp,
+){
+    val color1 = colorResource(id = colorStart)
+    Canvas(
+        modifier = modifier.size(sizeDraw)
+    ) {
+        drawCircle(
+            color = color1,
+            radius = size.minDimension/2,
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun CompleteElipsePreview(){
+    CompleteELipse(sizeDraw = 100.dp)
 }
 
 
@@ -318,7 +342,7 @@ fun MainButton(
 @Composable
 @Preview(showBackground = true)
 fun MainButtonPreview(){
-    MainButton(text="Iniciar Sesión")
+    MainButton(text=stringResource(R.string.nombre))
 
 }
 
@@ -382,4 +406,66 @@ fun LoginOption(
 @Preview(showBackground = false)
 fun LoginOptionPreview(){
     LoginOption(backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
+}
+
+@Composable
+fun PictureWithCircle(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ){
+        CompleteELipse(
+            sizeDraw = 175.dp
+        )
+        Image(
+            modifier = Modifier.size(160.dp),
+            painter = painterResource(R.drawable.logo),
+            contentDescription = ""
+        )
+    }
+
+}
+
+@Composable
+@Preview
+fun PictureWithCirclePreview(){
+    PictureWithCircle()
+}
+
+@Composable
+fun ProfileText(
+    modifier: Modifier= Modifier,
+    text: String = "",
+){
+    Text(
+        text=text,
+        fontSize = 20.sp,
+        fontWeight = FontWeight(500)
+    )
+}
+
+@Composable
+@Preview
+fun ProfileTextPreview(){
+    ProfileText(text="Prueba")
+}
+
+@Composable
+fun ProfilePost(
+    modifier: Modifier= Modifier,
+    img: Int = R.drawable.cafe,
+){
+    Image(
+        painter = painterResource(img),
+        contentDescription = "",
+        modifier = modifier.size(170.dp)
+    )
+}
+
+@Composable
+@Preview
+fun ProfilePostPreview(){
+    ProfilePost()
 }

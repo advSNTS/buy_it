@@ -6,4 +6,20 @@
     <string name="iniciar_sesion">Iniciar Sesión</string>
     <string name="crear_cuenta">Crear Cuenta</string>
     <string name="otras_formas_de_iniciar_sesion">Otras formas de iniciar sesión:</string>
+    <string name="_9">9</string>
+    <string name="productos">Productos</string>
+    <string name="_1_6k">1.6k</string>
+    <string name="seguidores">Seguidores</string>
+    <string name="_128">128</string>
+    <string name="seguidos">Seguidos</string>
+    <string name="empty" />
+    <string name="volver">Volver</string>
+    <string name="nombre_de_usuario">Nombre de Usuario:</string>
+    <string name="email">Email:</string>
+    <string name="contrase_a">Contraseña:</string>
+    <string name="confirmar_contrase_a">"Confirmar contraseña: "</string>
+    <string name="nombre">Nombre:</string>
+    <string name="buy_it">Buy it.</string>
+    <string name="asteriscos">*******</string>
+    <string name="guardar_cambios">Guardar Cambios</string>
 </resources>
