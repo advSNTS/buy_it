@@ -104,6 +104,15 @@ fun Profile(
                 .size(50.dp)
 
         )
+        Image(
+            painter = painterResource(R.drawable.edit),
+            contentDescription = stringResource(R.string.empty),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth()
+                .size(40.dp)
+                .offset(x=100.dp,y=140.dp)
+        )
     }
 
 }
