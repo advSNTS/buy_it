@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">buy_it</string>
+    <string name="e_mail">E-mail:</string>
+    <string name="contrasenna">Contraseña</string>
+    <string name="olvido_su_contrasenna">¿Olvidó su contraseña?</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="crear_cuenta">Crear Cuenta</string>
+    <string name="otras_formas_de_iniciar_sesion">Otras formas de iniciar sesión:</string>
+    <string name="_9">9</string>
+    <string name="productos">Productos</string>
+    <string name="_1_6k">1.6k</string>
+    <string name="seguidores">Seguidores</string>
+    <string name="_128">128</string>
+    <string name="seguidos">Seguidos</string>
+    <string name="empty" />
+    <string name="volver">Volver</string>
+    <string name="nombre_de_usuario">Nombre de Usuario:</string>
+    <string name="email">Email:</string>
+    <string name="contrase_a">Contraseña:</string>
+    <string name="confirmar_contrase_a">"Confirmar contraseña: "</string>
+    <string name="nombre">Nombre:</string>
+    <string name="buy_it">Buy it.</string>
+    <string name="asteriscos">*******</string>
+    <string name="guardar_cambios">Guardar Cambios</string>
+    <string name="barra_de_navegacion">Barra de navegacion</string>
+    <string name="editar_perfil">Editar perfil</string>
+    <string name="imagen_de_elipse">Imagen de elipse</string>
+    <string name="fondo_de_una_forma_alterna_de_inicio_de_sesion">Fondo de una forma alterna de inicio de sesion</string>
+    <string name="logo_de_forma_alterna_de_inicio_de_sesion">Logo de forma alterna de inicio de sesion</string>
+    <string name="logo_de_la_pagina">logo de la pagina</string>
+    <string name="producto">producto</string>
+</resources>
