@@ -48,6 +48,8 @@ Logo
 //TODO: volverlo vidrio
 @Composable
 fun GlassPanel(
+    loginButtonPressed: () -> Unit,
+    registerButtonPressed: () -> Unit,
     modifier : Modifier = Modifier
 ){
     var email by remember { mutableStateOf("") }
@@ -81,11 +83,13 @@ fun GlassPanel(
             )
             MainButton(modifier = Modifier
                 .padding(top = 20.dp)
-                .fillMaxWidth(),text = stringResource(R.string.iniciar_sesion)
+                .fillMaxWidth(),text = stringResource(R.string.iniciar_sesion),
+                onClick = loginButtonPressed
             )
             SecondaryButton(modifier = Modifier
                 .padding(bottom = 40.dp)
-                .fillMaxWidth(),text = stringResource(R.string.crear_cuenta)
+                .fillMaxWidth(),text = stringResource(R.string.crear_cuenta),
+                onClick = registerButtonPressed
             )
             Text(modifier = Modifier.padding(bottom = 20.dp),text = stringResource(R.string.otras_formas_de_iniciar_sesion), fontWeight = FontWeight(510), fontSize = 16.sp)
             Row() {
@@ -101,7 +105,7 @@ fun GlassPanel(
 @Composable
 @Preview(showBackground = false)
 fun GlassPanelPreview(){
-    GlassPanel()
+    GlassPanel({},{})
 }
 
 /*

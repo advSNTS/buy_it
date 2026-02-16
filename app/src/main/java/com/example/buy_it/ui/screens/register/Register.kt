@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.screens.register
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,8 @@ import com.example.buy_it.ui.components.TextInput
 
 @Composable
 fun Register(
+    registerButtonPressed: () -> Unit,
+    onBackScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     var username by remember { mutableStateOf("") }
@@ -58,6 +61,9 @@ fun Register(
                 .padding(start = 30.dp)
                 .offset(y = 40.dp)
                 .size(35.dp)
+                .clickable{
+                    onBackScreen
+                }
         )
         Column(
             modifier = Modifier
@@ -110,7 +116,8 @@ fun Register(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
-                text = stringResource(R.string.crear_cuenta)
+                text = stringResource(R.string.crear_cuenta),
+                onClick = registerButtonPressed
             )
 
         }
@@ -121,5 +128,5 @@ fun Register(
 @Composable
 @Preview(showBackground = false)
 fun RegisterPreview(){
-    Register()
+    Register({},{})
 }

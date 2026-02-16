@@ -46,6 +46,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.10.3")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation("androidx.compose.material:material-icons-extended:$2024.04.01")
+
     implementation(libs.androidx.graphics.shapes)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     testImplementation(libs.junit)

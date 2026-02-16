@@ -33,50 +33,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Buy_itTheme{
-                Scaffold(
-
-                ) {
-                    Login(
-                        modifier = Modifier.padding(it)
-                    )
-                }
+                BuyIt()
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BuyItTopAppBar(
-
-){
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = "buy it.",
-
-                style = TextStyle(
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight(510),
-                    brush = Brush.linearGradient(
-                        colorStops = arrayOf(
-                            0.17f to colorResource(R.color.graybluebuyit),
-                            1f to colorResource(R.color.navybluebuyit)
-                        ),
-                        start = Offset(0f, 0f),
-                        end = Offset(0.5299f*1000f, -0.848f*100f) //x es el seno y y el cosenop
-                    ), //libreria de gradientes
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier
-            )
-        }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BuyItTopAppBarPreview(){
-    BuyItTopAppBar()
-
-}

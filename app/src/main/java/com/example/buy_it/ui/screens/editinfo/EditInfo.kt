@@ -28,6 +28,7 @@ import com.example.buy_it.ui.components.TextInput
 
 @Composable
 fun EditInfo(
+    onSaveChanges : () -> Unit,
     modifier: Modifier = Modifier,
 ){
     var name by remember{ mutableStateOf("") }
@@ -91,7 +92,8 @@ fun EditInfo(
             Spacer(Modifier.height(60.dp))
             MainButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.guardar_cambios)
+                text = stringResource(R.string.guardar_cambios),
+                onClick = onSaveChanges,
             )
 
         }
@@ -101,5 +103,5 @@ fun EditInfo(
 @Composable
 @Preview(showBackground = true)
 fun EditInfoPreview(){
-    EditInfo()
+    EditInfo({})
 }

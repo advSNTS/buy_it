@@ -314,11 +314,12 @@ fun CheckAndTextPreview(){
 //Boton Iniciar Sesión, el texto es pasado por parámetro
 @Composable
 fun MainButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     text: String
 ){
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.blackbuyit)
@@ -333,18 +334,19 @@ fun MainButton(
 @Composable
 @Preview(showBackground = true)
 fun MainButtonPreview(){
-    MainButton(text=stringResource(R.string.nombre))
+    MainButton(text=stringResource(R.string.nombre), onClick = {})
 
 }
 
 //Boton Registrarse, el texto es pasado por parámetro
 @Composable
 fun SecondaryButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     text: String,
 ){
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.white),
@@ -360,7 +362,7 @@ fun SecondaryButton(
 @Composable
 @Preview(showBackground = false)
 fun SecondaryButtonPreview(){
-    SecondaryButton(text = "Crear cuenta")
+    SecondaryButton(text = "Crear cuenta", onClick = {})
 }
 
 
@@ -386,10 +388,11 @@ fun ProfileTextPreview(){
 fun ProfilePost(
     modifier: Modifier= Modifier,
     img: Int = R.drawable.cafe,
+    descripcion: String,
 ){
     Image(
         painter = painterResource(img),
-        contentDescription = stringResource(R.string.producto),
+        contentDescription = descripcion,
         modifier = modifier.size(170.dp)
     )
 }
@@ -397,7 +400,7 @@ fun ProfilePost(
 @Composable
 @Preview
 fun ProfilePostPreview(){
-    ProfilePost()
+    ProfilePost(img = R.drawable.cafe, descripcion = "Cafe")
 }
 
 @Composable

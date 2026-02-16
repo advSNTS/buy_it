@@ -23,6 +23,8 @@ TODO: volver las elipses de figura -> a círculos con degradaro (decorativo)
  */
 @Composable
 fun Login(
+    loginButtonPressed: () -> Unit,
+    registerButtonPressed: () -> Unit,
     modifier : Modifier = Modifier
 ){
     Box(
@@ -33,12 +35,12 @@ fun Login(
         Circle(painter = painterResource(R.drawable.elipse1), modifier = Modifier.align(Alignment.TopStart).offset(x=-32.dp).size(270.dp))
         Circle(painter = painterResource(R.drawable.elipse2), modifier = Modifier.align(Alignment.TopEnd).offset(x = 135.dp,y=200.dp).size(287.dp))
         Circle(painter = painterResource(R.drawable.elipse3), modifier = Modifier.align(Alignment.TopStart).offset(x=-16.dp, y = 450.dp).size(270.dp))
-        GlassPanel(modifier = Modifier.align(Alignment.Center))
+        GlassPanel(modifier = Modifier.align(Alignment.Center), loginButtonPressed = loginButtonPressed, registerButtonPressed = registerButtonPressed )
     }
 }
 
 @Composable
 @Preview(showBackground = true)
 fun LoginPreview(){
-    Login()
+    Login({},{})
 }
