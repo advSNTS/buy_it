@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -33,6 +37,12 @@ import com.example.buy_it.ui.components.TextInput
 fun Register(
     modifier: Modifier = Modifier,
 ){
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var estado by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -69,26 +79,28 @@ fun Register(
             Spacer(Modifier.height(70.dp))
             TextInput(
                 placeholder = stringResource(R.string.nombre_de_usuario),
-                item = "",
-                onItemChange = {}
+                item = username,
+                onItemChange = {username = it}
             )
             TextInput(
                 placeholder = stringResource(R.string.email),
-                item = "",
-                onItemChange = {}
+                item = email,
+                onItemChange = {email = it}
             )
             TextInput(
                 placeholder = stringResource(R.string.contrase_a),
-                item = "",
-                onItemChange = {}
+                item = password,
+                onItemChange = {password = it}
             )
             TextInput(
                 placeholder = stringResource(R.string.confirmar_contrase_a),
-                item = "",
-                onItemChange = {}
+                item = confirmPassword,
+                onItemChange = {confirmPassword = it}
             )
             Spacer(Modifier.height(20.dp))
             CheckAndText(
+                estado = estado,
+                onEstadoChange = {estado = !estado},
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)

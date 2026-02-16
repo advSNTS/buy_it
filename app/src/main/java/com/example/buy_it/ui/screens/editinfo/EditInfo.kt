@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,12 +23,18 @@ import com.example.buy_it.R
 import com.example.buy_it.ui.components.FondoBlancoEditInfo
 import com.example.buy_it.ui.components.MainButton
 import com.example.buy_it.ui.components.PanelGlass
+import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 
 @Composable
 fun EditInfo(
     modifier: Modifier = Modifier,
 ){
+    var name by remember{ mutableStateOf("") }
+    var email by remember{ mutableStateOf("") }
+    var password by remember{ mutableStateOf("") }
+    var mostrarPassword by remember { mutableStateOf(false) }
+    var icono = if(!mostrarPassword) R.drawable.hide else R.drawable.see
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -53,26 +63,30 @@ fun EditInfo(
             TextInput(
 
                 placeholder = stringResource(R.string.buy_it),
-                item = "",
-                onItemChange = {}
+                item = name,
+                onItemChange = {name = it}
             )
             Spacer(Modifier.height(10.dp))
             Text(
-                text = stringResource(R.string.nombre),
+                text = stringResource(R.string.email),
             )
             TextInput(
-                placeholder = stringResource(R.string.buy_it),
-                item = "",
-                onItemChange = {}
+                placeholder = stringResource(R.string.buyit_buyit_com),
+                item = email,
+                onItemChange = {email = it}
             )
             Spacer(Modifier.height(10.dp))
             Text(
                 text = stringResource(R.string.contrasenna),
             )
-            TextInput(
-                placeholder = stringResource(R.string.asteriscos),
-                item = "",
-                onItemChange = {}
+            PasswordInput(
+
+                placeholder = stringResource(R.string.contrasenna),
+                item = password,
+                onItemChange = {password = it},
+                icono = icono,
+                mostrar = mostrarPassword,
+                onMostrarPassword = {mostrarPassword = !mostrarPassword}
             )
             Spacer(Modifier.height(60.dp))
             MainButton(

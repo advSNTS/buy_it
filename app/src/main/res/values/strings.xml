@@ -32,4 +32,6 @@
     <string name="ajustes">ajustes</string>
     <string name="navbar_background">Navbar background</string>
     <string name="home_icon">Home icon</string>
+    <string name="buyit_buyit_com">buyit@buyit.com</string>
+    <string name="mostar_contrase_a">Mostar contraseña</string>
 </resources>

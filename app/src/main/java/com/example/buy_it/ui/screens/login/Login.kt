@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.Circle
-import com.example.buy_it.ui.components.GlassPanel
 
 
 /*

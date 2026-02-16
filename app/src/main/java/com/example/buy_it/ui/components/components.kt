@@ -19,6 +19,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -38,6 +40,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -163,67 +167,7 @@ fun CirclePreview(){
     Circle()
 }
 
-//panel principal
-/*
-Incluye los composables :
-Botones de login, otras formas, y checkbox
-Campos de texto
-Logo
- */
-//TODO: volverlo vidrio
-@Composable
-fun GlassPanel(
-    modifier : Modifier = Modifier
-){
-    var email by remember { mutableStateOf("") }
-    var password by remember {mutableStateOf("")}
 
-    Box(
-        modifier = modifier
-            .width(352.dp)
-            .height(800.dp)
-            .background(
-                color = colorResource(R.color.glasswhite),
-                shape = RoundedCornerShape(size = 25.dp)
-            ),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
-            modifier = Modifier.padding(30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LogoMessage(modifier = Modifier.padding(top = 35.dp, bottom = 40.dp))
-            TextInput(placeholder = "Email", item = email, onItemChange = {email = it})
-            TextInput(placeholder = "Contraseña", item = password, onItemChange = {password = it})
-            CheckAndText(modifier = Modifier.padding(top = 10.dp))
-            Text(
-                text = stringResource(R.string.olvido_su_contrasenna),
-                textDecoration = TextDecoration.Underline,
-            )
-            MainButton(modifier = Modifier
-                .padding(top = 20.dp)
-                .fillMaxWidth(),text = stringResource(R.string.iniciar_sesion)
-            )
-            SecondaryButton(modifier = Modifier
-                .padding(bottom = 40.dp)
-                .fillMaxWidth(),text = stringResource(R.string.crear_cuenta)
-            )
-            Text(modifier = Modifier.padding(bottom = 20.dp),text = stringResource(R.string.otras_formas_de_iniciar_sesion), fontWeight = FontWeight(510), fontSize = 16.sp)
-            Row() {
-                //Cambiar esto cuando se cambie el fondo de ciruculo de imagen a figura
-                LoginOption(Modifier.size(74.dp),backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
-                Spacer(Modifier.width(30.dp))
-                LoginOption(Modifier.size(74.dp),backgroundGlass = painterResource(R.drawable.elipse5), loginIcon = painterResource(R.drawable.apple))
-            }
-        }
-    }
-}
-
-@Composable
-@Preview(showBackground = false)
-fun GlassPanelPreview(){
-    GlassPanel()
-}
 
 //Logo principal
 //TODO: Degradado, definir color por resource
@@ -297,10 +241,48 @@ fun TextInputPreview(){
 
 }
 
+@Composable
+fun PasswordInput(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+    item: String,
+    onItemChange: (String) -> Unit,
+    mostrar: Boolean,
+    onMostrarPassword: () -> Unit,
+    icono: Int,
+) {
+    TextField(
+        value = item,
+        onValueChange = onItemChange,
+        placeholder = { Text(placeholder) },
+        visualTransformation = if (mostrar) VisualTransformation.None else PasswordVisualTransformation(),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent
+        ),
+        trailingIcon = {
+            IconButton(onClick = onMostrarPassword) {
+                Icon(
+                    painter = painterResource(icono),
+                    contentDescription = stringResource(R.string.mostar_contrase_a),
+                    modifier = Modifier.size(25.dp)
+                )
+            }
+        }
+    )
+}
+@Composable
+@Preview(showBackground = true)
+fun PasswordInputPreview(){
+    PasswordInput(placeholder = "Holas", item = "", onItemChange = {}, mostrar = false, onMostrarPassword = {}, icono = R.drawable.see)
+}
+
 //Texto de recordar
 //TODO: Volver a strinng resource
 @Composable
 fun CheckAndText(
+    estado: Boolean = false,
+    onEstadoChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ){
     Row(
@@ -308,8 +290,8 @@ fun CheckAndText(
         modifier = modifier.padding(8.dp)
     ) {
         Checkbox(
-            checked = true,
-            onCheckedChange = {},
+            checked = estado,
+            onCheckedChange = onEstadoChange,
             colors = CheckboxDefaults.colors(
                 checkedColor = colorResource(R.color.graybuyit),
                 uncheckedColor = colorResource(R.color.graybuyit),
@@ -326,7 +308,7 @@ fun CheckAndText(
 @Composable
 @Preview(showBackground = true)
 fun CheckAndTextPreview(){
-    CheckAndText()
+    CheckAndText(estado = false, onEstadoChange = {})
 }
 
 //Boton Iniciar Sesión, el texto es pasado por parámetro
@@ -381,41 +363,6 @@ fun SecondaryButtonPreview(){
     SecondaryButton(text = "Crear cuenta")
 }
 
-/*
-Opciones de login, del mockup figma: google y apple
-La imagen se le pasa por parámetro
-TODO: Que el fondo no sea imagen sino un círculo
- */
-@Composable
-fun LoginOption(
-    modifier: Modifier = Modifier,
-    backgroundGlass: Painter,
-    loginIcon: Painter,
-){
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ){
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = backgroundGlass,
-            contentDescription = stringResource(R.string.fondo_de_una_forma_alterna_de_inicio_de_sesion),
-        )
-        Image(
-            modifier = Modifier.fillMaxSize(0.7f),
-            painter = loginIcon,
-            contentDescription = stringResource(R.string.logo_de_forma_alterna_de_inicio_de_sesion)
-        )
-    }
-
-}
-
-
-@Composable
-@Preview(showBackground = false)
-fun LoginOptionPreview(){
-    LoginOption(backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
-}
 
 @Composable
 fun ProfileText(
