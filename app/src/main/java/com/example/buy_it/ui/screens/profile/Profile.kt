@@ -103,6 +103,15 @@ fun Profile(
 
         )
         Image(
+            painter = painterResource(R.drawable.settings),
+            contentDescription = stringResource(R.string.ajustes),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .fillMaxWidth()
+                .size(30.dp)
+                .offset(x = 150.dp, y = 30.dp)
+        )
+        Image(
             painter = painterResource(R.drawable.edit),
             contentDescription = stringResource(R.string.editar_perfil),
             modifier = Modifier

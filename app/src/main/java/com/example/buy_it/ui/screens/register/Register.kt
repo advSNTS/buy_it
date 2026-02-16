@@ -68,16 +68,24 @@ fun Register(
             )
             Spacer(Modifier.height(70.dp))
             TextInput(
-                text= stringResource(R.string.nombre_de_usuario)
+                placeholder = stringResource(R.string.nombre_de_usuario),
+                item = "",
+                onItemChange = {}
             )
             TextInput(
-                text = stringResource(R.string.email)
+                placeholder = stringResource(R.string.email),
+                item = "",
+                onItemChange = {}
             )
             TextInput(
-                text = stringResource(R.string.contrase_a)
+                placeholder = stringResource(R.string.contrase_a),
+                item = "",
+                onItemChange = {}
             )
             TextInput(
-                text = stringResource(R.string.confirmar_contrase_a)
+                placeholder = stringResource(R.string.confirmar_contrase_a),
+                item = "",
+                onItemChange = {}
             )
             Spacer(Modifier.height(20.dp))
             CheckAndText(

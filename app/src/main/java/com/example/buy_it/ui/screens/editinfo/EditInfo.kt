@@ -51,21 +51,28 @@ fun EditInfo(
 
             )
             TextInput(
-                text = stringResource(R.string.buy_it)
+
+                placeholder = stringResource(R.string.buy_it),
+                item = "",
+                onItemChange = {}
             )
             Spacer(Modifier.height(10.dp))
             Text(
                 text = stringResource(R.string.nombre),
             )
             TextInput(
-                text = stringResource(R.string.buy_it),
+                placeholder = stringResource(R.string.buy_it),
+                item = "",
+                onItemChange = {}
             )
             Spacer(Modifier.height(10.dp))
             Text(
                 text = stringResource(R.string.contrasenna),
             )
             TextInput(
-                text = stringResource(R.string.asteriscos)
+                placeholder = stringResource(R.string.asteriscos),
+                item = "",
+                onItemChange = {}
             )
             Spacer(Modifier.height(60.dp))
             MainButton(

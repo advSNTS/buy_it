@@ -23,6 +23,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -171,6 +175,9 @@ Logo
 fun GlassPanel(
     modifier : Modifier = Modifier
 ){
+    var email by remember { mutableStateOf("") }
+    var password by remember {mutableStateOf("")}
+
     Box(
         modifier = modifier
             .width(352.dp)
@@ -186,8 +193,8 @@ fun GlassPanel(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LogoMessage(modifier = Modifier.padding(top = 35.dp, bottom = 40.dp))
-            TextInput(text= stringResource(R.string.e_mail))
-            TextInput(text = stringResource(R.string.contrasenna))
+            TextInput(placeholder = "Email", item = email, onItemChange = {email = it})
+            TextInput(placeholder = "Contraseña", item = password, onItemChange = {password = it})
             CheckAndText(modifier = Modifier.padding(top = 10.dp))
             Text(
                 text = stringResource(R.string.olvido_su_contrasenna),
@@ -264,15 +271,18 @@ fun LogoMessagePreview(){
 @Composable
 fun TextInput(
     modifier: Modifier = Modifier,
-    text: String,
+    placeholder: String,
+    item: String,
+    onItemChange: (String) -> Unit,
 ){
     TextField(
+        placeholder = {Text(placeholder)},
         modifier = modifier,
-        value = text,
+        value = item,
         textStyle = TextStyle(
             color = colorResource(R.color.graybuyit)
         ),
-        onValueChange = {},
+        onValueChange = onItemChange,
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent
@@ -283,7 +293,7 @@ fun TextInput(
 @Composable
 @Preview(showBackground = true)
 fun TextInputPreview(){
-    TextInput(text="Default")
+    TextInput(item = "", placeholder = "Hyue", onItemChange = {})
 
 }
 
@@ -441,4 +451,44 @@ fun ProfilePost(
 @Preview
 fun ProfilePostPreview(){
     ProfilePost()
+}
+
+@Composable
+fun navbar(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier
+    ){
+        Image(
+            painter = painterResource(R.drawable.navbar),
+            contentDescription = stringResource(R.string.navbar_background)
+        )
+        Row(
+
+        ) {
+            Image(
+                painter = painterResource(R.drawable.home),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+            Image(
+                painter = painterResource(R.drawable.plus),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+            Image(
+                painter = painterResource(R.drawable.search),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+            Image(
+                painter = painterResource(R.drawable.home),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun navbarPreview(){
+    navbar()
 }

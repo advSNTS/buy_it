@@ -29,4 +29,7 @@
     <string name="logo_de_forma_alterna_de_inicio_de_sesion">Logo de forma alterna de inicio de sesion</string>
     <string name="logo_de_la_pagina">logo de la pagina</string>
     <string name="producto">producto</string>
+    <string name="ajustes">ajustes</string>
+    <string name="navbar_background">Navbar background</string>
+    <string name="home_icon">Home icon</string>
 </resources>
