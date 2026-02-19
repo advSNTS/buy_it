@@ -21,6 +21,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.R
+import com.example.buy_it.ui.theme.Buy_itTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -66,8 +68,8 @@ y = sin(angulo)
  */
 @Composable
 fun Elipse(
-    @ColorRes colorStart: Int = R.color.graybluebuyit, //anotacion de color res para recibir por color resource
-    @ColorRes colorEnd: Int = R.color.bgwhite,
+    colorStart: Color = MaterialTheme.colorScheme.primary, //anotacion de color res para recibir por color resource
+    colorEnd: Color = MaterialTheme.colorScheme.onPrimary,
     radio: Dp = 50.dp,
     angulo: Float = 45f, //angulo del gradiente
     inicioGradiente: Float = 0.5f,
@@ -75,8 +77,6 @@ fun Elipse(
     modifier: Modifier = Modifier
 ){
     //sacar los ids de los colores
-    val color1 = colorResource(id = colorStart)
-    val color2 = colorResource(id = colorEnd)
 
     //tamaño del canva
     Canvas(modifier = modifier.size(radio * 2)){
@@ -97,8 +97,8 @@ fun Elipse(
             brush = Brush.linearGradient(
                 //desde donde van los colores
                 colorStops = arrayOf(
-                    inicioGradiente to color1,
-                    finGradiente to color2
+                    inicioGradiente to colorStart,
+                    finGradiente to colorEnd
                 ),
                 start = Offset(startX, startY), //el inicio con respecto al centro
                 end = Offset(endX, endY)
@@ -112,15 +112,16 @@ fun Elipse(
 @Composable
 @Preview()
 fun ElipsePreview(){
-    Elipse(
-        colorStart = R.color.graybluebuyit,
-        colorEnd = R.color.bgwhite,
-        radio = 100.dp,
-        angulo = -71f,
-        inicioGradiente = 0.1f,
-        finGradiente = 0.7f
+    Buy_itTheme() {
+        Elipse(
+            radio = 100.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.7f
 
-    )
+        )
+    }
+
 }
 
 @Composable
@@ -224,7 +225,7 @@ fun TextInput(
         modifier = modifier,
         value = item,
         textStyle = TextStyle(
-            color = colorResource(R.color.graybuyit)
+            color = MaterialTheme.colorScheme.outline
         ),
         onValueChange = onItemChange,
         colors = TextFieldDefaults.colors(
@@ -237,7 +238,10 @@ fun TextInput(
 @Composable
 @Preview(showBackground = true)
 fun TextInputPreview(){
-    TextInput(item = "", placeholder = "Hyue", onItemChange = {})
+    Buy_itTheme() {
+        TextInput(item = "", placeholder = "Hyue", onItemChange = {})
+    }
+
 
 }
 
@@ -293,14 +297,14 @@ fun CheckAndText(
             checked = estado,
             onCheckedChange = onEstadoChange,
             colors = CheckboxDefaults.colors(
-                checkedColor = colorResource(R.color.graybuyit),
-                uncheckedColor = colorResource(R.color.graybuyit),
+                checkedColor = MaterialTheme.colorScheme.secondary,
+                uncheckedColor = MaterialTheme.colorScheme.outline,
             )
         )
         Text(
             modifier = Modifier.padding(9.dp),
             text = "Recordarme",
-            color = colorResource(R.color.graybuyit)
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }
@@ -308,10 +312,12 @@ fun CheckAndText(
 @Composable
 @Preview(showBackground = true)
 fun CheckAndTextPreview(){
-    CheckAndText(estado = false, onEstadoChange = {})
+    Buy_itTheme() {CheckAndText(estado = false, onEstadoChange = {}) }
+
 }
 
 //Boton Iniciar Sesión, el texto es pasado por parámetro
+//A veces el color se bugea
 @Composable
 fun MainButton(
     onClick: () -> Unit,
@@ -322,7 +328,7 @@ fun MainButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.blackbuyit)
+            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
         Text(
@@ -334,7 +340,8 @@ fun MainButton(
 @Composable
 @Preview(showBackground = true)
 fun MainButtonPreview(){
-    MainButton(text=stringResource(R.string.nombre), onClick = {})
+    Buy_itTheme() { MainButton(text=stringResource(R.string.nombre), onClick = {})}
+
 
 }
 
@@ -349,12 +356,12 @@ fun SecondaryButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.white),
+            containerColor = MaterialTheme.colorScheme.onPrimary,
         )
     ) {
         Text(
             text = text,
-            color = colorResource(R.color.blackbuyit)
+            color = MaterialTheme.colorScheme.onSecondaryContainer
         )
     }
 }
@@ -362,7 +369,8 @@ fun SecondaryButton(
 @Composable
 @Preview(showBackground = false)
 fun SecondaryButtonPreview(){
-    SecondaryButton(text = "Crear cuenta", onClick = {})
+    Buy_itTheme() {SecondaryButton(text = "Crear cuenta", onClick = {}) }
+
 }
 
 

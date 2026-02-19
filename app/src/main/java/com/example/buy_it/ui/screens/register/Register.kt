@@ -33,6 +33,7 @@ import com.example.buy_it.ui.components.FondoBlancoRegister
 import com.example.buy_it.ui.components.MainButton
 import com.example.buy_it.ui.components.PanelGlass
 import com.example.buy_it.ui.components.TextInput
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Register(
@@ -128,5 +129,6 @@ fun Register(
 @Composable
 @Preview(showBackground = false)
 fun RegisterPreview(){
-    Register({},{})
+    Buy_itTheme() { Register({},{})}
+
 }
