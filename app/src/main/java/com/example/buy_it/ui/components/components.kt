@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -449,4 +452,52 @@ fun navbar(
 @Preview
 fun navbarPreview(){
     navbar()
+}
+
+
+/*
+_________
+Iconos
+________
+
+Por ahora el clic no hace nada
+ */
+@Composable
+fun HomeIcon(modifier: Modifier = Modifier) {
+    IconButton(
+        onClick = { },
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Home,
+            contentDescription = stringResource(R.string.inicio),
+            tint = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+@Composable
+fun AddIcon(modifier: Modifier = Modifier) {
+    IconButton(
+        onClick = { },
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = stringResource(R.string.agregar),
+            tint = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+
+@Composable
+@Preview
+fun IconsPreview(){
+    Buy_itTheme() {
+        Row() {
+            HomeIcon()
+            AddIcon()
+        }
+    }
 }
