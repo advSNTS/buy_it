@@ -468,9 +468,12 @@ ________
 Por ahora el clic no hace nada
  */
 @Composable
-fun HomeIcon(modifier: Modifier = Modifier) {
+fun HomeIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     IconButton(
-        onClick = { },
+        onClick = onClick,
         modifier = modifier
     ) {
         Icon(
@@ -482,9 +485,12 @@ fun HomeIcon(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AddIcon(modifier: Modifier = Modifier) {
+fun AddIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     IconButton(
-        onClick = { },
+        onClick = onClick,
         modifier = modifier
     ) {
         Icon(
@@ -496,9 +502,12 @@ fun AddIcon(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BuscarIcon(modifier: Modifier = Modifier) {
+fun BuscarIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     IconButton(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier
     ) {
         Icon(
