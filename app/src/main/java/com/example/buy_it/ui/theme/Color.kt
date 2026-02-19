@@ -3,7 +3,7 @@ package com.example.buy_it.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF596884)
-val onPrimaryLight = Color(0xFFFBFBFB)
+val onPrimaryLight = Color(0xFFFBFBFB) //fondo
 val primaryContainerLight = Color(0xFFDAE2FF)
 val onPrimaryContainerLight = Color(0xFF2F4578)
 val secondaryLight = Color(0xFF38608F)
@@ -24,7 +24,7 @@ val surfaceLight = Color(0xFFF5FAFB)
 val onSurfaceLight = Color(0xFF171D1E)
 val surfaceVariantLight = Color(0xFFE0E2EC)
 val onSurfaceVariantLight = Color(0xFF44474E)
-val outlineLight = Color(0xFF74777F)
+val outlineLight = Color(0xFF797979) //texto
 val outlineVariantLight = Color(0xFFC4C6CF)
 val scrimLight = Color(0xFF000000)
 val inverseSurfaceLight = Color(0xFF2B3133)

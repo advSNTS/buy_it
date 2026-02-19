@@ -225,7 +225,7 @@ fun TextInput(
         modifier = modifier,
         value = item,
         textStyle = TextStyle(
-            color = colorResource(R.color.graybuyit)
+            color = MaterialTheme.colorScheme.outline
         ),
         onValueChange = onItemChange,
         colors = TextFieldDefaults.colors(
@@ -238,7 +238,10 @@ fun TextInput(
 @Composable
 @Preview(showBackground = true)
 fun TextInputPreview(){
-    TextInput(item = "", placeholder = "Hyue", onItemChange = {})
+    Buy_itTheme() {
+        TextInput(item = "", placeholder = "Hyue", onItemChange = {})
+    }
+
 
 }
 
