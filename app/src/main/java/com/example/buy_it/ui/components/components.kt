@@ -355,12 +355,12 @@ fun SecondaryButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.white),
+            containerColor = MaterialTheme.colorScheme.onPrimary,
         )
     ) {
         Text(
             text = text,
-            color = colorResource(R.color.blackbuyit)
+            color = MaterialTheme.colorScheme.onSecondaryContainer
         )
     }
 }
@@ -368,7 +368,8 @@ fun SecondaryButton(
 @Composable
 @Preview(showBackground = false)
 fun SecondaryButtonPreview(){
-    SecondaryButton(text = "Crear cuenta", onClick = {})
+    Buy_itTheme() {SecondaryButton(text = "Crear cuenta", onClick = {}) }
+
 }
 
 
