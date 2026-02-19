@@ -15,6 +15,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 
 @Composable
@@ -53,7 +54,8 @@ fun FondoBlanco(modifier: Modifier = Modifier){
 @Composable
 @Preview()
 fun FondoBlancoPreview(){
-    FondoBlanco()
+    Buy_itTheme() { FondoBlanco() }
+
 }
 
 @Composable
@@ -93,7 +95,9 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
 @Composable
 @Preview()
 fun FondoBlancoRegisterPreview(){
-    FondoBlancoRegister()
+    Buy_itTheme() {
+        FondoBlancoRegister()
+    }
 }
 
 @Composable
@@ -132,7 +136,10 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
 @Composable
 @Preview()
 fun FondoBlancoEditInfoPreview(){
-    FondoBlancoEditInfo()
+    Buy_itTheme() {
+        FondoBlancoEditInfo()
+    }
+
 }
 
 @Composable
@@ -156,7 +163,10 @@ fun PanelGlass(
 @Composable
 @Preview()
 fun PanelGlassPreview(){
-    PanelGlass()
+    Buy_itTheme() {
+        PanelGlass()
+    }
+
 }
 
 @Composable
@@ -196,5 +206,8 @@ fun ProfileCircles(
 @Composable
 @Preview()
 fun ProfileCirclesPreview(){
-    ProfileCircles()
+    Buy_itTheme() {
+        ProfileCircles()
+    }
+
 }
