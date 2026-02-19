@@ -571,7 +571,7 @@ fun BarNav(
 
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(30.dp))
             .background(color = MaterialTheme.colorScheme.tertiary)
             .padding(vertical = 8.dp),
 
