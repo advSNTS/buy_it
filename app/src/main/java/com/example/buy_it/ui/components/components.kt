@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -567,18 +568,20 @@ fun BarNav(
     onAddClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    Row(
 
+    Row(
         modifier = modifier
             .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp, // 👈 sombra pequeña flotante
+                shape = RoundedCornerShape(30.dp),
+                clip = false
+            )
             .clip(RoundedCornerShape(30.dp))
-            .background(color = MaterialTheme.colorScheme.tertiary)
+            .background(MaterialTheme.colorScheme.tertiary)
             .padding(vertical = 8.dp),
 
-        // Separa los iconos de manera igualitaria
         horizontalArrangement = Arrangement.SpaceEvenly,
-
-        // Centra los iconos verticalmente dentro del rectángulo
         verticalAlignment = Alignment.CenterVertically
     ) {
         HomeIcon(onClick = onHomeClick)

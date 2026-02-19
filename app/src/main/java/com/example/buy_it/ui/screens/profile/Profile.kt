@@ -26,10 +26,12 @@ import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
 import com.example.buy_it.data.ProfileItems
 import com.example.buy_it.data.local.ProfileItemsProvider
+import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.components.ProfilePost
 import com.example.buy_it.ui.components.ProfileText
 import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Profile(
@@ -96,15 +98,12 @@ fun Profile(
             }
 
         }
-        Image(
-            painter = painterResource(R.drawable.barra),
-            contentDescription = stringResource(R.string.barra_de_navegacion),
+        BarNav(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .size(50.dp)
-
+                .align(Alignment.BottomCenter) // Lo envía abajo al centro
+                .padding(16.dp) // Le da un margen para que "flote" y se vean las esquinas redondeadas
         )
+
         Image(
             painter = painterResource(R.drawable.settings),
             contentDescription = stringResource(R.string.ajustes),
@@ -139,5 +138,6 @@ fun Profile(
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Profile({},{})
+    Buy_itTheme() { Profile({},{})}
+
 }
