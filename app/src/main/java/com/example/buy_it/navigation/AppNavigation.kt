@@ -2,9 +2,12 @@ package com.example.buy_it.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.buy_it.ui.components.navbarPreview
 import com.example.buy_it.ui.screens.configuration.Configuration
 import com.example.buy_it.ui.screens.editinfo.EditInfo
 import com.example.buy_it.ui.screens.login.Login
@@ -77,3 +80,15 @@ fun AppNavigation(
 
     }
 }
+
+@Composable
+@Preview(showBackground = true)
+fun NavigationPreview() {
+    //controlador vacio, solo para preview!!!!!!
+    val navController = rememberNavController()
+
+    AppNavigation(
+        navController = navController
+    )
+}
+
