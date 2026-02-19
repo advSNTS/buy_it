@@ -297,14 +297,14 @@ fun CheckAndText(
             checked = estado,
             onCheckedChange = onEstadoChange,
             colors = CheckboxDefaults.colors(
-                checkedColor = colorResource(R.color.graybuyit),
-                uncheckedColor = colorResource(R.color.graybuyit),
+                checkedColor = MaterialTheme.colorScheme.secondary,
+                uncheckedColor = MaterialTheme.colorScheme.outline,
             )
         )
         Text(
             modifier = Modifier.padding(9.dp),
             text = "Recordarme",
-            color = colorResource(R.color.graybuyit)
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }
@@ -312,7 +312,8 @@ fun CheckAndText(
 @Composable
 @Preview(showBackground = true)
 fun CheckAndTextPreview(){
-    CheckAndText(estado = false, onEstadoChange = {})
+    Buy_itTheme() {CheckAndText(estado = false, onEstadoChange = {}) }
+
 }
 
 //Boton Iniciar Sesión, el texto es pasado por parámetro
