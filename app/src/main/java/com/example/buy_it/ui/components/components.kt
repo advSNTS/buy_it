@@ -317,6 +317,7 @@ fun CheckAndTextPreview(){
 }
 
 //Boton Iniciar Sesión, el texto es pasado por parámetro
+//A veces el color se bugea
 @Composable
 fun MainButton(
     onClick: () -> Unit,
