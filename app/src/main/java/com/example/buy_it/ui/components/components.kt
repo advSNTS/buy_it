@@ -327,7 +327,7 @@ fun MainButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.blackbuyit)
+            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
         Text(
@@ -339,7 +339,8 @@ fun MainButton(
 @Composable
 @Preview(showBackground = true)
 fun MainButtonPreview(){
-    MainButton(text=stringResource(R.string.nombre), onClick = {})
+    Buy_itTheme() { MainButton(text=stringResource(R.string.nombre), onClick = {})}
+
 
 }
 
