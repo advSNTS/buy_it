@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -474,12 +475,13 @@ fun HomeIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier.size(56.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Home,
             contentDescription = stringResource(R.string.inicio),
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(50.dp)
         )
     }
 }
@@ -491,12 +493,13 @@ fun AddIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier.size(56.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = stringResource(R.string.agregar),
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(50.dp)
         )
     }
 }
@@ -508,12 +511,13 @@ fun BuscarIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier.size(56.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Search,
             contentDescription = "Buscar",
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(50.dp)
         )
     }
 }
@@ -526,18 +530,20 @@ fun ProfileIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier.size(56.dp)
     ) {
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = "Perfil",
             modifier = Modifier
-                .size(32.dp)
+                .size(50.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
     }
 }
+
+
 
 @Composable
 @Preview
@@ -549,5 +555,43 @@ fun IconsPreview(){
             BuscarIcon()
             ProfileIcon()
         }
+    }
+}
+
+
+@Composable
+fun BarNav(
+    modifier: Modifier = Modifier,
+    onHomeClick: () -> Unit = {},
+    onBuscarClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
+    Row(
+
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(color = MaterialTheme.colorScheme.tertiary)
+            .padding(vertical = 8.dp),
+
+        // Separa los iconos de manera igualitaria
+        horizontalArrangement = Arrangement.SpaceEvenly,
+
+        // Centra los iconos verticalmente dentro del rectángulo
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HomeIcon(onClick = onHomeClick)
+        AddIcon(onClick = onAddClick)
+        BuscarIcon(onClick = onBuscarClick)
+        ProfileIcon(onClick = onProfileClick)
+    }
+}
+
+@Composable
+@Preview
+fun navPreview(){
+    Buy_itTheme() {
+        BarNav()
     }
 }
