@@ -2,6 +2,7 @@ package com.example.buy_it.ui.screens.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Comment
+import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -101,6 +108,72 @@ fun PrProductAndName(){
     Buy_itTheme() {
         ProductAndName(
             product = "Jabon REY 300g"
+        )
+    }
+}
+
+@Composable
+fun PostInfo(
+    percentageLikes: Int,
+    range: String,
+    comments: Int,
+    modifier: Modifier = Modifier
+) {
+    val contentColor = MaterialTheme.colorScheme.primary
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.ThumbUp,
+            contentDescription = "Likes",
+            tint = contentColor
+        )
+        Text(
+            text = "$percentageLikes%",
+            color = contentColor,
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        VerticalDivider(
+            modifier = Modifier.height(20.dp),
+            color = contentColor
+        )
+
+        Text(
+            text = range,
+            color = contentColor,
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        VerticalDivider(
+            modifier = Modifier.height(20.dp),
+            color = contentColor
+        )
+
+        Icon(
+            imageVector = Icons.AutoMirrored.Default.Comment,
+            contentDescription = "Comments",
+            tint = contentColor
+        )
+        Text(
+            text = "$comments",
+            color = contentColor,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrPostInfo(){
+    Buy_itTheme() {
+        PostInfo(
+            range= "$600-1000",
+            percentageLikes = 89,
+            comments = 26
         )
     }
 }
