@@ -5,9 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.buy_it"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.buy_it"
@@ -35,6 +33,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -49,7 +48,7 @@ dependencies {
 
     implementation("androidx.compose.ui:ui-text-google-fonts:1.10.3")
     implementation("androidx.navigation:navigation-compose:2.9.7")
-    implementation("androidx.compose.material:material-icons-extended:$2024.04.01")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
 
     implementation(libs.androidx.graphics.shapes)
     implementation(libs.androidx.compose.ui.text.google.fonts)
