@@ -226,20 +226,29 @@ fun MainBackground(
         Elipse(
             colorStart = MaterialTheme.colorScheme.surface,
             colorEnd = MaterialTheme.colorScheme.background,
-            radio = 80.dp,
+            radio = 60.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
-            finGradiente = 0.5f,
-            modifier = Modifier.align(Alignment.TopEnd).offset(x = 60.dp, y = -88.dp)
+            finGradiente = 0.6f,
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 50.dp, y = -40.dp)
         )
         Elipse(
             colorStart = MaterialTheme.colorScheme.surface,
             colorEnd = MaterialTheme.colorScheme.background,
-            radio = 110.dp,
+            radio = 150.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
             finGradiente = 0.5f,
-            modifier = Modifier.align(Alignment.TopCenter).offset(y = -90.dp)
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -250.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.primary,
+            colorEnd = MaterialTheme.colorScheme.surface,
+            radio = 100.dp,
+            angulo = 90f,
+            inicioGradiente = 0.1f,
+            finGradiente = 1f,
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -140.dp, y = -110.dp)
         )
     }
 }
