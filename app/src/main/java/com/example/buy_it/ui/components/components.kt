@@ -573,7 +573,7 @@ fun BarNav(
         modifier = modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 8.dp, // 👈 sombra pequeña flotante
+                elevation = 8.dp,
                 shape = RoundedCornerShape(30.dp),
                 clip = false
             )
