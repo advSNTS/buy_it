@@ -476,13 +476,13 @@ fun HomeIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier.size(56.dp)
+        modifier = modifier.size(30.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Home,
             contentDescription = stringResource(R.string.inicio),
             tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(50.dp)
+            modifier = Modifier.size(30.dp)
         )
     }
 }
@@ -494,13 +494,13 @@ fun AddIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier.size(56.dp)
+        modifier = modifier.size(30.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = stringResource(R.string.agregar),
             tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(50.dp)
+            modifier = Modifier.size(30.dp)
         )
     }
 }
@@ -512,13 +512,13 @@ fun BuscarIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier.size(56.dp)
+        modifier = modifier.size(30.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Search,
             contentDescription = "Buscar",
             tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(50.dp)
+            modifier = Modifier.size(30.dp)
         )
     }
 }
@@ -531,13 +531,13 @@ fun ProfileIcon(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier.size(56.dp)
+        modifier = modifier.size(30.dp)
     ) {
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = "Perfil",
             modifier = Modifier
-                .size(50.dp)
+                .size(30.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
@@ -571,6 +571,7 @@ fun BarNav(
 
     Row(
         modifier = modifier
+            .height(60.dp)
             .fillMaxWidth()
             .shadow(
                 elevation = 8.dp,
@@ -578,8 +579,7 @@ fun BarNav(
                 clip = false
             )
             .clip(RoundedCornerShape(30.dp))
-            .background(MaterialTheme.colorScheme.tertiary)
-            .padding(vertical = 8.dp),
+            .background(MaterialTheme.colorScheme.tertiary),
 
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
