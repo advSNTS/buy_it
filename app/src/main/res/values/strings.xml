@@ -36,4 +36,19 @@
     <string name="mostar_contrase_a">Mostar contraseña</string>
     <string name="agregar">Agregar</string>
     <string name="inicio">Inicio</string>
+    <string name="configuraciones">Configuraciones</string>
+    <string name="quien_pude_ver_tus_rese_as">Quien pude ver tus reseñas</string>
+    <string name="general">General</string>
+    <string name="privacidad_de_la_cuenta">Privacidad de la cuenta</string>
+    <string name="privada">Privada</string>
+    <string name="bloqueados">Bloqueados</string>
+    <string name="_11">11</string>
+    <string name="idioma">Idioma</string>
+    <string name="espa_ol">Español</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="temas">Temas</string>
+    <string name="claro">Claro</string>
+    <string name="tiempo_en_pantalla">Tiempo en pantalla</string>
+    <string name="uso_de_datos">Uso de datos</string>
+    <string name="almacenamiento">Almacenamiento</string>
 </resources>
