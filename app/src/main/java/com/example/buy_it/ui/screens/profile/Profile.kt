@@ -137,5 +137,6 @@ fun Profile(
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Profile({},{})
+    Buy_itTheme() { Profile({},{})}
+
 }
