@@ -59,7 +59,6 @@ fun Profile(
                     .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -101,7 +100,7 @@ fun Profile(
         BarNav(
             modifier = Modifier
                 .align(Alignment.BottomCenter) // Lo envía abajo al centro
-                .padding(16.dp) // Le da un margen para que "flote" y se vean las esquinas redondeadas
+                .padding(start = 8.dp, end = 8.dp) // Le da un margen para que "flote" y se vean las esquinas redondeadas
         )
 
         Image(
@@ -138,6 +137,5 @@ fun Profile(
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Buy_itTheme() { Profile({},{})}
-
+    Profile({},{})
 }
