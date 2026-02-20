@@ -2,8 +2,10 @@ package com.example.buy_it.ui.screens.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
@@ -54,7 +57,51 @@ fun ReviewCardUser(
 @Preview(showBackground = true)
 @Composable
 fun PrReviewCardUser(){
-    ReviewCardUser(
-        name = "Hola",
-    )
+    Buy_itTheme() {
+        ReviewCardUser(
+            name = "Hola",
+        )
+    }
+
 }
+
+
+@Composable
+fun ProductAndName(
+    @DrawableRes imagen: Int = R.drawable.rey,
+    product: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = imagen),
+            contentDescription = product,
+            modifier = Modifier
+                .size(200.dp),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        Text(
+            text = product,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrProductAndName(){
+    Buy_itTheme() {
+        ProductAndName(
+            product = "Jabon REY 300g"
+        )
+    }
+}
+
