@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -208,6 +209,55 @@ fun ProfileCircles(
 fun ProfileCirclesPreview(){
     Buy_itTheme() {
         ProfileCircles()
+    }
+
+}
+
+
+@Composable
+fun MainBackground(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onPrimary)
+    ){
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 60.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.6f,
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 50.dp, y = -40.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 150.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.5f,
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -250.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.primary,
+            colorEnd = MaterialTheme.colorScheme.surface,
+            radio = 100.dp,
+            angulo = 90f,
+            inicioGradiente = 0.1f,
+            finGradiente = 1f,
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -140.dp, y = -110.dp)
+        )
+    }
+}
+
+@Composable
+@Preview()
+fun MainpREVIEW(){
+    Buy_itTheme() {
+        MainBackground()
     }
 
 }
