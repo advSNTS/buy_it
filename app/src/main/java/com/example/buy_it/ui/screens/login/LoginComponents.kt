@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -84,7 +85,10 @@ fun GlassPanel(
             MainButton(modifier = Modifier
                 .padding(top = 20.dp)
                 .fillMaxWidth(),text = stringResource(R.string.iniciar_sesion),
-                onClick = loginButtonPressed
+                onClick = {
+                    Log.d("Envio de formulario","email: $email, contraseña: $password, recordar contraseña: $selected")
+                    loginButtonPressed()
+                }
             )
             SecondaryButton(modifier = Modifier
                 .padding(bottom = 40.dp)

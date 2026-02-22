@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.register
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlancoRegister
 import com.example.buy_it.ui.components.MainButton
 import com.example.buy_it.ui.components.PanelGlass
+import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
 
@@ -46,6 +48,9 @@ fun Register(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var estado by remember { mutableStateOf(false) }
+    var mostrarPassword by remember { mutableStateOf(false) }
+    var icono = if(!mostrarPassword) R.drawable.hide else R.drawable.see
+    var mostrarConfirmPassword by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -63,7 +68,7 @@ fun Register(
                 .offset(y = 40.dp)
                 .size(35.dp)
                 .clickable{
-                    onBackScreen
+                    onBackScreen()
                 }
         )
         Column(
@@ -94,15 +99,21 @@ fun Register(
                 item = email,
                 onItemChange = {email = it}
             )
-            TextInput(
-                placeholder = stringResource(R.string.contrase_a),
+            PasswordInput(
+                placeholder = stringResource(R.string.contrasenna),
                 item = password,
-                onItemChange = {password = it}
+                onItemChange = {password = it},
+                icono = icono,
+                mostrar = mostrarPassword,
+                onMostrarPassword = {mostrarPassword = !mostrarPassword}
             )
-            TextInput(
-                placeholder = stringResource(R.string.confirmar_contrase_a),
+            PasswordInput(
+                placeholder = stringResource(R.string.contrasenna),
                 item = confirmPassword,
-                onItemChange = {confirmPassword = it}
+                onItemChange = {confirmPassword = it},
+                icono = icono,
+                mostrar = mostrarConfirmPassword,
+                onMostrarPassword = {mostrarConfirmPassword = !mostrarPassword}
             )
             Spacer(Modifier.height(20.dp))
             CheckAndText(
@@ -118,7 +129,10 @@ fun Register(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
                 text = stringResource(R.string.crear_cuenta),
-                onClick = registerButtonPressed
+                onClick = {
+                    Log.d("Envio de informacion","username: $username, email: $email, contraseña: $password, confirmar contraseña: $confirmPassword, Recordar contraseña: $estado")
+                    registerButtonPressed()
+                }
             )
 
         }

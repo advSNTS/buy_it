@@ -1,5 +1,6 @@
 package com.example.buy_it.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,6 +15,7 @@ import com.example.buy_it.ui.screens.login.Login
 import com.example.buy_it.ui.screens.profile.Profile
 import com.example.buy_it.ui.screens.register.Register
 import com.example.buy_it.ui.theme.onErrorDark
+import com.example.buy_it.ui.screens.home.Home
 
 @Composable
 fun AppNavigation(
@@ -28,7 +30,7 @@ fun AppNavigation(
         composable(route = "login"){
             Login(
                 loginButtonPressed = {
-                    navController.navigate("profile")
+                    navController.navigate("home")
                 },
                 registerButtonPressed = {
                     navController.navigate("register")
@@ -39,7 +41,7 @@ fun AppNavigation(
         composable(route = "register"){
             Register(
                 registerButtonPressed = {
-                    navController.navigate("profile")
+                    navController.navigate("home")
                 },
                 onBackScreen = {
                     navController.navigate("login")
@@ -54,6 +56,12 @@ fun AppNavigation(
                 },
                 onConfigurationEdit = {
                     navController.navigate("configuration")
+                },
+                onHomeClick = {
+                    navController.navigate("home")
+                },
+                onProfileClick = {
+                    navController.navigate("profile")
                 }
             )
         }
@@ -74,10 +82,17 @@ fun AppNavigation(
             )
         }
 
-
-
-
-
+        composable(route = "home") {
+            Home(
+                onNotificationClick = { /* TODO */ },
+                onHomeClick = {
+                    navController.navigate("home")
+                },
+                onProfileClick = {
+                    navController.navigate("profile")
+                }
+            )
+        }
     }
 }
 

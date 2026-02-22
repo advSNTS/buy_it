@@ -37,6 +37,8 @@ import com.example.buy_it.ui.theme.Buy_itTheme
 fun Profile(
     onProfileEdit: () -> Unit,
     onConfigurationEdit: () -> Unit,
+    onHomeClick: () -> Unit,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Box(
@@ -100,8 +102,10 @@ fun Profile(
         BarNav(
             modifier = Modifier
                 .align(Alignment.BottomCenter) // Lo envía abajo al centro
-                .padding(start = 8.dp, end = 8.dp) // Le da un margen para que "flote" y se vean las esquinas redondeadas
-        )
+                .padding(start = 8.dp, end = 8.dp), // Le da un margen para que "flote" y se vean las esquinas redondeadas
+            onHomeClick = onHomeClick,
+            onProfileClick = onProfileClick
+            )
 
         Image(
             painter = painterResource(R.drawable.settings),
@@ -137,6 +141,5 @@ fun Profile(
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Buy_itTheme() { Profile({},{})}
-
+    Buy_itTheme() { Profile({},{},{},{}) }
 }

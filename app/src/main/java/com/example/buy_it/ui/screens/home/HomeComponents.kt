@@ -31,6 +31,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
 import com.example.buy_it.ui.theme.Buy_itTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.sp
+import com.example.buy_it.data.ReviewInfo
 
 @Composable
 fun ReviewCardUser(
@@ -69,9 +78,7 @@ fun PrReviewCardUser(){
             name = "Hola",
         )
     }
-
 }
-
 
 @Composable
 fun ProductAndName(
@@ -178,3 +185,105 @@ fun PrPostInfo(){
     }
 }
 
+@Composable
+fun HomeHeader(
+    onNotificationClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 6.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "buy it.",
+            fontSize = 34.sp,
+            fontWeight = FontWeight(700),
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Image(
+            painter = painterResource(R.drawable.campana),
+            contentDescription = "Notificaciones",
+            modifier = Modifier
+                .size(28.dp)
+                .clickable(onClick = onNotificationClick)
+        )
+    }
+}
+
+@Composable
+fun FeedCard(
+    info: ReviewInfo,
+    onMoreClick: () -> Unit,
+    onLikeClick: () -> Unit,
+    onCommentClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .shadow(8.dp, RoundedCornerShape(18.dp))
+            .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(18.dp))
+            .padding(14.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(info.pfp),
+                        contentDescription = "pfp",
+                        modifier = Modifier.size(28.dp).clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(Modifier.size(10.dp))
+                    Text(
+                        text = info.name,
+                        fontWeight = FontWeight(700),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "Más",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clickable(onClick = onMoreClick),
+                    tint = MaterialTheme.colorScheme.outline
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ProductAndName(
+                    imagen = info.imgProd,
+                    product = info.product
+                )
+
+                Text(
+                    text = info.review,
+                    modifier = Modifier.weight(1f),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 14.sp
+                )
+            }
+
+            PostInfo(
+                percentageLikes = info.percentageLikes,
+                range = info.range,
+                comments = info.comments
+            )
+        }
+    }
+}

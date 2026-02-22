@@ -251,8 +251,33 @@ fun TextInputPreview(){
     Buy_itTheme() {
         TextInput(item = "", placeholder = "Hyue", onItemChange = {})
     }
+}
 
+@Composable
+fun TextInputRounded(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+    item: String,
+    onItemChange: (String) -> Unit,
+){
+    TextField(
+        placeholder = {Text(placeholder)},
+        modifier = modifier.clip(RoundedCornerShape(14.dp)),
+        value = item,
+        textStyle = TextStyle(
+            color = MaterialTheme.colorScheme.outline
+        ),
+        onValueChange = onItemChange,
 
+    )
+}
+
+@Composable
+@Preview(showBackground = false)
+fun TextInputRoundedPreview(){
+    Buy_itTheme() {
+        TextInputRounded(item = "", placeholder = "Hyue", onItemChange = {})
+    }
 }
 
 @Composable

@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.editinfo
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -82,7 +83,6 @@ fun EditInfo(
                 text = stringResource(R.string.contrasenna),
             )
             PasswordInput(
-
                 placeholder = stringResource(R.string.contrasenna),
                 item = password,
                 onItemChange = {password = it},
@@ -94,9 +94,11 @@ fun EditInfo(
             MainButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.guardar_cambios),
-                onClick = onSaveChanges,
+                onClick = {
+                    Log.d("Guardar cambios","nombre: $name, email: $email, contraseña: $password")
+                    onSaveChanges()
+                }
             )
-
         }
     }
 }
