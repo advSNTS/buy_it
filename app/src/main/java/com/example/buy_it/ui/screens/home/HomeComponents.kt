@@ -240,15 +240,15 @@ fun ReviewCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        shape = RoundedCornerShape(24.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onPrimary
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp) // reducido de 16 a 12
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 6.dp) // menos padding abajo
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -268,7 +268,7 @@ fun ReviewCard(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.Top // cambiado a Top para subir el icono
                     ) {
                         ReviewCardUser(
                             name = reviewInfo.name,
@@ -277,7 +277,8 @@ fun ReviewCard(
                         Icon(
                             imageVector = Icons.Default.MoreVert,
                             contentDescription = "Opciones",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp) // pequeño ajuste fino
                         )
                     }
                     BodyReview(
@@ -287,7 +288,7 @@ fun ReviewCard(
                 }
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(2.dp)) // reducido de 6 a 2
 
             PostInfo(
                 percentageLikes = reviewInfo.percentageLikes,
@@ -298,7 +299,6 @@ fun ReviewCard(
         }
     }
 }
-
 
 @Preview
 @Composable

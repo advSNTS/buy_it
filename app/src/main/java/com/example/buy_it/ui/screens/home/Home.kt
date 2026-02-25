@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,3 +17,24 @@ import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.local.ReviewProvider
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.MainBackground
+import com.example.buy_it.ui.theme.Buy_itTheme
+
+
+@Composable
+fun MainScreen(){
+    val allreviews = ReviewProvider.feed
+
+    Column() {
+        allreviews.forEach {
+            review -> ReviewCard(reviewInfo = review)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrMainScreen(){
+    Buy_itTheme() {
+        MainScreen()
+    }
+}
