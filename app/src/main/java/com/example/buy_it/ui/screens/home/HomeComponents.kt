@@ -38,6 +38,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.ReviewInfo
@@ -193,5 +196,109 @@ fun BodyReview(
     modifier: Modifier = Modifier
 ){
     val backgroundIcon = if (isLike) Icons.Outlined.ThumbUp else Icons.Outlined.ThumbDown
+    val iconRotation = if (isLike) -30f else 30f
+    Box(
+        modifier = modifier.padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
 
+        Icon(
+            imageVector = backgroundIcon,
+            contentDescription = null,
+            modifier = Modifier
+                .size(120.dp)
+                .rotate(iconRotation),
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+        )
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrReviBody(){
+    Buy_itTheme() {
+        BodyReview(
+            text = "Muy buen jabon xd",
+            true
+        )
+    }
+}
+
+@Composable
+fun ReviewCard(
+    reviewInfo: ReviewInfo,
+    modifier: Modifier = Modifier
+){
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ){
+                ProductAndName(
+                    imagen = reviewInfo.imgProd,
+                    product = reviewInfo.product,
+                    modifier = Modifier.weight(0.4f)
+                )
+                Column(
+                    modifier = Modifier
+                        .weight(0.6f)
+                        .padding(start = 8.dp)
+                ){
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        ReviewCardUser(
+                            name = reviewInfo.name,
+                            imagen = reviewInfo.pfp
+                        )
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Opciones",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    BodyReview(
+                        text = reviewInfo.review,
+                        isLike = reviewInfo.like
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        PostInfo(
+            percentageLikes = reviewInfo.percentageLikes,
+            range = reviewInfo.range,
+            comments = reviewInfo.comments,
+            modifier = Modifier.padding(start = 12.dp)
+        )
+
+    }
+}
+
+
+@Preview
+@Composable
+fun CardPreview(){
+    var reviewInfo: ReviewInfo
 }
