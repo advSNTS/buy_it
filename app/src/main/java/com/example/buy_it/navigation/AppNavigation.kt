@@ -15,7 +15,7 @@ import com.example.buy_it.ui.screens.login.Login
 import com.example.buy_it.ui.screens.profile.Profile
 import com.example.buy_it.ui.screens.register.Register
 import com.example.buy_it.ui.theme.onErrorDark
-//import com.example.buy_it.ui.screens.home.Home
+import com.example.buy_it.ui.screens.home.Home
 import com.example.buy_it.ui.screens.detail.Detail
 import com.example.buy_it.ui.screens.trends.Trends
 import com.example.buy_it.ui.screens.comments.Comments
