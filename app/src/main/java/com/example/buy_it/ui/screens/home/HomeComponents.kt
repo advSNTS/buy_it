@@ -44,6 +44,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.ReviewInfo
+import java.sql.Date
+import java.time.LocalDate
 
 @Composable
 fun ReviewCardUser(
@@ -52,23 +54,23 @@ fun ReviewCardUser(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(8.dp),
+        modifier = modifier.padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(id = imagen),
             contentDescription = "Perfil",
             modifier = Modifier
-                .size(48.dp)
+                .size(32.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
 
-        Spacer(modifier = Modifier.width(18.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
         Text(
             text = name,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
     }
@@ -98,8 +100,8 @@ fun ProductAndName(
             painter = painterResource(id = imagen),
             contentDescription = product,
             modifier = Modifier
-                .size(200.dp),
-            contentScale = ContentScale.Crop
+                .size(100.dp),
+            contentScale = ContentScale.Fit
         )
 
         Spacer(modifier = Modifier.height(2.dp))
@@ -234,11 +236,11 @@ fun PrReviBody(){
 fun ReviewCard(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier
-){
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(horizontal = 8.dp, vertical = 4.dp),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onPrimary
@@ -246,27 +248,28 @@ fun ReviewCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
-        ){
+            modifier = Modifier.padding(12.dp) // reducido de 16 a 12
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ){
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 ProductAndName(
                     imagen = reviewInfo.imgProd,
                     product = reviewInfo.product,
-                    modifier = Modifier.weight(0.4f)
+                    modifier = Modifier.weight(0.38f)
                 )
+
                 Column(
                     modifier = Modifier
-                        .weight(0.6f)
+                        .weight(0.62f)
                         .padding(start = 8.dp)
-                ){
+                ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
                         ReviewCardUser(
                             name = reviewInfo.name,
                             imagen = reviewInfo.pfp
@@ -283,16 +286,16 @@ fun ReviewCard(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            PostInfo(
+                percentageLikes = reviewInfo.percentageLikes,
+                range = reviewInfo.range,
+                comments = reviewInfo.comments,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        PostInfo(
-            percentageLikes = reviewInfo.percentageLikes,
-            range = reviewInfo.range,
-            comments = reviewInfo.comments,
-            modifier = Modifier.padding(start = 12.dp)
-        )
-
     }
 }
 
@@ -300,5 +303,18 @@ fun ReviewCard(
 @Preview
 @Composable
 fun CardPreview(){
-    var reviewInfo: ReviewInfo
+    val reviewInfo = ReviewInfo(
+        pfp = R.drawable.predet,
+        imgProd = R.drawable.rey,
+        name = "buy it.",
+        review = "Buen jabón, con el me hago los rituales de purificación.",
+        product = "Jabon REY 300g",
+        like = true,
+        percentageLikes = 88,
+        date = LocalDate.now(),
+        range = "$6000-$8000",
+        comments = 787
+    )
+    Buy_itTheme() { ReviewCard(reviewInfo)}
+
 }
