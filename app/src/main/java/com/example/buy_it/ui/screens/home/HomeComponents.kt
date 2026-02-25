@@ -36,6 +36,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.ThumbDown
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.ReviewInfo
@@ -133,7 +135,7 @@ fun PostInfo(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.ThumbUp,
+            imageVector = Icons.Outlined.ThumbUp,
             contentDescription = "Likes",
             tint = contentColor
         )
@@ -182,4 +184,14 @@ fun PrPostInfo(){
             comments = 26
         )
     }
+}
+
+@Composable
+fun BodyReview(
+    text: String,
+    isLike: Boolean,
+    modifier: Modifier = Modifier
+){
+    val backgroundIcon = if (isLike) Icons.Outlined.ThumbUp else Icons.Outlined.ThumbDown
+
 }
