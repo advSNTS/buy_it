@@ -36,9 +36,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.ThumbDown
+import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.ReviewInfo
+import java.sql.Date
+import java.time.LocalDate
 
 @Composable
 fun ReviewCardUser(
@@ -47,23 +54,23 @@ fun ReviewCardUser(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(8.dp),
+        modifier = modifier.padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(id = imagen),
             contentDescription = "Perfil",
             modifier = Modifier
-                .size(48.dp)
+                .size(32.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
 
-        Spacer(modifier = Modifier.width(18.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
         Text(
             text = name,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
     }
@@ -93,8 +100,8 @@ fun ProductAndName(
             painter = painterResource(id = imagen),
             contentDescription = product,
             modifier = Modifier
-                .size(200.dp),
-            contentScale = ContentScale.Crop
+                .size(100.dp),
+            contentScale = ContentScale.Fit
         )
 
         Spacer(modifier = Modifier.height(2.dp))
@@ -133,7 +140,7 @@ fun PostInfo(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.ThumbUp,
+            imageVector = Icons.Outlined.ThumbUp,
             contentDescription = "Likes",
             tint = contentColor
         )
@@ -185,114 +192,129 @@ fun PrPostInfo(){
 }
 
 @Composable
-fun HomeHeader(
-    onNotificationClick: () -> Unit,
+fun BodyReview(
+    text: String,
+    isLike: Boolean,
     modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+){
+    val backgroundIcon = if (isLike) Icons.Outlined.ThumbUp else Icons.Outlined.ThumbDown
+    val iconRotation = if (isLike) -30f else 30f
+    Box(
+        modifier = modifier.padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "buy it.",
-            fontSize = 34.sp,
-            fontWeight = FontWeight(700),
-            color = MaterialTheme.colorScheme.primary
+
+        Icon(
+            imageVector = backgroundIcon,
+            contentDescription = null,
+            modifier = Modifier
+                .size(120.dp)
+                .rotate(iconRotation),
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
         )
 
-        Image(
-            painter = painterResource(R.drawable.campana),
-            contentDescription = "Notificaciones",
-            modifier = Modifier
-                .size(28.dp)
-                .clickable(onClick = onNotificationClick)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrReviBody(){
+    Buy_itTheme() {
+        BodyReview(
+            text = "Muy buen jabon xd",
+            true
         )
     }
 }
 
 @Composable
-fun FeedCard(
-    info: ReviewInfo,
-    onMoreClick: () -> Unit,
-    onLikeClick: () -> Unit,
-    onCommentClick: () -> Unit,
-    onOpenDetail: (String) -> Unit,
+fun ReviewCard(
+    reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onOpenDetail(productIdFromName(info.product)) }
-            .shadow(8.dp, RoundedCornerShape(18.dp))
-            .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(18.dp))
-            .padding(14.dp)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(info.pfp),
-                        contentDescription = "pfp",
-                        modifier = Modifier.size(28.dp).clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(Modifier.size(10.dp))
-                    Text(
-                        text = info.name,
-                        fontWeight = FontWeight(700),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Más",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .clickable(onClick = onMoreClick),
-                    tint = MaterialTheme.colorScheme.outline
-                )
-            }
-
+        Column(
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 6.dp) // menos padding abajo
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ProductAndName(
-                    imagen = info.imgProd,
-                    product = info.product
+                    imagen = reviewInfo.imgProd,
+                    product = reviewInfo.product,
+                    modifier = Modifier.weight(0.38f)
                 )
 
-                Text(
-                    text = info.review,
-                    modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 14.sp
-                )
+                Column(
+                    modifier = Modifier
+                        .weight(0.62f)
+                        .padding(start = 8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top // cambiado a Top para subir el icono
+                    ) {
+                        ReviewCardUser(
+                            name = reviewInfo.name,
+                            imagen = reviewInfo.pfp
+                        )
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Opciones",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp) // pequeño ajuste fino
+                        )
+                    }
+                    BodyReview(
+                        text = reviewInfo.review,
+                        isLike = reviewInfo.like
+                    )
+                }
             }
 
+            Spacer(modifier = Modifier.height(2.dp)) // reducido de 6 a 2
+
             PostInfo(
-                percentageLikes = info.percentageLikes,
-                range = info.range,
-                comments = info.comments
+                percentageLikes = reviewInfo.percentageLikes,
+                range = reviewInfo.range,
+                comments = reviewInfo.comments,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
     }
 }
 
-private fun productIdFromName(productName: String): String {
-    return when {
-        productName.contains("REY", ignoreCase = true) -> "rey_300g"
-        productName.contains("TOSTA", ignoreCase = true) -> "cafe_110g"
-        else -> "rey_300g"
-    }
+@Preview
+@Composable
+fun CardPreview(){
+    val reviewInfo = ReviewInfo(
+        pfp = R.drawable.predet,
+        imgProd = R.drawable.rey,
+        name = "buy it.",
+        review = "Buen jabón, con el me hago los rituales de purificación.",
+        product = "Jabon REY 300g",
+        like = true,
+        percentageLikes = 88,
+        date = LocalDate.now(),
+        range = "$6000-$8000",
+        comments = 787
+    )
+    Buy_itTheme() { ReviewCard(reviewInfo)}
+
 }

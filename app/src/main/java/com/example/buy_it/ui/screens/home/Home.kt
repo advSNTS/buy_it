@@ -1,10 +1,20 @@
 package com.example.buy_it.ui.screens.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -12,65 +22,91 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.local.ReviewProvider
 import com.example.buy_it.ui.components.BarNav
+import com.example.buy_it.ui.components.LogoMessage
 import com.example.buy_it.ui.components.MainBackground
+import com.example.buy_it.ui.theme.Buy_itTheme
+
 
 @Composable
-fun Home(
-    onNotificationClick: () -> Unit,
-    onHomeClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    onOpenDetail: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun MainScreen(){
+    val allreviews = ReviewProvider.feed
 
-    val feed = remember { mutableStateListOf<ReviewInfo>().apply { addAll(ReviewProvider.feed) } }
-
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        MainBackground()
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 90.dp),
-            verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                HomeHeader(onNotificationClick = onNotificationClick)
-            }
-
-            items(feed) { review ->
-                FeedCard(
-                    info = review,
-                    onMoreClick = { /* TODO menú */ },
-                    onLikeClick = { /* TODO */ },
-                    onCommentClick = { /* TODO */ },
-                    onOpenDetail = { onOpenDetail(it) }
-                )
-            }
+    Column() {
+        allreviews.forEach {
+            review -> ReviewCard(reviewInfo = review)
         }
-        BarNav(
-            modifier = Modifier
-                .align(Alignment.BottomCenter) // Lo envía abajo al centro
-                .padding(start = 8.dp, end = 8.dp), // Le da un margen para que "flote" y se vean las esquinas redondeadas
-            onHomeClick = onHomeClick,
-            onProfileClick = onProfileClick
-        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrMainScreen(){
+    Buy_itTheme() {
+        MainScreen()
     }
 }
 
 @Composable
+fun Home() {
+    val allreviews = ReviewProvider.feed
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        MainBackground()
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Header: logo + campana
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LogoMessage(tamano = 48.sp)
+
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = "Notificaciones",
+                    modifier = Modifier.size(28.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            // Lista scrolleable de cards
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    top = 8.dp,
+                    bottom = 90.dp // espacio para que la BarNav no tape las cards
+                )
+            ) {
+                items(allreviews) { review ->
+                    ReviewCard(reviewInfo = review)
+                }
+            }
+        }
+
+        // BarNav flotante abajo
+        BarNav(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        )
+    }
+}
+
 @Preview
-fun HomePreview() {
-    Home(
-        onNotificationClick = {},
-        onHomeClick = {},
-        onProfileClick = {},
-        onOpenDetail = {}
-    )
+@Composable
+fun HomePrev(){
+    Buy_itTheme() {
+        Home()
+
+    }
 }

@@ -2,6 +2,7 @@ package com.example.buy_it.data.local
 
 import com.example.buy_it.R
 import com.example.buy_it.data.ReviewInfo
+import java.time.LocalDate
 import java.util.Date
 
 object ReviewProvider {
@@ -14,7 +15,7 @@ object ReviewProvider {
             product = "Jabón REY 300g",
             like = false,
             percentageLikes = 89,
-            date = Date(),
+            date = LocalDate.now(),
             range = "$5000 - $6000",
             comments = 25
         ),
@@ -26,7 +27,7 @@ object ReviewProvider {
             product = "Café TOSTA’O 110g",
             like = false,
             percentageLikes = 60,
-            date = Date(),
+            date = LocalDate.now(),
             range = "$5000 - $6000",
             comments = 33
         ),
@@ -38,7 +39,7 @@ object ReviewProvider {
             product = "Jabón REY 300g",
             like = false,
             percentageLikes = 89,
-            date = Date(),
+            date = LocalDate.now(),
             range = "$5000 - $6000",
             comments = 25
         )

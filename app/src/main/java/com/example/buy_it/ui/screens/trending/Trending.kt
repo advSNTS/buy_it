@@ -20,8 +20,8 @@ import com.example.buy_it.data.local.TrendingItemsProvider
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.MainBackground
 import com.example.buy_it.ui.components.ProfilePost
-import com.example.buy_it.ui.screens.home.FeedCard
-import com.example.buy_it.ui.screens.home.HomeHeader
+//import com.example.buy_it.ui.screens.home.FeedCard
+//import com.example.buy_it.ui.screens.home.HomeHeader
 
 @Composable
 fun Trending(

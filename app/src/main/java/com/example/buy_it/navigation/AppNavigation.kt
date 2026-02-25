@@ -84,7 +84,7 @@ fun AppNavigation(
                 }
             )
         }
-
+/*
         composable(route = "home") {
             Home(
                 onNotificationClick = { /* TODO */ },
@@ -93,7 +93,7 @@ fun AppNavigation(
                 onOpenDetail = { id -> navController.navigate("detail/$id") }
             )
         }
-
+*/
         composable(route = "comments/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
             Comments(
