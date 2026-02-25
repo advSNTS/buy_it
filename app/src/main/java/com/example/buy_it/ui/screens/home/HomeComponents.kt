@@ -16,7 +16,6 @@ import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -161,7 +160,7 @@ fun PostInfo(
         )
 
         Icon(
-            imageVector = Icons.AutoMirrored.Default.Comment,
+            imageVector = Icons.AutoMirrored.Filled.Comment,
             contentDescription = "Comments",
             tint = contentColor
         )
@@ -220,11 +219,13 @@ fun FeedCard(
     onMoreClick: () -> Unit,
     onLikeClick: () -> Unit,
     onCommentClick: () -> Unit,
+    onOpenDetail: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .clickable { onOpenDetail(productIdFromName(info.product)) }
             .shadow(8.dp, RoundedCornerShape(18.dp))
             .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(18.dp))
             .padding(14.dp)
@@ -285,5 +286,13 @@ fun FeedCard(
                 comments = info.comments
             )
         }
+    }
+}
+
+private fun productIdFromName(productName: String): String {
+    return when {
+        productName.contains("REY", ignoreCase = true) -> "rey_300g"
+        productName.contains("TOSTA", ignoreCase = true) -> "cafe_110g"
+        else -> "rey_300g"
     }
 }

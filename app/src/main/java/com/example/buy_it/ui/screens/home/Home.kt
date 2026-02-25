@@ -22,6 +22,7 @@ fun Home(
     onNotificationClick: () -> Unit,
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onOpenDetail: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -48,7 +49,8 @@ fun Home(
                     info = review,
                     onMoreClick = { /* TODO menú */ },
                     onLikeClick = { /* TODO */ },
-                    onCommentClick = { /* TODO */ }
+                    onCommentClick = { /* TODO */ },
+                    onOpenDetail = { onOpenDetail(it) }
                 )
             }
         }
@@ -64,6 +66,11 @@ fun Home(
 
 @Composable
 @Preview
-fun HomePreview(){
-    Home(onNotificationClick = {}, onHomeClick = { }, onProfileClick = { })
+fun HomePreview() {
+    Home(
+        onNotificationClick = {},
+        onHomeClick = {},
+        onProfileClick = {},
+        onOpenDetail = {}
+    )
 }
