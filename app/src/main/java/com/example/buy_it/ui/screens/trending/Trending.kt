@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.trending
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +46,7 @@ fun Trending(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 90.dp),
-                verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
             }

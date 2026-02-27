@@ -17,6 +17,22 @@ import com.example.buy_it.ui.screens.detail.Detail
 import com.example.buy_it.ui.screens.trends.Trends
 import com.example.buy_it.ui.screens.comments.Comments
 
+sealed class Screen(val route: String) {
+    object Login : Screen("login")
+    object Register : Screen("register")
+    object Home : Screen("home")
+    object Profile : Screen("profile")
+    object Trends : Screen("trends")
+    object EditInfo : Screen("editinfo")
+    object Configuration : Screen("configuration")
+    object Detail : Screen("detail/{productId}") {
+        fun createRoute(productId: String) = "detail/$productId"
+    }
+    object Comments : Screen("comments/{productId}") {
+        fun createRoute(productId: String) = "comments/$productId"
+    }
+}
+
 @Composable
 fun AppNavigation(
     navController: NavHostController,
@@ -24,103 +40,103 @@ fun AppNavigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = "login",
+        startDestination = Screen.Login.route,
         modifier = modifier
     ){
-        composable(route = "login"){
+        composable(route = Screen.Login.route){
             Login(
                 loginButtonPressed = {
-                    navController.navigate("home")
+                    navController.navigate(Screen.Home.route)
                 },
                 registerButtonPressed = {
-                    navController.navigate("register")
+                    navController.navigate(Screen.Register.route)
                 }
             )
         }
 
-        composable(route = "register"){
+        composable(route = Screen.Register.route){
             Register(
                 registerButtonPressed = {
-                    navController.navigate("home")
+                    navController.navigate(Screen.Home.route)
                 },
                 onBackScreen = {
-                    navController.navigate("login")
+                    navController.navigate(Screen.Login.route)
                 },
             )
         }
 
-        composable(route = "profile"){
+        composable(route = Screen.Profile.route){
             Profile(
                 onProfileEdit = {
-                    navController.navigate("editinfo")
+                    navController.navigate(Screen.EditInfo.route)
                 },
                 onConfigurationEdit = {
-                    navController.navigate("configuration")
+                    navController.navigate(Screen.Configuration.route)
                 },
                 onHomeClick = {
-                    navController.navigate("home")
+                    navController.navigate(Screen.Home.route)
                 },
                 onProfileClick = {
-                    navController.navigate("profile")
+                    navController.navigate(Screen.Profile.route)
                 },
                 onTrendsClick = {
-                    navController.navigate("trends")
+                    navController.navigate(Screen.Trends.route)
                 }
             )
         }
 
-        composable(route = "editinfo"){
+        composable(route = Screen.EditInfo.route){
             EditInfo(
                 onSaveChanges = {
-                    navController.navigate("profile")
+                    navController.navigate(Screen.Profile.route)
                 }
             )
         }
 
-        composable(route = "configuration"){
+        composable(route = Screen.Configuration.route){
             Configuration(
                 onBackPressed = {
-                    navController.navigate("profile")
+                    navController.navigate(Screen.Profile.route)
                 }
             )
         }
 
-        composable(route = "home") {
+        composable(route = Screen.Home.route) {
             Home(
                 onNotificationClick = { /* TODO */ },
                 onHomeClick = {},
-                onProfileClick = { navController.navigate("profile") },
-                onTrendsClick = { navController.navigate("trends") },
-                onOpenDetail = { id -> navController.navigate("detail/$id") }
+                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onTrendsClick = { navController.navigate(Screen.Trends.route) },
+                onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) }
             )
         }
-        composable(route = "comments/{productId}") { backStackEntry ->
+        composable(route = Screen.Comments.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
             Comments(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
                 onNotificationClick = { /* TODO */ },
-                onHomeClick = { navController.navigate("home") },
-                onProfileClick = { navController.navigate("profile") }
+                onHomeClick = { navController.navigate(Screen.Home.route) },
+                onProfileClick = { navController.navigate(Screen.Profile.route) }
             )
         }
 
-        composable(route = "detail/{productId}") { backStackEntry ->
+        composable(route = Screen.Detail.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
             Detail(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
                 onNotificationClick = { /* TODO */ },
-                onOpenComments = { navController.navigate("comments/$productId") }
+                onOpenComments = { navController.navigate(Screen.Comments.createRoute(productId)) }
             )
         }
 
-        composable(route = "trends") {
+        composable(route = Screen.Trends.route) {
             Trends(
                 onNotificationClick = { /* TODO */ },
-                onHomeClick = { navController.navigate("home") },
-                onProfileClick = { navController.navigate("profile") },
-                onOpenDetail = { id -> navController.navigate("detail/$id") },
+                onHomeClick = { navController.navigate(Screen.Home.route) },
+                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
                 onTrendsClick = { }
             )
         }
