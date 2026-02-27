@@ -16,14 +16,11 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.local.ReviewProvider
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.LogoMessage
@@ -49,9 +46,15 @@ fun PrMainScreen(){
         MainScreen()
     }
 }
-
 @Composable
-fun Home() {
+fun Home(
+    onNotificationClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onTrendsClick: () -> Unit,
+    onOpenDetail: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val allreviews = ReviewProvider.feed
 
     Box(
@@ -97,7 +100,10 @@ fun Home() {
         BarNav(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            onHomeClick = onHomeClick,
+            onProfileClick = onProfileClick,
+            onBuscarClick = onTrendsClick
         )
     }
 }
@@ -106,7 +112,6 @@ fun Home() {
 @Composable
 fun HomePrev(){
     Buy_itTheme() {
-        Home()
-
+        Home({},{},{},{},{})
     }
 }

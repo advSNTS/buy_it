@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.TrendInfo
@@ -27,12 +28,14 @@ import com.example.buy_it.data.local.TrendProvider
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.MainBackground
 import com.example.buy_it.R
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Trends(
     onNotificationClick: () -> Unit,
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onTrendsClick: () -> Unit,
     onOpenDetail: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -108,10 +111,19 @@ fun Trends(
         BarNav(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(start = 8.dp, end = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             onHomeClick = onHomeClick,
-            onProfileClick = onProfileClick
+            onProfileClick = onProfileClick,
+            onBuscarClick = onTrendsClick
         )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun TrendsPreview(){
+    Buy_itTheme {
+        Trends({},{},{},{},{})
     }
 }
 

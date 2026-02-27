@@ -1,6 +1,5 @@
 package com.example.buy_it.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -8,13 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.buy_it.ui.components.navbarPreview
 import com.example.buy_it.ui.screens.configuration.Configuration
 import com.example.buy_it.ui.screens.editinfo.EditInfo
 import com.example.buy_it.ui.screens.login.Login
 import com.example.buy_it.ui.screens.profile.Profile
 import com.example.buy_it.ui.screens.register.Register
-import com.example.buy_it.ui.theme.onErrorDark
 import com.example.buy_it.ui.screens.home.Home
 import com.example.buy_it.ui.screens.detail.Detail
 import com.example.buy_it.ui.screens.trends.Trends
@@ -27,7 +24,7 @@ fun AppNavigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = "trends",
+        startDestination = "login",
         modifier = modifier
     ){
         composable(route = "login"){
@@ -65,6 +62,9 @@ fun AppNavigation(
                 },
                 onProfileClick = {
                     navController.navigate("profile")
+                },
+                onTrendsClick = {
+                    navController.navigate("trends")
                 }
             )
         }
@@ -84,16 +84,16 @@ fun AppNavigation(
                 }
             )
         }
-/*
+
         composable(route = "home") {
             Home(
                 onNotificationClick = { /* TODO */ },
-                onHomeClick = { navController.navigate("home") },
+                onHomeClick = {},
                 onProfileClick = { navController.navigate("profile") },
+                onTrendsClick = { navController.navigate("trends") },
                 onOpenDetail = { id -> navController.navigate("detail/$id") }
             )
         }
-*/
         composable(route = "comments/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
             Comments(
@@ -120,7 +120,8 @@ fun AppNavigation(
                 onNotificationClick = { /* TODO */ },
                 onHomeClick = { navController.navigate("home") },
                 onProfileClick = { navController.navigate("profile") },
-                onOpenDetail = { id -> navController.navigate("detail/$id") }
+                onOpenDetail = { id -> navController.navigate("detail/$id") },
+                onTrendsClick = { }
             )
         }
     }
@@ -136,4 +137,3 @@ fun NavigationPreview() {
         navController = navController
     )
 }
-

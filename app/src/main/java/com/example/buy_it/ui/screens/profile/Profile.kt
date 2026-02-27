@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -24,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
-import com.example.buy_it.data.ProfileItems
 import com.example.buy_it.data.local.ProfileItemsProvider
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.ProfileCircles
@@ -39,6 +37,7 @@ fun Profile(
     onConfigurationEdit: () -> Unit,
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onTrendsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Box(
@@ -101,10 +100,11 @@ fun Profile(
         }
         BarNav(
             modifier = Modifier
-                .align(Alignment.BottomCenter) // Lo envía abajo al centro
-                .padding(start = 8.dp, end = 8.dp), // Le da un margen para que "flote" y se vean las esquinas redondeadas
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             onHomeClick = onHomeClick,
-            onProfileClick = onProfileClick
+            onProfileClick = onProfileClick,
+            onBuscarClick = onTrendsClick
             )
 
         Image(
@@ -141,5 +141,5 @@ fun Profile(
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Buy_itTheme() { Profile({},{},{},{}) }
+    Buy_itTheme() { Profile({},{},{},{},{}) }
 }
