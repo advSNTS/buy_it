@@ -29,12 +29,15 @@ import com.example.buy_it.ui.theme.Buy_itTheme
 
 
 @Composable
-fun MainScreen(){
+fun MainScreen(onOpenDetail: (String) -> Unit) { 
     val allreviews = ReviewProvider.feed
 
-    Column() {
-        allreviews.forEach {
-            review -> ReviewCard(reviewInfo = review)
+    Column() {        
+        allreviews.forEach { review ->
+            ReviewCard(
+                reviewInfo = review,
+                onClick = { onOpenDetail(review.productId) } 
+            )
         }
     }
 }
@@ -43,9 +46,10 @@ fun MainScreen(){
 @Composable
 fun PrMainScreen(){
     Buy_itTheme() {
-        MainScreen()
+        MainScreen({})
     }
 }
+
 @Composable
 fun Home(
     onNotificationClick: () -> Unit,
@@ -53,7 +57,8 @@ fun Home(
     onProfileClick: () -> Unit,
     onTrendsClick: () -> Unit,
     onOpenDetail: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAddReview: (String) -> Unit
 ) {
     val allreviews = ReviewProvider.feed
 
@@ -64,47 +69,23 @@ fun Home(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Header: logo + campana
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                LogoMessage(tamano = 48.sp)
-
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notificaciones",
-                    modifier = Modifier.size(28.dp),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
 
             // Lista scrolleable de cards
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
                     top = 8.dp,
-                    bottom = 90.dp // espacio para que la BarNav no tape las cards
                 )
             ) {
                 items(allreviews) { review ->
-                    ReviewCard(reviewInfo = review)
+                    ReviewCard(
+                        reviewInfo = review,
+                        onClick = { onOpenDetail(review.productId) }
+                    )
                 }
             }
         }
 
-        // BarNav flotante abajo
-        BarNav(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            onHomeClick = onHomeClick,
-            onProfileClick = onProfileClick,
-            onBuscarClick = onTrendsClick
-        )
     }
 }
 
@@ -112,6 +93,6 @@ fun Home(
 @Composable
 fun HomePrev(){
     Buy_itTheme() {
-        Home({},{},{},{},{})
+        Home({},{},{},{},{},onAddReview = {})
     }
 }

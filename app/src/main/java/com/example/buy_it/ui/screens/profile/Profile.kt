@@ -98,15 +98,6 @@ fun Profile(
             }
 
         }
-        BarNav(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            onHomeClick = onHomeClick,
-            onProfileClick = onProfileClick,
-            onBuscarClick = onTrendsClick
-            )
-
         Image(
             painter = painterResource(R.drawable.settings),
             contentDescription = stringResource(R.string.ajustes),

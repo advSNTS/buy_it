@@ -32,10 +32,6 @@ import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Trends(
-    onNotificationClick: () -> Unit,
-    onHomeClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    onTrendsClick: () -> Unit,
     onOpenDetail: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -56,13 +52,9 @@ fun Trends(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 90.dp),
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            item {
-                TrendsHeader(onNotificationClick = onNotificationClick)
-            }
-
             item {
                 SearchBar(
                     value = query,
@@ -107,15 +99,6 @@ fun Trends(
                 )
             }
         }
-
-        BarNav(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            onHomeClick = onHomeClick,
-            onProfileClick = onProfileClick,
-            onBuscarClick = onTrendsClick
-        )
     }
 }
 
@@ -123,35 +106,7 @@ fun Trends(
 @Preview(showBackground = true)
 fun TrendsPreview(){
     Buy_itTheme {
-        Trends({},{},{},{},{})
-    }
-}
-
-@Composable
-private fun TrendsHeader(
-    onNotificationClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = "buy it.",
-            fontSize = 34.sp,
-            fontWeight = FontWeight(700),
-            color = MaterialTheme.colorScheme.primary
-        )
-
-        Image(
-            painter = painterResource(R.drawable.campana),
-            contentDescription = "Notificaciones",
-            modifier = Modifier
-                .size(28.dp)
-                .clickable(onClick = onNotificationClick)
-        )
+        Trends({})
     }
 }
 

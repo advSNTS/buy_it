@@ -235,12 +235,14 @@ fun PrReviBody(){
 @Composable
 fun ReviewCard(
     reviewInfo: ReviewInfo,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp)
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onPrimary
@@ -313,7 +315,8 @@ fun CardPreview(){
         percentageLikes = 88,
         date = LocalDate.now(),
         range = "$6000-$8000",
-        comments = 787
+        comments = 787,
+        productId = "rey_300g"
     )
     Buy_itTheme() { ReviewCard(reviewInfo)}
 

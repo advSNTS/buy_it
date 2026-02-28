@@ -107,20 +107,6 @@ fun Comments(
                 }
             }
         }
-
-        BarNav(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-            onHomeClick = {
-                Log.d("Navigation", "Navegando a Home desde Comentarios")
-                onHomeClick()
-            },
-            onProfileClick = {
-                Log.d("Navigation", "Navegando a Perfil desde Comentarios")
-                onProfileClick()
-            }
-        )
     }
 }
 

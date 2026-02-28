@@ -9,6 +9,7 @@ data class ReviewInfo(
     val name: String,
     // val username: String,
     val review: String,
+    val productId: String,
     val product: String,
     val like: Boolean,
     val percentageLikes: Int,

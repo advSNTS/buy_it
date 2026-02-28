@@ -31,6 +31,9 @@ sealed class Screen(val route: String) {
     object Comments : Screen("comments/{productId}") {
         fun createRoute(productId: String) = "comments/$productId"
     }
+    object ReviewEditorScreen : Screen("review_editor/{productId}") {
+        fun createRoute(productId: String) = "review_editor/$productId"
+    }
 }
 
 @Composable
@@ -107,7 +110,8 @@ fun AppNavigation(
                 onHomeClick = {},
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
                 onTrendsClick = { navController.navigate(Screen.Trends.route) },
-                onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) }
+                onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
+                onAddReview = { id -> navController.navigate(Screen.ReviewEditorScreen.createRoute(id)) }
             )
         }
         composable(route = Screen.Comments.route) { backStackEntry ->
@@ -133,11 +137,21 @@ fun AppNavigation(
 
         composable(route = Screen.Trends.route) {
             Trends(
-                onNotificationClick = { /* TODO */ },
-                onHomeClick = { navController.navigate(Screen.Home.route) },
-                onProfileClick = { navController.navigate(Screen.Profile.route) },
                 onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
-                onTrendsClick = { }
+            )
+        }
+
+        composable(route = Screen.ReviewEditorScreen.route) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId").orEmpty()
+
+            com.example.buy_it.ui.screens.revieweditor.ReviewEditor(
+                productId = productId,
+                onBackPressed = { navController.popBackStack() },
+                onNotificationClick = { /* TODO */ },
+                onPublish = {
+                    // TODO guardar draft
+                    navController.popBackStack()
+                }
             )
         }
     }
