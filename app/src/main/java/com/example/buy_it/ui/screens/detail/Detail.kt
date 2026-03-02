@@ -38,8 +38,6 @@ fun Detail(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        MainBackground()
-
         Column(modifier = Modifier.fillMaxSize()) {
             DetailTopBar(
                 title = "Ver detalle de producto",

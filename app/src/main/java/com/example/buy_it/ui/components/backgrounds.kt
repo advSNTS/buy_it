@@ -3,6 +3,7 @@ package com.example.buy_it.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -12,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -258,6 +260,55 @@ fun MainBackground(
 fun MainpREVIEW(){
     Buy_itTheme() {
         MainBackground()
+    }
+
+}
+
+@Composable
+fun TopBarBackground(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clipToBounds()
+            .background(MaterialTheme.colorScheme.onPrimary)
+    ){
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 40.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.6f,
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 25.dp, y = -15.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 60.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.5f,
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -45.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.primary,
+            colorEnd = MaterialTheme.colorScheme.surface,
+            radio = 50.dp,
+            angulo = 90f,
+            inicioGradiente = 0.1f,
+            finGradiente = 1f,
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -15.dp, y = -20.dp)
+        )
+    }
+}
+
+@Composable
+@Preview()
+fun TopBarBackgroundPreview(){
+    Buy_itTheme() {
+        TopBarBackground(Modifier.height(64.dp))
     }
 
 }

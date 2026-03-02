@@ -191,25 +191,26 @@ posicion de y = sen(-58) = -0.848
 El degradado lo hace brush
  */
 @Composable
-fun LogoMessage(
+fun GradientMessage(
+    text: String,
     modifier: Modifier = Modifier,
-    tamano: TextUnit = 96.sp,
-
+    fontSize: TextUnit = 96.sp,
+    fontWeight: FontWeight = FontWeight(510),
 ){
     Text(
-        text = "buy it.",
+        text = text,
 
         style = TextStyle(
-            fontSize = tamano,
-            fontWeight = FontWeight(510),
+            fontSize = fontSize,
+            fontWeight = fontWeight,
             brush = Brush.linearGradient(
                 colorStops = arrayOf(
                     0.17f to colorResource(R.color.graybluebuyit),
                     1f to colorResource(R.color.navybluebuyit)
                 ),
                 start = Offset(0f, 0f),
-                end = Offset(0.5299f*1000f, -0.848f*100f) //x es el seno y y el cosenop
-            ), //libreria de gradientes
+                end = Offset(0.5299f*1000f, -0.848f*100f)
+            ),
             textAlign = TextAlign.Center
         ), modifier = modifier
     )
@@ -217,8 +218,8 @@ fun LogoMessage(
 
 @Composable
 @Preview(showBackground = true)
-fun LogoMessagePreview(){
-    LogoMessage()
+fun GradientMessagePreview(){
+    GradientMessage("Prueba")
 }
 
 //Imput de texto

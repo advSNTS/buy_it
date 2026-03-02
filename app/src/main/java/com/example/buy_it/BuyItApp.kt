@@ -1,14 +1,18 @@
 package com.example.buy_it
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +26,7 @@ import com.example.buy_it.navigation.AppNavigation
 import com.example.buy_it.navigation.Screen
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.MainBackground
+import com.example.buy_it.ui.components.TopBarBackground
 
 @Composable
 fun BuyIt(
@@ -31,54 +36,64 @@ fun BuyIt(
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
 
-    val showBar = currentRoute != null && 
+    val showTopBar = currentRoute != null &&
                  currentRoute != Screen.Login.route && 
-                 currentRoute != Screen.Register.route
+                 currentRoute != Screen.Register.route &&
+                 currentRoute != Screen.Profile.route &&
+                 currentRoute != Screen.EditInfo.route &&
+                 currentRoute != Screen.Configuration.route
 
+    val showNavBar = currentRoute != null &&
+            currentRoute != Screen.Login.route &&
+            currentRoute != Screen.Register.route &&
+            currentRoute != Screen.Comments.route
 
-    Scaffold(
-        topBar = {
-            if (showBar) {
-                BuyItTopAppBar()
-            }
-        },
-        bottomBar = {
-            if (showBar) {
-                BarNav(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    onHomeClick = { 
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Home.route) { inclusive = true }
-                        }
-                    },
-                    onBuscarClick = { navController.navigate(Screen.Trends.route) },
-                    onAddClick = { /* Acción para agregar */ },
-                    onProfileClick = { navController.navigate(Screen.Profile.route) }
-                )
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (showTopBar) {
+            MainBackground()
         }
-    ) { paddingValues ->
-        AppNavigation(
-            navController = navController,
-            modifier = Modifier.padding(paddingValues)
-        )
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                if (showTopBar) {
+                    BuyItTopAppBar()
+                }
+            },
+            bottomBar = {
+                if (showNavBar) {
+                    BarNav(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        onHomeClick = { 
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.Home.route) { inclusive = true }
+                            }
+                        },
+                        onBuscarClick = { navController.navigate(Screen.Trends.route) },
+                        onAddClick = { /* Acción para agregar */ },
+                        onProfileClick = { navController.navigate(Screen.Profile.route) }
+                    )
+                }
+            }
+        ) { paddingValues ->
+            AppNavigation(
+                navController = navController,
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
     }
 }
 
-@Composable
-@Preview
-fun BuyItPreview(){
-    BuyIt()
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BuyItTopAppBar(
-
-){
+fun BuyItTopAppBar(){
+    // 3. Quitamos el TopBarBackground de aquí para que use el MainBackground global
+    // O si quieres círculos extra, asegúrate de que el contenedor de la TopBar sea transparente
     CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent, // Transparente para fusión total
+            scrolledContainerColor = Color.Transparent
+        ),
         title = {
             Text(
                 text = "buy it.",
@@ -91,18 +106,11 @@ fun BuyItTopAppBar(
                             1f to colorResource(R.color.navybluebuyit)
                         ),
                         start = Offset(0f, 0f),
-                        end = Offset(80f, -40f) //x es el seno y y el cosenop
-                    ), //libreria de gradientes
+                        end = Offset(80f, -40f)
+                    ),
                     textAlign = TextAlign.Center
-                ),
-                modifier = Modifier
+                )
             )
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BuyItTopAppBarPreview(){
-    BuyItTopAppBar()
 }

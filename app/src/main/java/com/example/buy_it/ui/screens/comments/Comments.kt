@@ -63,8 +63,6 @@ fun Comments(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        MainBackground()
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
