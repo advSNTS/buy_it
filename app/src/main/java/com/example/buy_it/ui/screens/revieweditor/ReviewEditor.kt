@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.data.local.ProductProvider
 import com.example.buy_it.ui.components.MainBackground
 
@@ -18,15 +22,13 @@ fun ReviewEditor(
     onBackPressed: () -> Unit,
     onNotificationClick: () -> Unit,
     onPublish: (ReviewDraft) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ReviewEditorViewModel = viewModel(),
 ) {
     val product = remember(productId) { ProductProvider.byId(productId) }
     if (product == null) return
 
-    var likeChoice by remember { mutableStateOf(LikeChoice.None) } // Like / Dislike / None
-    var opinion by remember { mutableStateOf("") }
-
-    val canPublish = opinion.isNotBlank() && likeChoice != LikeChoice.None
+    val uiState by viewModel.uiState.collectAsState()
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -47,27 +49,19 @@ fun ReviewEditor(
                 username = "@tu",
                 productName = product.name,
                 productImage = product.image,
-                likeChoice = likeChoice,
-                onLikeChoiceChange = { likeChoice = it },
-                opinion = opinion,
-                onOpinionChange = { opinion = it },
+                likeChoice = uiState.likeChoice,
+                onLikeChoiceChange = { viewModel.onLikeChoiceChange(it) },
+                opinion = uiState.opinion,
+                onOpinionChange = { viewModel.onOpinionChange(it) },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 10.dp)
             )
 
             PublishReviewButton(
-                enabled = canPublish,
+                enabled = uiState.canPublish,
                 text = "Publicar reseña",
-                onClick = {
-                    onPublish(
-                        ReviewDraft(
-                            productId = productId,
-                            likeChoice = likeChoice,
-                            opinion = opinion.trim()
-                        )
-                    )
-                },
+                onClick = { onPublish(viewModel.buildDraft(productId)) },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 18.dp)
@@ -78,8 +72,8 @@ fun ReviewEditor(
 
 @Composable
 @Preview(showBackground = true)
-fun ReviewEditorPreview(){
-    ReviewEditor("cafe_110g",{},{},{})
+fun ReviewEditorPreview() {
+    ReviewEditor("cafe_110g", {}, {}, {})
 }
 
 data class ReviewDraft(
