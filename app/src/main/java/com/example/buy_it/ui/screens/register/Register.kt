@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.screens.register
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -22,20 +26,45 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlancoRegister
 import com.example.buy_it.ui.components.MainButton
 import com.example.buy_it.ui.components.PanelGlass
+import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Register(
+    registerButtonPressed: () -> Unit,
+    onBackScreen: () -> Unit,
     modifier: Modifier = Modifier,
-){
+    viewModel: RegisterViewModel = viewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    // Manejo de navegación mediante flags del UiState
+    LaunchedEffect(uiState.navigateToHome) {
+        if (uiState.navigateToHome) {
+            registerButtonPressed()
+            viewModel.onNavigationHandled()
+        }
+    }
+
+    LaunchedEffect(uiState.navigateBack) {
+        if (uiState.navigateBack) {
+            onBackScreen()
+            viewModel.onNavigationHandled()
+        }
+    }
+
+    val iconoPassword = if (!uiState.mostrarPassword) R.drawable.hide else R.drawable.see
+    val iconoConfirmPassword = if (!uiState.mostrarConfirmPassword) R.drawable.hide else R.drawable.see
+
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         FondoBlancoRegister()
@@ -48,6 +77,7 @@ fun Register(
                 .padding(start = 30.dp)
                 .offset(y = 40.dp)
                 .size(35.dp)
+                .clickable { viewModel.onBackClicked() }
         )
         Column(
             modifier = Modifier
@@ -56,7 +86,6 @@ fun Register(
                 .fillMaxWidth()
                 .padding(horizontal = 50.dp)
         ) {
-
             Text(
                 modifier = Modifier.padding(5.dp),
                 text = stringResource(R.string.crear_cuenta),
@@ -64,42 +93,65 @@ fun Register(
                 fontWeight = FontWeight(510),
                 color = colorResource(R.color.navybluebuyit),
                 textAlign = TextAlign.Center,
-
             )
             Spacer(Modifier.height(70.dp))
             TextInput(
-                text= stringResource(R.string.nombre_de_usuario)
+                placeholder = stringResource(R.string.nombre_de_usuario),
+                item = uiState.username,
+                onItemChange = { viewModel.onUsernameChange(it) }
             )
             TextInput(
-                text = stringResource(R.string.email)
+                placeholder = stringResource(R.string.email),
+                item = uiState.email,
+                onItemChange = { viewModel.onEmailChange(it) }
             )
-            TextInput(
-                text = stringResource(R.string.contrase_a)
+            PasswordInput(
+                placeholder = stringResource(R.string.contrasenna),
+                item = uiState.password,
+                onItemChange = { viewModel.onPasswordChange(it) },
+                icono = iconoPassword,
+                mostrar = uiState.mostrarPassword,
+                onMostrarPassword = { viewModel.onToggleMostrarPassword() }
             )
-            TextInput(
-                text = stringResource(R.string.confirmar_contrase_a)
+            PasswordInput(
+                placeholder = stringResource(R.string.contrasenna),
+                item = uiState.confirmPassword,
+                onItemChange = { viewModel.onConfirmPasswordChange(it) },
+                icono = iconoConfirmPassword,
+                mostrar = uiState.mostrarConfirmPassword,
+                onMostrarPassword = { viewModel.onToggleMostrarConfirmPassword() }
             )
             Spacer(Modifier.height(20.dp))
             CheckAndText(
+                estado = uiState.acceptedTerms,
+                onEstadoChange = { viewModel.onAcceptedTermsChange() },
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)
             )
+            if (uiState.mostrarMensaje && uiState.errorMessage.isNotEmpty()) {
+                Text(
+                    text = uiState.errorMessage,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .align(Alignment.CenterHorizontally),
+                    color = colorResource(R.color.graybuyit)
+                )
+            }
             Spacer(Modifier.height(20.dp))
             MainButton(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
-                text = stringResource(R.string.crear_cuenta)
+                text = stringResource(R.string.crear_cuenta),
+                onClick = { viewModel.onRegister() }
             )
-
         }
     }
-
 }
 
 @Composable
 @Preview(showBackground = false)
-fun RegisterPreview(){
-    Register()
+fun RegisterPreview() {
+    Buy_itTheme { Register({}, {}) }
 }

@@ -1,36 +1,52 @@
 package com.example.buy_it.ui.screens.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.components.ProfilePost
 import com.example.buy_it.ui.components.ProfileText
 import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Profile(
+    onProfileEdit: () -> Unit,
+    onConfigurationEdit: () -> Unit,
+    onHomeClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onTrendsClick: () -> Unit,
+    profileViewModel: ProfileViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ){
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
+    val state by profileViewModel.uiState.collectAsState()
 
+    Box(
+        modifier = modifier.fillMaxSize(),
     ){
         ProfileCircles()
         Column(
@@ -46,79 +62,59 @@ fun Profile(
                     .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ProfileText(text= stringResource(R.string._9))
-                    ProfileText(text= stringResource(R.string.productos))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.productosCount)
+                    ProfileText(text = stringResource(R.string.productos))
                 }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ProfileText(text= stringResource(R.string._1_6k))
-                    ProfileText(text= stringResource(R.string.seguidores))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.seguidoresCount)
+                    ProfileText(text = stringResource(R.string.seguidores))
                 }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ProfileText(text= stringResource(R.string._128))
-                    ProfileText(text= stringResource(R.string.seguidos))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.seguidosCount)
+                    ProfileText(text = stringResource(R.string.seguidos))
                 }
             }
-            Row(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                ProfilePost(img = R.drawable.cafe)
-                ProfilePost(img = R.drawable.top)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                ProfilePost(img = R.drawable.rey)
-                ProfilePost(img = R.drawable.mogolla)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                ProfilePost(img = R.drawable.carne)
-                ProfilePost(img = R.drawable.toalla)
+                    .weight(1f)
+                    .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ){
+                items(state.profileItems) { item ->
+                    ProfilePost(
+                        img = item.img,
+                        descripcion = item.descripcion
+                    )
+                }
             }
         }
         Image(
-            painter = painterResource(R.drawable.barra),
-            contentDescription = stringResource(R.string.barra_de_navegacion),
+            painter = painterResource(R.drawable.settings),
+            contentDescription = stringResource(R.string.ajustes),
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .size(50.dp)
-
+                .align(Alignment.TopEnd)
+                .size(30.dp)
+                .offset(x = (-20).dp, y = 30.dp)
+                .clickable(onClick = onConfigurationEdit)
         )
         Image(
             painter = painterResource(R.drawable.edit),
             contentDescription = stringResource(R.string.editar_perfil),
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .size(40.dp)
-                .offset(x = 100.dp, y = 140.dp)
+                .size(120.dp)
+                .offset(x = 100.dp, y = 100.dp)
+                .clickable(onClick = onProfileEdit)
         )
-
     }
-
 }
-
 
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Profile()
+    Buy_itTheme { Profile({},{},{},{},{}, viewModel()) }
 }

@@ -1,9 +1,11 @@
 package com.example.buy_it.ui.components
 
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,26 +16,43 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +61,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.R
+import com.example.buy_it.ui.theme.Buy_itTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -58,8 +78,8 @@ y = sin(angulo)
  */
 @Composable
 fun Elipse(
-    @ColorRes colorStart: Int = R.color.graybluebuyit, //anotacion de color res para recibir por color resource
-    @ColorRes colorEnd: Int = R.color.bgwhite,
+    colorStart: Color = MaterialTheme.colorScheme.primary, //anotacion de color res para recibir por color resource
+    colorEnd: Color = MaterialTheme.colorScheme.onPrimary,
     radio: Dp = 50.dp,
     angulo: Float = 45f, //angulo del gradiente
     inicioGradiente: Float = 0.5f,
@@ -67,8 +87,6 @@ fun Elipse(
     modifier: Modifier = Modifier
 ){
     //sacar los ids de los colores
-    val color1 = colorResource(id = colorStart)
-    val color2 = colorResource(id = colorEnd)
 
     //tamaño del canva
     Canvas(modifier = modifier.size(radio * 2)){
@@ -89,8 +107,8 @@ fun Elipse(
             brush = Brush.linearGradient(
                 //desde donde van los colores
                 colorStops = arrayOf(
-                    inicioGradiente to color1,
-                    finGradiente to color2
+                    inicioGradiente to colorStart,
+                    finGradiente to colorEnd
                 ),
                 start = Offset(startX, startY), //el inicio con respecto al centro
                 end = Offset(endX, endY)
@@ -104,15 +122,16 @@ fun Elipse(
 @Composable
 @Preview()
 fun ElipsePreview(){
-    Elipse(
-        colorStart = R.color.graybluebuyit,
-        colorEnd = R.color.bgwhite,
-        radio = 100.dp,
-        angulo = -71f,
-        inicioGradiente = 0.1f,
-        finGradiente = 0.7f
+    Buy_itTheme() {
+        Elipse(
+            radio = 100.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.7f
 
-    )
+        )
+    }
+
 }
 
 @Composable
@@ -159,64 +178,7 @@ fun CirclePreview(){
     Circle()
 }
 
-//panel principal
-/*
-Incluye los composables :
-Botones de login, otras formas, y checkbox
-Campos de texto
-Logo
- */
-//TODO: volverlo vidrio
-@Composable
-fun GlassPanel(
-    modifier : Modifier = Modifier
-){
-    Box(
-        modifier = modifier
-            .width(352.dp)
-            .height(800.dp)
-            .background(
-                color = colorResource(R.color.glasswhite),
-                shape = RoundedCornerShape(size = 25.dp)
-            ),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
-            modifier = Modifier.padding(30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LogoMessage(modifier = Modifier.padding(top = 35.dp, bottom = 40.dp))
-            TextInput(text= stringResource(R.string.e_mail))
-            TextInput(text = stringResource(R.string.contrasenna))
-            CheckAndText(modifier = Modifier.padding(top = 10.dp))
-            Text(
-                text = stringResource(R.string.olvido_su_contrasenna),
-                textDecoration = TextDecoration.Underline,
-            )
-            MainButton(modifier = Modifier
-                .padding(top = 20.dp)
-                .fillMaxWidth(),text = stringResource(R.string.iniciar_sesion)
-            )
-            SecondaryButton(modifier = Modifier
-                .padding(bottom = 40.dp)
-                .fillMaxWidth(),text = stringResource(R.string.crear_cuenta)
-            )
-            Text(modifier = Modifier.padding(bottom = 20.dp),text = stringResource(R.string.otras_formas_de_iniciar_sesion), fontWeight = FontWeight(510), fontSize = 16.sp)
-            Row() {
-                //Cambiar esto cuando se cambie el fondo de ciruculo de imagen a figura
-                LoginOption(Modifier.size(74.dp),backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
-                Spacer(Modifier.width(30.dp))
-                LoginOption(Modifier.size(74.dp),backgroundGlass = painterResource(R.drawable.elipse5), loginIcon = painterResource(R.drawable.apple))
-            }
-        }
-    }
-}
 
-@Composable
-@Preview(showBackground = false)
-fun GlassPanelPreview(){
-    GlassPanel()
-}
 
 //Logo principal
 //TODO: Degradado, definir color por resource
@@ -229,25 +191,26 @@ posicion de y = sen(-58) = -0.848
 El degradado lo hace brush
  */
 @Composable
-fun LogoMessage(
+fun GradientMessage(
+    text: String,
     modifier: Modifier = Modifier,
-    tamano: TextUnit = 96.sp,
-
+    fontSize: TextUnit = 96.sp,
+    fontWeight: FontWeight = FontWeight(510),
 ){
     Text(
-        text = "buy it.",
+        text = text,
 
         style = TextStyle(
-            fontSize = tamano,
-            fontWeight = FontWeight(510),
+            fontSize = fontSize,
+            fontWeight = fontWeight,
             brush = Brush.linearGradient(
                 colorStops = arrayOf(
                     0.17f to colorResource(R.color.graybluebuyit),
                     1f to colorResource(R.color.navybluebuyit)
                 ),
                 start = Offset(0f, 0f),
-                end = Offset(0.5299f*1000f, -0.848f*100f) //x es el seno y y el cosenop
-            ), //libreria de gradientes
+                end = Offset(0.5299f*1000f, -0.848f*100f)
+            ),
             textAlign = TextAlign.Center
         ), modifier = modifier
     )
@@ -255,8 +218,8 @@ fun LogoMessage(
 
 @Composable
 @Preview(showBackground = true)
-fun LogoMessagePreview(){
-    LogoMessage()
+fun GradientMessagePreview(){
+    GradientMessage("Prueba")
 }
 
 //Imput de texto
@@ -264,15 +227,18 @@ fun LogoMessagePreview(){
 @Composable
 fun TextInput(
     modifier: Modifier = Modifier,
-    text: String,
+    placeholder: String,
+    item: String,
+    onItemChange: (String) -> Unit,
 ){
     TextField(
+        placeholder = {Text(placeholder)},
         modifier = modifier,
-        value = text,
+        value = item,
         textStyle = TextStyle(
-            color = colorResource(R.color.graybuyit)
+            color = MaterialTheme.colorScheme.outline
         ),
-        onValueChange = {},
+        onValueChange = onItemChange,
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent
@@ -283,14 +249,80 @@ fun TextInput(
 @Composable
 @Preview(showBackground = true)
 fun TextInputPreview(){
-    TextInput(text="Default")
+    Buy_itTheme() {
+        TextInput(item = "", placeholder = "Hyue", onItemChange = {})
+    }
+}
 
+@Composable
+fun TextInputRounded(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+    item: String,
+    onItemChange: (String) -> Unit,
+){
+    TextField(
+        placeholder = {Text(placeholder)},
+        modifier = modifier.clip(RoundedCornerShape(14.dp)),
+        value = item,
+        textStyle = TextStyle(
+            color = MaterialTheme.colorScheme.outline
+        ),
+        onValueChange = onItemChange,
+
+    )
+}
+
+@Composable
+@Preview(showBackground = false)
+fun TextInputRoundedPreview(){
+    Buy_itTheme() {
+        TextInputRounded(item = "", placeholder = "Hyue", onItemChange = {})
+    }
+}
+
+@Composable
+fun PasswordInput(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+    item: String,
+    onItemChange: (String) -> Unit,
+    mostrar: Boolean,
+    onMostrarPassword: () -> Unit,
+    icono: Int,
+) {
+    TextField(
+        value = item,
+        onValueChange = onItemChange,
+        placeholder = { Text(placeholder) },
+        visualTransformation = if (mostrar) VisualTransformation.None else PasswordVisualTransformation(),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent
+        ),
+        trailingIcon = {
+            IconButton(onClick = onMostrarPassword) {
+                Icon(
+                    painter = painterResource(icono),
+                    contentDescription = stringResource(R.string.iniciar_sesion),
+                    modifier = Modifier.size(25.dp)
+                )
+            }
+        }
+    )
+}
+@Composable
+@Preview(showBackground = true)
+fun PasswordInputPreview(){
+    PasswordInput(placeholder = "Holas", item = "", onItemChange = {}, mostrar = false, onMostrarPassword = {}, icono = R.drawable.see)
 }
 
 //Texto de recordar
 //TODO: Volver a strinng resource
 @Composable
 fun CheckAndText(
+    estado: Boolean = false,
+    onEstadoChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ){
     Row(
@@ -298,17 +330,17 @@ fun CheckAndText(
         modifier = modifier.padding(8.dp)
     ) {
         Checkbox(
-            checked = true,
-            onCheckedChange = {},
+            checked = estado,
+            onCheckedChange = onEstadoChange,
             colors = CheckboxDefaults.colors(
-                checkedColor = colorResource(R.color.graybuyit),
-                uncheckedColor = colorResource(R.color.graybuyit),
+                checkedColor = MaterialTheme.colorScheme.secondary,
+                uncheckedColor = MaterialTheme.colorScheme.outline,
             )
         )
         Text(
             modifier = Modifier.padding(9.dp),
             text = "Recordarme",
-            color = colorResource(R.color.graybuyit)
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }
@@ -316,20 +348,23 @@ fun CheckAndText(
 @Composable
 @Preview(showBackground = true)
 fun CheckAndTextPreview(){
-    CheckAndText()
+    Buy_itTheme() {CheckAndText(estado = false, onEstadoChange = {}) }
+
 }
 
 //Boton Iniciar Sesión, el texto es pasado por parámetro
+//A veces el color se bugea
 @Composable
 fun MainButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     text: String
 ){
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.blackbuyit)
+            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
         Text(
@@ -341,26 +376,28 @@ fun MainButton(
 @Composable
 @Preview(showBackground = true)
 fun MainButtonPreview(){
-    MainButton(text=stringResource(R.string.nombre))
+    Buy_itTheme() { MainButton(text=stringResource(R.string.nombre), onClick = {})}
+
 
 }
 
 //Boton Registrarse, el texto es pasado por parámetro
 @Composable
 fun SecondaryButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     text: String,
 ){
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.white),
+            containerColor = MaterialTheme.colorScheme.onPrimary,
         )
     ) {
         Text(
             text = text,
-            color = colorResource(R.color.blackbuyit)
+            color = MaterialTheme.colorScheme.onSecondaryContainer
         )
     }
 }
@@ -368,44 +405,10 @@ fun SecondaryButton(
 @Composable
 @Preview(showBackground = false)
 fun SecondaryButtonPreview(){
-    SecondaryButton(text = "Crear cuenta")
-}
-
-/*
-Opciones de login, del mockup figma: google y apple
-La imagen se le pasa por parámetro
-TODO: Que el fondo no sea imagen sino un círculo
- */
-@Composable
-fun LoginOption(
-    modifier: Modifier = Modifier,
-    backgroundGlass: Painter,
-    loginIcon: Painter,
-){
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ){
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = backgroundGlass,
-            contentDescription = stringResource(R.string.fondo_de_una_forma_alterna_de_inicio_de_sesion),
-        )
-        Image(
-            modifier = Modifier.fillMaxSize(0.7f),
-            painter = loginIcon,
-            contentDescription = stringResource(R.string.logo_de_forma_alterna_de_inicio_de_sesion)
-        )
-    }
+    Buy_itTheme() {SecondaryButton(text = "Crear cuenta", onClick = {}) }
 
 }
 
-
-@Composable
-@Preview(showBackground = false)
-fun LoginOptionPreview(){
-    LoginOption(backgroundGlass = painterResource(R.drawable.elipse4), loginIcon = painterResource(R.drawable.googlewhite))
-}
 
 @Composable
 fun ProfileText(
@@ -429,10 +432,11 @@ fun ProfileTextPreview(){
 fun ProfilePost(
     modifier: Modifier= Modifier,
     img: Int = R.drawable.cafe,
+    descripcion: String,
 ){
     Image(
         painter = painterResource(img),
-        contentDescription = stringResource(R.string.producto),
+        contentDescription = descripcion,
         modifier = modifier.size(170.dp)
     )
 }
@@ -440,5 +444,183 @@ fun ProfilePost(
 @Composable
 @Preview
 fun ProfilePostPreview(){
-    ProfilePost()
+    ProfilePost(img = R.drawable.cafe, descripcion = "Cafe")
+}
+
+@Composable
+fun navbar(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier
+    ){
+        Image(
+            painter = painterResource(R.drawable.navbar),
+            contentDescription = stringResource(R.string.barra_de_navegacion)
+        )
+        Row(
+
+        ) {
+            Image(
+                painter = painterResource(R.drawable.home),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+            Image(
+                painter = painterResource(R.drawable.plus),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+            Image(
+                painter = painterResource(R.drawable.search),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+            Image(
+                painter = painterResource(R.drawable.home),
+                contentDescription = stringResource(R.string.home_icon)
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun navbarPreview(){
+    navbar()
+}
+
+
+/*
+_________
+Iconos
+________
+
+Por ahora el clic no hace nada
+ */
+@Composable
+fun HomeIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.size(30.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Home,
+            contentDescription = stringResource(R.string.inicio),
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+@Composable
+fun AddIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.size(30.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = stringResource(R.string.agregar),
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+@Composable
+fun BuscarIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.size(30.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "Buscar",
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+@Composable
+fun ProfileIcon(
+    @DrawableRes imageRes: Int = R.drawable.logo,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.size(30.dp)
+    ) {
+        Image(
+            painter = painterResource(id = imageRes),
+            contentDescription = "Perfil",
+            modifier = Modifier
+                .size(30.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+
+
+@Composable
+@Preview
+fun IconsPreview(){
+    Buy_itTheme() {
+        Row() {
+            HomeIcon()
+            AddIcon()
+            BuscarIcon()
+            ProfileIcon()
+        }
+    }
+}
+
+
+@Composable
+fun BarNav(
+    modifier: Modifier = Modifier,
+    onHomeClick: () -> Unit = {},
+    onBuscarClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
+
+    Row(
+        modifier = modifier
+            .height(60.dp)
+            .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(30.dp),
+                clip = false
+            )
+            .clip(RoundedCornerShape(30.dp))
+            .background(MaterialTheme.colorScheme.tertiary),
+
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HomeIcon(onClick = onHomeClick)
+        AddIcon(onClick = onAddClick)
+        BuscarIcon(onClick = onBuscarClick)
+        ProfileIcon(onClick = onProfileClick)
+    }
+}
+
+@Composable
+@Preview
+fun navPreview(){
+    Buy_itTheme() {
+        BarNav()
+    }
 }

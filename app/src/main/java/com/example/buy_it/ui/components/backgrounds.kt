@@ -3,18 +3,22 @@ package com.example.buy_it.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buy_it.R
+import com.example.buy_it.ui.theme.Buy_itTheme
 
 
 @Composable
@@ -25,8 +29,6 @@ fun FondoBlanco(modifier: Modifier = Modifier){
             .background(colorResource(R.color.bgwhite))
     ){
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 150.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -34,8 +36,6 @@ fun FondoBlanco(modifier: Modifier = Modifier){
             modifier = Modifier.align(Alignment.TopStart).offset(x = -32.dp).size(270.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 100.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -43,8 +43,6 @@ fun FondoBlanco(modifier: Modifier = Modifier){
             modifier = Modifier.align(Alignment.TopEnd).offset(x = 135.dp, y = 200.dp).size(287.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 200.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -59,7 +57,8 @@ fun FondoBlanco(modifier: Modifier = Modifier){
 @Composable
 @Preview()
 fun FondoBlancoPreview(){
-    FondoBlanco()
+    Buy_itTheme() { FondoBlanco() }
+
 }
 
 @Composable
@@ -70,8 +69,6 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
             .background(colorResource(R.color.bgwhite))
     ){
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 120.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -80,8 +77,6 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
                 .size(239.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 100.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -89,8 +84,6 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
             modifier = Modifier.align(Alignment.TopEnd).offset(x = 105.dp, y = 20.dp).size(270.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 140.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -105,7 +98,9 @@ fun FondoBlancoRegister(modifier: Modifier = Modifier){
 @Composable
 @Preview()
 fun FondoBlancoRegisterPreview(){
-    FondoBlancoRegister()
+    Buy_itTheme() {
+        FondoBlancoRegister()
+    }
 }
 
 @Composable
@@ -116,8 +111,6 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
             .background(colorResource(R.color.bgwhite))
     ){
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 100.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -125,8 +118,6 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
             modifier = Modifier.align(Alignment.Center).offset(x = -85.dp, y = -50.dp).size(239.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 120.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -134,8 +125,6 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
             modifier = Modifier.align(Alignment.TopEnd).offset(x = 35.dp, y = 20.dp).size(270.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 140.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -150,7 +139,10 @@ fun FondoBlancoEditInfo(modifier: Modifier = Modifier){
 @Composable
 @Preview()
 fun FondoBlancoEditInfoPreview(){
-    FondoBlancoEditInfo()
+    Buy_itTheme() {
+        FondoBlancoEditInfo()
+    }
+
 }
 
 @Composable
@@ -174,7 +166,10 @@ fun PanelGlass(
 @Composable
 @Preview()
 fun PanelGlassPreview(){
-    PanelGlass()
+    Buy_itTheme() {
+        PanelGlass()
+    }
+
 }
 
 @Composable
@@ -187,8 +182,6 @@ fun ProfileCircles(
             .background(colorResource(R.color.bgwhite))
     ){
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 120.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -196,8 +189,6 @@ fun ProfileCircles(
             modifier = Modifier.align(Alignment.TopCenter).offset(y = -40.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 130.dp,
             angulo = -101f,
             inicioGradiente = 0.1f,
@@ -205,8 +196,6 @@ fun ProfileCircles(
             modifier = Modifier.align(Alignment.TopStart).offset(x = -60.dp, y = -120.dp)
         )
         Elipse(
-            colorStart = R.color.graybluebuyit,
-            colorEnd = R.color.bgwhite,
             radio = 130.dp,
             angulo = -71f,
             inicioGradiente = 0.1f,
@@ -220,5 +209,106 @@ fun ProfileCircles(
 @Composable
 @Preview()
 fun ProfileCirclesPreview(){
-    ProfileCircles()
+    Buy_itTheme() {
+        ProfileCircles()
+    }
+
+}
+
+
+@Composable
+fun MainBackground(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onPrimary)
+    ){
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 60.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.6f,
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 50.dp, y = -40.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 150.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.5f,
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -250.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.primary,
+            colorEnd = MaterialTheme.colorScheme.surface,
+            radio = 100.dp,
+            angulo = 90f,
+            inicioGradiente = 0.1f,
+            finGradiente = 1f,
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -140.dp, y = -110.dp)
+        )
+    }
+}
+
+@Composable
+@Preview()
+fun MainpREVIEW(){
+    Buy_itTheme() {
+        MainBackground()
+    }
+
+}
+
+@Composable
+fun TopBarBackground(
+    modifier: Modifier = Modifier
+){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clipToBounds()
+            .background(MaterialTheme.colorScheme.onPrimary)
+    ){
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 40.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.6f,
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = 25.dp, y = -15.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.surface,
+            colorEnd = MaterialTheme.colorScheme.background,
+            radio = 60.dp,
+            angulo = -71f,
+            inicioGradiente = 0.1f,
+            finGradiente = 0.5f,
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -45.dp)
+        )
+        Elipse(
+            colorStart = MaterialTheme.colorScheme.primary,
+            colorEnd = MaterialTheme.colorScheme.surface,
+            radio = 50.dp,
+            angulo = 90f,
+            inicioGradiente = 0.1f,
+            finGradiente = 1f,
+            modifier = Modifier.align(Alignment.TopStart).offset(x = -15.dp, y = -20.dp)
+        )
+    }
+}
+
+@Composable
+@Preview()
+fun TopBarBackgroundPreview(){
+    Buy_itTheme() {
+        TopBarBackground(Modifier.height(64.dp))
+    }
+
 }
