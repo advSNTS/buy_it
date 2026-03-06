@@ -8,4 +8,6 @@ data class RegisterState(
     val acceptedTerms: Boolean = false,
     val mostrarPassword: Boolean = false,
     val mostrarConfirmPassword: Boolean = false,
+    val mostrarMensaje: Boolean = false,
+    val errorMessage: String = "",
 )
