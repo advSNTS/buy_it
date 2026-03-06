@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlancoRegister
@@ -42,15 +44,13 @@ fun Register(
     registerButtonPressed: () -> Unit,
     onBackScreen: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: RegisterViewModel = viewModel()
 ){
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var estado by remember { mutableStateOf(false) }
-    var mostrarPassword by remember { mutableStateOf(false) }
-    var icono = if(!mostrarPassword) R.drawable.hide else R.drawable.see
-    var mostrarConfirmPassword by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsState()
+
+    val iconoPassword = if (!uiState.mostrarPassword) R.drawable.hide else R.drawable.see
+    val iconoConfirmPassword = if (!uiState.mostrarConfirmPassword) R.drawable.hide else R.drawable.see
+
 
     Box(
         modifier = modifier
@@ -91,34 +91,34 @@ fun Register(
             Spacer(Modifier.height(70.dp))
             TextInput(
                 placeholder = stringResource(R.string.nombre_de_usuario),
-                item = username,
-                onItemChange = {username = it}
+                item = uiState.username,
+                onItemChange = {viewModel.onUsernameChange(it)}
             )
             TextInput(
                 placeholder = stringResource(R.string.email),
-                item = email,
-                onItemChange = {email = it}
+                item = uiState.email,
+                onItemChange = {viewModel.onEmailChange(it)}
             )
             PasswordInput(
                 placeholder = stringResource(R.string.contrasenna),
-                item = password,
-                onItemChange = {password = it},
-                icono = icono,
-                mostrar = mostrarPassword,
-                onMostrarPassword = {mostrarPassword = !mostrarPassword}
+                item = uiState.password,
+                onItemChange = {viewModel.onPasswordChange(it)},
+                icono = iconoPassword,
+                mostrar = uiState.mostrarPassword,
+                onMostrarPassword = {viewModel.onToggleMostrarPassword()}
             )
             PasswordInput(
                 placeholder = stringResource(R.string.contrasenna),
-                item = confirmPassword,
-                onItemChange = {confirmPassword = it},
-                icono = icono,
-                mostrar = mostrarConfirmPassword,
-                onMostrarPassword = {mostrarConfirmPassword = !mostrarPassword}
+                item = uiState.confirmPassword,
+                onItemChange = {viewModel.onConfirmPasswordChange(it)},
+                icono = iconoConfirmPassword,
+                mostrar = uiState.mostrarConfirmPassword,
+                onMostrarPassword = {viewModel.onToggleMostrarConfirmPassword()}
             )
             Spacer(Modifier.height(20.dp))
             CheckAndText(
-                estado = estado,
-                onEstadoChange = {estado = !estado},
+                estado = uiState.acceptedTerms,
+                onEstadoChange = {viewModel.onAcceptedTermsChange()},
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)
@@ -130,7 +130,7 @@ fun Register(
                     .fillMaxWidth(),
                 text = stringResource(R.string.crear_cuenta),
                 onClick = {
-                    Log.d("Envio de informacion","username: $username, email: $email, contraseña: $password, confirmar contraseña: $confirmPassword, Recordar contraseña: $estado")
+                    viewModel.onRegister()
                     registerButtonPressed()
                 }
             )
