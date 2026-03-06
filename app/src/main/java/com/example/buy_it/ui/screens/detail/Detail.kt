@@ -22,6 +22,7 @@ fun Detail(
     onBackPressed: () -> Unit,
     onNotificationClick: () -> Unit,
     onOpenComments: () -> Unit,
+    onSeeStores: () -> Unit,
     detailViewModel: DetailViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -63,7 +64,7 @@ fun Detail(
                         range = product.range,
                         likePercent = product.likePercent,
                         ratingsCount = product.ratingsCount,
-                        onClickArrow = onOpenComments
+                        onClickArrow = onSeeStores
                     )
                 }
 
@@ -99,6 +100,7 @@ fun DetailPreview() {
         onBackPressed = {},
         onNotificationClick = {},
         onOpenComments = {},
+        onSeeStores = {},
         detailViewModel = DetailViewModel()
     )
 }
