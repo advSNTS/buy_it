@@ -106,8 +106,8 @@ fun Profile(
             contentDescription = stringResource(R.string.editar_perfil),
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .size(40.dp)
-                .offset(x = 100.dp, y = 140.dp)
+                .size(120.dp)
+                .offset(x = 100.dp, y = 100.dp)
                 .clickable(onClick = onProfileEdit)
         )
     }
