@@ -22,6 +22,11 @@ import com.example.buy_it.ui.screens.comments.Comments
 import com.example.buy_it.ui.screens.home.HomeViewModel
 import com.example.buy_it.ui.screens.login.LoginViewModel
 import com.example.buy_it.ui.screens.prices.Prices
+import com.example.buy_it.ui.screens.prices.PricesViewModel
+import com.example.buy_it.ui.screens.detail.DetailViewModel
+import com.example.buy_it.ui.screens.comments.CommentsViewModel
+import com.example.buy_it.ui.screens.trends.TrendsViewModel
+import com.example.buy_it.ui.screens.revieweditor.ReviewEditor
 
 sealed class Screen(val route: String) {
     object Login : Screen("login")
@@ -59,7 +64,6 @@ fun AppNavigation(
     ){
         composable(route = Screen.Login.route){
             val loginViewModel: LoginViewModel = viewModel()
-
             val state by loginViewModel.uiState.collectAsState()
 
             if(state.navigate){
@@ -133,17 +137,17 @@ fun AppNavigation(
             Home(
                 onNotificationClick = { /* TODO */ },
                 onHomeClick = { /* Ya estamos aquí */ },
-                onProfileClick = { 
+                onProfileClick = {
                     navController.navigate(Screen.Profile.route)
                 },
-                onTrendsClick = { 
+                onTrendsClick = {
                     navController.navigate(Screen.Trends.route)
                 },
-                onOpenDetail = { id -> 
-                    navController.navigate(Screen.Detail.createRoute(id)) 
+                onOpenDetail = { id ->
+                    navController.navigate(Screen.Detail.createRoute(id))
                 },
-                onAddReview = { id -> 
-                    navController.navigate(Screen.ReviewEditorScreen.createRoute(id)) 
+                onAddReview = { id ->
+                    navController.navigate(Screen.ReviewEditorScreen.createRoute(id))
                 },
                 homeViewModel = homeViewModel
             )
@@ -151,40 +155,49 @@ fun AppNavigation(
 
         composable(route = Screen.Comments.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
+            val commentsViewModel: CommentsViewModel = viewModel()
             Comments(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
                 onNotificationClick = { /* TODO */ },
-                onHomeClick = { 
+                onHomeClick = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
-                onProfileClick = { navController.navigate(Screen.Profile.route) }
+                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                commentsViewModel = commentsViewModel
             )
         }
 
         composable(route = Screen.Detail.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
+            val detailViewModel: DetailViewModel = viewModel()
             Detail(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
                 onNotificationClick = { /* TODO */ },
                 onOpenComments = {
+                    navController.navigate(Screen.Comments.createRoute(productId))
+                },
+                onSeeStores = {
                     navController.navigate(Screen.Prices.createRoute(productId))
-                }
+                },
+                detailViewModel = detailViewModel
             )
         }
 
         composable(route = Screen.Trends.route) {
+            val trendsViewModel: TrendsViewModel = viewModel()
             Trends(
                 onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
+                trendsViewModel = trendsViewModel
             )
         }
 
         composable(route = Screen.ReviewEditorScreen.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
-            com.example.buy_it.ui.screens.revieweditor.ReviewEditor(
+            ReviewEditor(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
                 onNotificationClick = { /* TODO */ },
@@ -195,8 +208,8 @@ fun AppNavigation(
         }
 
         composable(route = Screen.Prices.route) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("productId").orEmpty()
-            Prices()
+            val pricesViewModel: PricesViewModel = viewModel()
+            Prices(pricesViewModel = pricesViewModel)
         }
     }
 }
