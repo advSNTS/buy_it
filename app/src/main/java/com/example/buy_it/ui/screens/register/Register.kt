@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +45,21 @@ fun Register(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // Manejo de navegación mediante flags del UiState
+    LaunchedEffect(uiState.navigateToHome) {
+        if (uiState.navigateToHome) {
+            registerButtonPressed()
+            viewModel.onNavigationHandled()
+        }
+    }
+
+    LaunchedEffect(uiState.navigateBack) {
+        if (uiState.navigateBack) {
+            onBackScreen()
+            viewModel.onNavigationHandled()
+        }
+    }
+
     val iconoPassword = if (!uiState.mostrarPassword) R.drawable.hide else R.drawable.see
     val iconoConfirmPassword = if (!uiState.mostrarConfirmPassword) R.drawable.hide else R.drawable.see
 
@@ -62,7 +77,7 @@ fun Register(
                 .padding(start = 30.dp)
                 .offset(y = 40.dp)
                 .size(35.dp)
-                .clickable { onBackScreen() }
+                .clickable { viewModel.onBackClicked() }
         )
         Column(
             modifier = Modifier
@@ -119,7 +134,8 @@ fun Register(
                     text = uiState.errorMessage,
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.CenterHorizontally),
+                    color = colorResource(R.color.graybuyit)
                 )
             }
             Spacer(Modifier.height(20.dp))

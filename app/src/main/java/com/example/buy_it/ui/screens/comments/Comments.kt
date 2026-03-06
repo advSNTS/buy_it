@@ -30,8 +30,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,11 +42,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.data.CommentInfo
-import com.example.buy_it.data.local.CommentProvider
-import com.example.buy_it.ui.components.BarNav
-import com.example.buy_it.ui.components.MainBackground
 
 @Composable
 fun Comments(
@@ -54,10 +53,14 @@ fun Comments(
     onNotificationClick: () -> Unit,
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
+    commentsViewModel: CommentsViewModel,
     modifier: Modifier = Modifier
 ) {
-    val comments = remember(productId) { CommentProvider.byProduct(productId) }
-    val (text, setText) = remember { mutableStateOf("") }
+    val state by commentsViewModel.uiState.collectAsState()
+
+    LaunchedEffect(productId) {
+        commentsViewModel.loadComments(productId)
+    }
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -86,7 +89,7 @@ fun Comments(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                items(comments) { c ->
+                items(state.comments) { c ->
                     CommentCard(info = c)
                 }
 
@@ -94,11 +97,11 @@ fun Comments(
                     CommentInputCard(
                         username = "@tu",
                         avatar = R.drawable.predet,
-                        value = text,
-                        onValueChange = setText,
+                        value = state.newCommentText,
+                        onValueChange = { commentsViewModel.onCommentTextChanged(it) },
                         onPublish = {
-                            Log.d("FormSubmission", "Publicando comentario: '$text' para el producto ID: $productId")
-                            /* TODO guardar comentario */
+                            Log.d("FormSubmission", "Publicando comentario: '${state.newCommentText}' para el producto ID: $productId")
+                            commentsViewModel.publishComment(productId)
                         }
                     )
                     Spacer(Modifier.height(8.dp))
@@ -116,7 +119,8 @@ fun CommentsPreview(){
         onBackPressed = {},
         onNotificationClick = {},
         onHomeClick = {},
-        onProfileClick = {}
+        onProfileClick = {},
+        commentsViewModel = viewModel(),
     )
 }
 

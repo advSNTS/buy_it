@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
@@ -36,8 +38,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.buy_it.R
 import com.example.buy_it.data.ReviewInfo
 
 @Composable
@@ -56,7 +60,7 @@ fun DetailTopBar(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Back",
                 modifier = Modifier
                     .size(26.dp)
@@ -89,7 +93,8 @@ fun ProductHeaderCard(
     range: String,
     likePercent: Int,
     ratingsCount: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickArrow: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -127,10 +132,12 @@ fun ProductHeaderCard(
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight(600)
                 )
-                Text(
-                    text = "➜",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 18.sp
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = "Back",
+                    modifier = Modifier.clickable{
+                        onClickArrow()
+                    }
                 )
             }
 
@@ -164,6 +171,18 @@ fun ProductHeaderCard(
             }
         }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ProductHeaderCardPreview() {
+    ProductHeaderCard(
+        name = "Jabon REY 300g",
+        imageRes = R.drawable.rey,
+        range = "$600-1000",
+        likePercent = 89,
+        ratingsCount = 100
+    )
 }
 
 @Composable

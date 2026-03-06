@@ -304,7 +304,7 @@ fun PasswordInput(
             IconButton(onClick = onMostrarPassword) {
                 Icon(
                     painter = painterResource(icono),
-                    contentDescription = stringResource(R.string.mostar_contrase_a),
+                    contentDescription = stringResource(R.string.iniciar_sesion),
                     modifier = Modifier.size(25.dp)
                 )
             }
@@ -456,7 +456,7 @@ fun navbar(
     ){
         Image(
             painter = painterResource(R.drawable.navbar),
-            contentDescription = stringResource(R.string.navbar_background)
+            contentDescription = stringResource(R.string.barra_de_navegacion)
         )
         Row(
 

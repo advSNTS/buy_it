@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.screens.configuration
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,10 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -37,9 +34,10 @@ import com.example.buy_it.ui.components.TextInput
 
 @Composable
 fun SearchBar(
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ){
-    var search by remember { mutableStateOf("") }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -65,17 +63,11 @@ fun SearchBar(
             )
             TextInput(
                 placeholder = "Buscar",
-                item = search,
-                onItemChange = {search = it}
+                item = value,
+                onItemChange = onValueChange
             )
         }
     }
-}
-
-@Composable
-@Preview
-fun SearchBarPreview(){
-    SearchBar()
 }
 
 @Composable
@@ -95,22 +87,18 @@ fun SubsectionText(
 }
 
 @Composable
-@Preview
-fun SubsectionTextPreview(){
-    SubsectionText("Sapo")
-}
-
-@Composable
 fun SubsectionItem(
     icon: ImageVector,
     text: String,
     secondText: String = "",
+    onClick: () -> Unit = {},
     modifier : Modifier = Modifier
 ){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Icon(
@@ -145,10 +133,4 @@ fun SubsectionItem(
         )
     }
 
-}
-
-@Composable
-@Preview
-fun SubsectionItemPreview(){
-    SubsectionItem(Icons.Default.Lock,"Privacidad de la cuenta", "asass", Modifier)
 }

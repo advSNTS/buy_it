@@ -21,6 +21,7 @@ import com.example.buy_it.ui.screens.trends.Trends
 import com.example.buy_it.ui.screens.comments.Comments
 import com.example.buy_it.ui.screens.home.HomeViewModel
 import com.example.buy_it.ui.screens.login.LoginViewModel
+import com.example.buy_it.ui.screens.prices.Prices
 
 sealed class Screen(val route: String) {
     object Login : Screen("login")
@@ -30,6 +31,11 @@ sealed class Screen(val route: String) {
     object Trends : Screen("trends")
     object EditInfo : Screen("editinfo")
     object Configuration : Screen("configuration")
+
+    object Prices : Screen("prices/{productId}") {
+        fun createRoute(productId: String) = "prices/$productId"
+    }
+
     object Detail : Screen("detail/{productId}") {
         fun createRoute(productId: String) = "detail/$productId"
     }
@@ -164,7 +170,9 @@ fun AppNavigation(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
                 onNotificationClick = { /* TODO */ },
-                onOpenComments = { navController.navigate(Screen.Comments.createRoute(productId)) }
+                onOpenComments = {
+                    navController.navigate(Screen.Prices.createRoute(productId))
+                }
             )
         }
 
@@ -184,6 +192,11 @@ fun AppNavigation(
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable(route = Screen.Prices.route) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId").orEmpty()
+            Prices()
         }
     }
 }

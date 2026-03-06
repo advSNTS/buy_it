@@ -10,4 +10,6 @@ data class RegisterState(
     val mostrarConfirmPassword: Boolean = false,
     val mostrarMensaje: Boolean = false,
     val errorMessage: String = "",
+    val navigateToHome: Boolean = false,
+    val navigateBack: Boolean = false
 )

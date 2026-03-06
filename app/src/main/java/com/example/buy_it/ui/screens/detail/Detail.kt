@@ -7,15 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.buy_it.data.ReviewInfo
-import com.example.buy_it.data.local.ProductProvider
-import com.example.buy_it.data.local.ReviewProvider
-import com.example.buy_it.ui.components.MainBackground
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Detail(
@@ -23,15 +22,21 @@ fun Detail(
     onBackPressed: () -> Unit,
     onNotificationClick: () -> Unit,
     onOpenComments: () -> Unit,
+    detailViewModel: DetailViewModel,
     modifier: Modifier = Modifier
 ) {
-    val product = ProductProvider.byId(productId) ?: return
+    val state by detailViewModel.uiState.collectAsState()
 
-    val reviews = remember {
-        mutableStateListOf<ReviewInfo>().apply {
-            addAll(ReviewProvider.feed.filter { it.product == product.name })
-            if (isEmpty()) addAll(ReviewProvider.feed)
-        }
+    // Cargar los datos cuando el productId cambie
+    LaunchedEffect(productId) {
+        detailViewModel.loadProductDetail(productId)
+    }
+
+    val product = state.product
+
+    if (product == null) {
+        // Podrías mostrar un loading o un error aquí si no se encuentra el producto
+        return
     }
 
     Box(
@@ -57,7 +62,8 @@ fun Detail(
                         imageRes = product.image,
                         range = product.range,
                         likePercent = product.likePercent,
-                        ratingsCount = product.ratingsCount
+                        ratingsCount = product.ratingsCount,
+                        onClickArrow = onOpenComments
                     )
                 }
 
@@ -65,7 +71,7 @@ fun Detail(
                     SectionTitle(text = "Opiniones del producto")
                 }
 
-                items(reviews) { review ->
+                items(state.reviews) { review ->
                     ReviewMiniCard(
                         info = review,
                         onCommentClick = onOpenComments
@@ -83,4 +89,16 @@ fun Detail(
             onLike = { /* TODO */ }
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailPreview() {
+    Detail(
+        productId = "rey_300g",
+        onBackPressed = {},
+        onNotificationClick = {},
+        onOpenComments = {},
+        detailViewModel = DetailViewModel()
+    )
 }

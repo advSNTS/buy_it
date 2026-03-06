@@ -23,25 +23,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.data.TrendInfo
-import com.example.buy_it.data.local.TrendProvider
-import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.MainBackground
-import com.example.buy_it.R
 import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Trends(
     onOpenDetail: (String) -> Unit,
+    trendsViewModel: TrendsViewModel,
     modifier: Modifier = Modifier
 ) {
-    var query by remember { mutableStateOf("") }
-    val trends = remember { TrendProvider.trends }
-
-    val filtered = remember(query, trends) {
-        if (query.isBlank()) trends
-        else trends.filter { it.name.contains(query, ignoreCase = true) }
-    }
+    val state by trendsViewModel.uiState.collectAsState()
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -57,8 +51,8 @@ fun Trends(
         ) {
             item {
                 SearchBar(
-                    value = query,
-                    onValueChange = { query = it }
+                    value = state.searchQuery,
+                    onValueChange = { trendsViewModel.onSearchQueryChanged(it) }
                 )
             }
 
@@ -92,7 +86,7 @@ fun Trends(
                 }
             }
 
-            items(filtered) { item ->
+            items(state.filteredTrends) { item ->
                 TrendCard(
                     info = item,
                     onClick = { onOpenDetail(item.id) }
@@ -106,7 +100,7 @@ fun Trends(
 @Preview(showBackground = true)
 fun TrendsPreview(){
     Buy_itTheme {
-        Trends({})
+        Trends(onOpenDetail = {}, trendsViewModel = viewModel())
     }
 }
 
@@ -157,7 +151,7 @@ private fun FilterButton() {
 }
 
 @Composable
-private fun TrendCard(
+fun TrendCard(
     info: TrendInfo,
     onClick: () -> Unit
 ) {

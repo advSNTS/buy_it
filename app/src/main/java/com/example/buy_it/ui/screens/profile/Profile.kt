@@ -15,16 +15,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
-import com.example.buy_it.data.local.ProfileItemsProvider
-import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.components.ProfilePost
 import com.example.buy_it.ui.components.ProfileText
@@ -38,14 +40,14 @@ fun Profile(
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
     onTrendsClick: () -> Unit,
+    profileViewModel: ProfileViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ){
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
+    val state by profileViewModel.uiState.collectAsState()
 
+    Box(
+        modifier = modifier.fillMaxSize(),
     ){
-        val allTweets = ProfileItemsProvider.itemsFromProfile
         ProfileCircles()
         Column(
             modifier = Modifier
@@ -60,23 +62,17 @@ fun Profile(
                     .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ProfileText(text= stringResource(R.string._9))
-                    ProfileText(text= stringResource(R.string.productos))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.productosCount)
+                    ProfileText(text = stringResource(R.string.productos))
                 }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ProfileText(text= stringResource(R.string._1_6k))
-                    ProfileText(text= stringResource(R.string.seguidores))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.seguidoresCount)
+                    ProfileText(text = stringResource(R.string.seguidores))
                 }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ProfileText(text= stringResource(R.string._128))
-                    ProfileText(text= stringResource(R.string.seguidos))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.seguidosCount)
+                    ProfileText(text = stringResource(R.string.seguidos))
                 }
             }
             LazyVerticalGrid(
@@ -84,53 +80,41 @@ fun Profile(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(top = 20.dp),
+                    .padding(top = 20.dp, start = 16.dp, end = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ){
-                items(allTweets.size) { index ->
+                items(state.profileItems) { item ->
                     ProfilePost(
-                        img = allTweets[index].img,
-                        descripcion = allTweets[index].descripcion
+                        img = item.img,
+                        descripcion = item.descripcion
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
-
         }
         Image(
             painter = painterResource(R.drawable.settings),
             contentDescription = stringResource(R.string.ajustes),
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .fillMaxWidth()
                 .size(30.dp)
-                .offset(x = 150.dp, y = 30.dp)
-                .clickable(
-                    onClick = onConfigurationEdit
-                )
+                .offset(x = (-20).dp, y = 30.dp)
+                .clickable(onClick = onConfigurationEdit)
         )
         Image(
             painter = painterResource(R.drawable.edit),
             contentDescription = stringResource(R.string.editar_perfil),
-
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .fillMaxWidth()
                 .size(40.dp)
                 .offset(x = 100.dp, y = 140.dp)
-                .clickable(
-                    onClick = onProfileEdit
-                )
+                .clickable(onClick = onProfileEdit)
         )
-
     }
-
 }
-
 
 @Composable
 @Preview(showBackground = true)
 fun ProfilePreview(){
-    Buy_itTheme() { Profile({},{},{},{},{}) }
+    Buy_itTheme { Profile({},{},{},{},{}, viewModel()) }
 }
