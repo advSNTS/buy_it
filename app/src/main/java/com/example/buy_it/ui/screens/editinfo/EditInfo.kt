@@ -1,6 +1,5 @@
 package com.example.buy_it.ui.screens.editinfo
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,15 +10,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.FondoBlancoEditInfo
 import com.example.buy_it.ui.components.MainButton
@@ -30,19 +28,18 @@ import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun EditInfo(
-    onSaveChanges : () -> Unit,
+    onSaveChanges: () -> Unit,
     modifier: Modifier = Modifier,
-){
-    var name by remember{ mutableStateOf("") }
-    var email by remember{ mutableStateOf("") }
-    var password by remember{ mutableStateOf("") }
-    var mostrarPassword by remember { mutableStateOf(false) }
-    var icono = if(!mostrarPassword) R.drawable.hide else R.drawable.see
+    viewModel: EditInfoViewModel = viewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    val icono = if (!uiState.mostrarPassword) R.drawable.hide else R.drawable.see
+
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         FondoBlancoEditInfo()
         PanelGlass()
         Column(
@@ -55,19 +52,17 @@ fun EditInfo(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-            ){
+            ) {
                 PictureWithCircle()
             }
             Spacer(Modifier.height(30.dp))
             Text(
                 text = stringResource(R.string.nombre),
-
             )
             TextInput(
-
                 placeholder = stringResource(R.string.buy_it),
-                item = name,
-                onItemChange = {name = it}
+                item = uiState.name,
+                onItemChange = { viewModel.onNameChange(it) }
             )
             Spacer(Modifier.height(10.dp))
             Text(
@@ -75,8 +70,8 @@ fun EditInfo(
             )
             TextInput(
                 placeholder = stringResource(R.string.buyit_buyit_com),
-                item = email,
-                onItemChange = {email = it}
+                item = uiState.email,
+                onItemChange = { viewModel.onEmailChange(it) }
             )
             Spacer(Modifier.height(10.dp))
             Text(
@@ -84,18 +79,18 @@ fun EditInfo(
             )
             PasswordInput(
                 placeholder = stringResource(R.string.contrasenna),
-                item = password,
-                onItemChange = {password = it},
+                item = uiState.password,
+                onItemChange = { viewModel.onPasswordChange(it) },
                 icono = icono,
-                mostrar = mostrarPassword,
-                onMostrarPassword = {mostrarPassword = !mostrarPassword}
+                mostrar = uiState.mostrarPassword,
+                onMostrarPassword = { viewModel.onToggleMostrarPassword() }
             )
             Spacer(Modifier.height(60.dp))
             MainButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.guardar_cambios),
                 onClick = {
-                    Log.d("Guardar cambios","nombre: $name, email: $email, contraseña: $password")
+                    viewModel.onSaveChanges()
                     onSaveChanges()
                 }
             )
@@ -105,7 +100,6 @@ fun EditInfo(
 
 @Composable
 @Preview(showBackground = true)
-fun EditInfoPreview(){
-    Buy_itTheme() { EditInfo({})}
-
+fun EditInfoPreview() {
+    Buy_itTheme { EditInfo({}) }
 }
