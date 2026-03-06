@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 class RegisterViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
-    val uiState: StateFlow<RegisterState> = _uiState.asStateFlow()
+    val uiState: StateFlow<RegisterState> = _uiState
 
     fun onUsernameChange(value: String) {
         _uiState.update { it.copy(username = value) }
