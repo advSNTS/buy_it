@@ -1,12 +1,15 @@
 package com.example.buy_it.ui.screens.revieweditor
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class ReviewEditorViewModel : ViewModel() {
+@HiltViewModel
+class ReviewEditorViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReviewEditorState())
     val uiState: StateFlow<ReviewEditorState> = _uiState.asStateFlow()
