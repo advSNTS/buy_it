@@ -1,33 +1,40 @@
 package com.example.buy_it.ui.screens.trends
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.data.TrendInfo
 import com.example.buy_it.ui.components.MainBackground
-import com.example.buy_it.ui.theme.Buy_itTheme
+import androidx.compose.material.icons.outlined.ThumbUp
 
 @Composable
 fun Trends(
@@ -46,7 +53,7 @@ fun Trends(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+                .padding(horizontal = 14.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             item {
@@ -59,30 +66,46 @@ fun Trends(
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    SortButton()
-                    FilterButton()
+                    SortButton(modifier = Modifier.weight(1f))
+                    FilterButton(modifier = Modifier.weight(1f))
                 }
             }
 
             item {
-                Text(
-                    text = "Tendencias",
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight(800),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Column {
+                    Text(
+                        text = "Tendencias",
+                        fontSize = 32.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = "Productos con mejor comportamiento reciente",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
             }
 
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Calificaciones", color = MaterialTheme.colorScheme.outline)
-                    Text("Precio", color = MaterialTheme.colorScheme.outline)
+                    Text(
+                        text = "Calificaciones",
+                        color = MaterialTheme.colorScheme.outline,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "Variación",
+                        color = MaterialTheme.colorScheme.outline,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
@@ -92,15 +115,11 @@ fun Trends(
                     onClick = { onOpenDetail(item.id) }
                 )
             }
-        }
-    }
-}
 
-@Composable
-@Preview(showBackground = true)
-fun TrendsPreview(){
-    Buy_itTheme {
-        Trends(onOpenDetail = {}, trendsViewModel = viewModel())
+            item {
+                Spacer(modifier = Modifier.height(90.dp))
+            }
+        }
     }
 }
 
@@ -113,40 +132,67 @@ private fun SearchBar(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text("Buscar") },
+        placeholder = { Text("Buscar producto") },
         singleLine = true,
-        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "Buscar") },
-        shape = RoundedCornerShape(22.dp)
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Buscar"
+            )
+        },
+        shape = RoundedCornerShape(18.dp)
     )
 }
 
 @Composable
-private fun SortButton() {
+private fun SortButton(
+    modifier: Modifier = Modifier
+) {
     Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .clickable { }
+            .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { /* TODO ordenar */ }
-            .padding(horizontal = 12.dp, vertical = 10.dp)
+        horizontalArrangement = Arrangement.Center
     ) {
-        Text("Ordenar por:", color = MaterialTheme.colorScheme.primary)
+        Text(
+            text = "Ordenar por",
+            color = MaterialTheme.colorScheme.primary
+        )
         Spacer(Modifier.width(8.dp))
-        Icon(Icons.Default.ArrowForward, contentDescription = "Ordenar")
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+            contentDescription = "Ordenar",
+            tint = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
 @Composable
-private fun FilterButton() {
+private fun FilterButton(
+    modifier: Modifier = Modifier
+) {
     Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .clickable { }
+            .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { /* TODO filtros */ }
-            .padding(horizontal = 12.dp, vertical = 10.dp)
+        horizontalArrangement = Arrangement.Center
     ) {
-        Icon(Icons.Default.Tune, contentDescription = "Filtros")
+        Icon(
+            imageVector = Icons.Default.Tune,
+            contentDescription = "Filtros",
+            tint = MaterialTheme.colorScheme.primary
+        )
         Spacer(Modifier.width(8.dp))
-        Text("Filtros")
+        Text(
+            text = "Filtros",
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
@@ -155,60 +201,95 @@ fun TrendCard(
     info: TrendInfo,
     onClick: () -> Unit
 ) {
-    val shape = RoundedCornerShape(18.dp)
+    val shape = RoundedCornerShape(22.dp)
     val isUp = info.deltaPercent >= 0
 
-    Row(
+    androidx.compose.material3.Card(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(6.dp, shape)
-            .background(MaterialTheme.colorScheme.onPrimary, shape)
-            .clickable(onClick = onClick)
-            .padding(14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+            .clickable(onClick = onClick),
+        shape = shape,
+        colors = androidx.compose.material3.CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
-        Image(
-            painter = painterResource(info.image),
-            contentDescription = info.name,
+        Row(
             modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            contentScale = ContentScale.Crop
-        )
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = info.name,
-                fontWeight = FontWeight(700),
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(Modifier.height(10.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            androidx.compose.material3.Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = androidx.compose.material3.CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
-                Text("👍 ${info.ratingPercent}%", color = MaterialTheme.colorScheme.outline)
-
-                val pillColor = if (isUp) MaterialTheme.colorScheme.tertiaryContainer
-                else MaterialTheme.colorScheme.errorContainer
-
-                val pillTextColor = if (isUp) MaterialTheme.colorScheme.onTertiaryContainer
-                else MaterialTheme.colorScheme.onErrorContainer
-
-                Box(
+                androidx.compose.foundation.Image(
+                    painter = androidx.compose.ui.res.painterResource(info.image),
+                    contentDescription = info.name,
                     modifier = Modifier
-                        .background(pillColor, RoundedCornerShape(12.dp))
-                        .padding(horizontal = 10.dp, vertical = 6.dp)
+                        .width(64.dp)
+                        .height(64.dp)
+                        .padding(8.dp),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Fit
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = info.name,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        text = if (isUp) "↑ +${info.deltaPercent}%" else "↓ ${info.deltaPercent}%",
-                        color = pillTextColor,
-                        fontWeight = FontWeight(700)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ThumbUp,
+                            contentDescription = "Calificación positiva",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+
+                        Text(
+                            text = "${info.ratingPercent}%",
+                            color = MaterialTheme.colorScheme.outline,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+
+                    val pillColor =
+                        if (isUp) MaterialTheme.colorScheme.tertiaryContainer
+                        else MaterialTheme.colorScheme.errorContainer
+
+                    val pillTextColor =
+                        if (isUp) MaterialTheme.colorScheme.onTertiaryContainer
+                        else MaterialTheme.colorScheme.onErrorContainer
+
+                    Box(
+                        modifier = Modifier
+                            .background(pillColor, RoundedCornerShape(14.dp))
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = if (isUp) "↑ +${info.deltaPercent}%" else "↓ ${info.deltaPercent}%",
+                            color = pillTextColor,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
         }

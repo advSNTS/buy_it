@@ -1,6 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger)
+
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -27,13 +34,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
     }
 
+}
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -50,6 +60,19 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:1.10.3")
     implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
+
+    //Hilt
+    implementation(libs.dagger.hilt)
+    implementation(libs.hilt.compose.navigation)
+    implementation(libs.androidx.junit.ktx)
+    ksp(libs.dagger.kapt)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
     implementation(libs.androidx.graphics.shapes)
     implementation(libs.androidx.compose.ui.text.google.fonts)

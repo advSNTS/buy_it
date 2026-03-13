@@ -26,7 +26,9 @@ import com.example.buy_it.ui.screens.profile.Profile
 import com.example.buy_it.ui.screens.register.Register
 import com.example.buy_it.ui.theme.Buy_itTheme
 import com.example.buy_it.ui.theme.bodyFontFamily
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
