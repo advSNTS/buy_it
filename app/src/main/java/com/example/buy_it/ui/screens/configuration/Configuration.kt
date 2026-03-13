@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DataThresholding
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.NoAccounts
@@ -37,16 +38,23 @@ import com.example.buy_it.R
 @Composable
 fun Configuration(
     onBackPressed: () -> Unit,
+    onLogout: () -> Unit,
     configurationViewModel: ConfigurationViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val state by configurationViewModel.uiState.collectAsState()
+
+    if(state.navigateToLogin){
+        onLogout()
+        configurationViewModel.onLogoutHandled()
+    }
 
     ConfigurationScreen(
         state = state,
         onBackPressed = onBackPressed,
         onSearchQueryChanged = { configurationViewModel.onSearchQueryChanged(it) },
         onToggleAccountPrivacy = { configurationViewModel.toggleAccountPrivacy() },
+        onLogout = { configurationViewModel.logout() },
         modifier = modifier
     )
 }
@@ -57,6 +65,7 @@ fun ConfigurationScreen(
     onBackPressed: () -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onToggleAccountPrivacy: () -> Unit,
+    onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -150,6 +159,12 @@ fun ConfigurationScreen(
             text = stringResource(R.string.almacenamiento)
         )
 
+        SubsectionItem(
+            icon = Icons.Default.ExitToApp,
+            text = stringResource(R.string.cerrar_sesi_n),
+            onClick = onLogout
+        )
+
         Spacer(modifier = Modifier.height(90.dp))
     }
 }
@@ -175,6 +190,7 @@ fun ConfigurationPreview() {
         state = ConfigurationState(),
         onBackPressed = {},
         onSearchQueryChanged = {},
-        onToggleAccountPrivacy = {}
+        onToggleAccountPrivacy = {},
+        onLogout = {}
     )
 }

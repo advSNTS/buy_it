@@ -27,10 +27,14 @@ import com.example.buy_it.ui.screens.prices.PricesViewModel
 import com.example.buy_it.ui.screens.detail.DetailViewModel
 import com.example.buy_it.ui.screens.comments.CommentsViewModel
 import com.example.buy_it.ui.screens.configuration.ConfigurationViewModel
+import com.example.buy_it.ui.screens.editinfo.EditInfoViewModel
 import com.example.buy_it.ui.screens.trends.TrendsViewModel
 import com.example.buy_it.ui.screens.revieweditor.ReviewEditor
+import com.example.buy_it.ui.screens.splash.SplashScreen
+import com.example.buy_it.ui.screens.splash.SplashViewModel
 
 sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
     object Login : Screen("login")
     object Register : Screen("register")
     object Home : Screen("home")
@@ -61,9 +65,26 @@ fun AppNavigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route,
+        startDestination = Screen.Splash.route,
         modifier = modifier
     ){
+
+        composable(route = Screen.Splash.route){
+            SplashScreen(
+                navigateToHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                navigateToLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                splashViewModel = hiltViewModel()
+            )
+        }
+
         composable(route = Screen.Login.route){
             val loginViewModel: LoginViewModel = hiltViewModel()
             val state by loginViewModel.uiState.collectAsState()
@@ -119,10 +140,12 @@ fun AppNavigation(
         }
 
         composable(route = Screen.EditInfo.route){
+            val editInfoViewModel: EditInfoViewModel = hiltViewModel()
             EditInfo(
                 onSaveChanges = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = editInfoViewModel
             )
         }
 
@@ -131,6 +154,11 @@ fun AppNavigation(
             Configuration(
                 onBackPressed = {
                     navController.popBackStack()
+                },
+                onLogout = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 },
                 configurationViewModel = configurationViewModel
             )

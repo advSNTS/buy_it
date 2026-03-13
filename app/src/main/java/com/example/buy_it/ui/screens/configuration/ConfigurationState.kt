@@ -6,5 +6,6 @@ data class ConfigurationState(
     val blockedCount: Int = 11,
     val currentLanguage: String = "Español",
     val currentTheme: String = "Claro",
-    val areNotificationsEnabled: Boolean = true
+    val areNotificationsEnabled: Boolean = true,
+    val navigateToLogin: Boolean = false
 )

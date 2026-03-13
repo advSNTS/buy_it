@@ -34,5 +34,10 @@ class ConfigurationViewModel @Inject constructor(
 
     fun logout() {
         authRepository.signOut()
+        _uiState.update { it.copy(navigateToLogin = true) }
+    }
+
+    fun onLogoutHandled() {
+        _uiState.update { it.copy(navigateToLogin = false) }
     }
 }
