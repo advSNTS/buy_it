@@ -3,15 +3,12 @@ package com.example.buy_it.ui.screens.detail
 import androidx.lifecycle.ViewModel
 import com.example.buy_it.data.local.ProductProvider
 import com.example.buy_it.data.local.ReviewProvider
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-@HiltViewModel
-class DetailViewModel @Inject constructor(): ViewModel() {
+class DetailViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(DetailState())
     val uiState: StateFlow<DetailState> = _uiState
 

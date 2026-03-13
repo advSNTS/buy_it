@@ -5,7 +5,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -26,7 +25,6 @@ import com.example.buy_it.ui.screens.prices.Prices
 import com.example.buy_it.ui.screens.prices.PricesViewModel
 import com.example.buy_it.ui.screens.detail.DetailViewModel
 import com.example.buy_it.ui.screens.comments.CommentsViewModel
-import com.example.buy_it.ui.screens.configuration.ConfigurationViewModel
 import com.example.buy_it.ui.screens.trends.TrendsViewModel
 import com.example.buy_it.ui.screens.revieweditor.ReviewEditor
 
@@ -65,7 +63,7 @@ fun AppNavigation(
         modifier = modifier
     ){
         composable(route = Screen.Login.route){
-            val loginViewModel: LoginViewModel = hiltViewModel()
+            val loginViewModel: LoginViewModel = viewModel()
             val state by loginViewModel.uiState.collectAsState()
 
             if(state.navigate){
@@ -127,17 +125,15 @@ fun AppNavigation(
         }
 
         composable(route = Screen.Configuration.route){
-            val configurationViewModel: ConfigurationViewModel = hiltViewModel()
             Configuration(
                 onBackPressed = {
                     navController.popBackStack()
-                },
-                configurationViewModel = configurationViewModel
+                }
             )
         }
 
         composable(route = Screen.Home.route) {
-            val homeViewModel: HomeViewModel = hiltViewModel()
+            val homeViewModel: HomeViewModel = viewModel()
             Home(
                 onNotificationClick = { /* TODO */ },
                 onHomeClick = { /* Ya estamos aquí */ },
@@ -159,7 +155,7 @@ fun AppNavigation(
 
         composable(route = Screen.Comments.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
-            val commentsViewModel: CommentsViewModel = hiltViewModel()
+            val commentsViewModel: CommentsViewModel = viewModel()
             Comments(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
@@ -176,7 +172,7 @@ fun AppNavigation(
 
         composable(route = Screen.Detail.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
-            val detailViewModel: DetailViewModel = hiltViewModel()
+            val detailViewModel: DetailViewModel = viewModel()
             Detail(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
@@ -192,7 +188,7 @@ fun AppNavigation(
         }
 
         composable(route = Screen.Trends.route) {
-            val trendsViewModel: TrendsViewModel = hiltViewModel()
+            val trendsViewModel: TrendsViewModel = viewModel()
             Trends(
                 onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
                 trendsViewModel = trendsViewModel
@@ -212,7 +208,7 @@ fun AppNavigation(
         }
 
         composable(route = Screen.Prices.route) { backStackEntry ->
-            val pricesViewModel: PricesViewModel = hiltViewModel()
+            val pricesViewModel: PricesViewModel = viewModel()
             Prices(pricesViewModel = pricesViewModel)
         }
     }

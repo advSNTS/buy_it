@@ -1,6 +1,5 @@
 package com.example.buy_it.ui.screens.detail
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +12,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Detail(
@@ -27,11 +28,17 @@ fun Detail(
 ) {
     val state by detailViewModel.uiState.collectAsState()
 
+    // Cargar los datos cuando el productId cambie
     LaunchedEffect(productId) {
         detailViewModel.loadProductDetail(productId)
     }
 
-    val product = state.product ?: return
+    val product = state.product
+
+    if (product == null) {
+        // Podrías mostrar un loading o un error aquí si no se encuentra el producto
+        return
+    }
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -47,8 +54,8 @@ fun Detail(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                    .padding(bottom = 86.dp),
+                verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
             ) {
                 item {
                     ProductHeaderCard(
@@ -71,22 +78,29 @@ fun Detail(
                         onCommentClick = onOpenComments
                     )
                 }
-
-                item {
-                    androidx.compose.foundation.layout.Spacer(
-                        modifier = Modifier.padding(bottom = 90.dp)
-                    )
-                }
             }
         }
 
         ReviewInputBar(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(8.dp),
             text = "Reseñar...",
-            onSend = { /* mantener actual */ },
-            onLike = { /* mantener actual */ }
+            onSend = { /* TODO: guardar reseña */ },
+            onLike = { /* TODO */ }
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailPreview() {
+    Detail(
+        productId = "rey_300g",
+        onBackPressed = {},
+        onNotificationClick = {},
+        onOpenComments = {},
+        onSeeStores = {},
+        detailViewModel = DetailViewModel()
+    )
 }

@@ -2,15 +2,12 @@ package com.example.buy_it.ui.screens.prices
 
 import androidx.lifecycle.ViewModel
 import com.example.buy_it.data.local.PricedItemsProvider
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-@HiltViewModel
-class PricesViewModel @Inject constructor() : ViewModel() {
+class PricesViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(PricesState())
     val uiState: StateFlow<PricesState> = _uiState
 

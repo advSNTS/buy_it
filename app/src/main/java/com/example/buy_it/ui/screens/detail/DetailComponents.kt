@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.screens.detail
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,22 +11,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -38,12 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.buy_it.R
 import com.example.buy_it.data.ReviewInfo
 
 @Composable
@@ -56,19 +55,16 @@ fun DetailTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 10.dp, top = 8.dp, bottom = 8.dp),
+            .padding(horizontal = 10.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Volver",
+                contentDescription = "Back",
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(26.dp)
                     .clickable(onClick = onBackPressed),
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -76,16 +72,15 @@ fun DetailTopBar(
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.outline,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium
+                fontSize = 14.sp
             )
         }
 
         Icon(
             imageVector = Icons.Default.NotificationsNone,
-            contentDescription = "Notificaciones",
+            contentDescription = "Notifications",
             modifier = Modifier
-                .size(24.dp)
+                .size(26.dp)
                 .clickable(onClick = onNotificationClick),
             tint = MaterialTheme.colorScheme.primary
         )
@@ -102,97 +97,93 @@ fun ProductHeaderCard(
     modifier: Modifier = Modifier,
     onClickArrow: () -> Unit = {},
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+    Box(
+        modifier = modifier
+            .padding(horizontal = 12.dp)
+            .fillMaxWidth()
+            .shadow(8.dp, RoundedCornerShape(18.dp))
+            .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(18.dp))
+            .padding(14.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
                 text = name,
-                fontSize = 19.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                fontWeight = FontWeight(800),
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-            ) {
-                Image(
-                    painter = painterResource(imageRes),
-                    contentDescription = name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp)
-                        .padding(10.dp),
-                    contentScale = ContentScale.Fit
-                )
-            }
+            Image(
+                painter = painterResource(imageRes),
+                contentDescription = name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(14.dp)),
+                contentScale = ContentScale.Crop
+            )
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = "$range | Ver Tiendas",
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f)
+                    fontWeight = FontWeight(600)
                 )
-
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = "Ver tiendas",
-                    modifier = Modifier.clickable(onClick = onClickArrow),
-                    tint = MaterialTheme.colorScheme.onSurface
+                    contentDescription = "Back",
+                    modifier = Modifier.clickable{
+                        onClickArrow()
+                    }
                 )
             }
 
             Text(
                 text = "Opiniones del producto",
                 color = MaterialTheme.colorScheme.outline,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight(700)
             )
 
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.ThumbUp,
-                    contentDescription = "Likes",
+                    contentDescription = "Like",
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(26.dp)
+                    modifier = Modifier.size(32.dp)
                 )
-
-                Spacer(Modifier.width(8.dp))
-
                 Text(
                     text = "$likePercent%",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 34.sp,
+                    fontWeight = FontWeight(900),
                     color = MaterialTheme.colorScheme.primary
                 )
-
-                Spacer(Modifier.width(8.dp))
-
                 Text(
                     text = "$ratingsCount calificaciones",
                     color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.padding(bottom = 2.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
         }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ProductHeaderCardPreview() {
+    ProductHeaderCard(
+        name = "Jabon REY 300g",
+        imageRes = R.drawable.rey,
+        range = "$600-1000",
+        likePercent = 89,
+        ratingsCount = 100
+    )
 }
 
 @Composable
@@ -202,9 +193,8 @@ fun SectionTitle(
 ) {
     Text(
         text = text,
-        modifier = modifier.padding(start = 4.dp, top = 2.dp),
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        modifier = modifier.padding(start = 18.dp, top = 6.dp),
+        fontWeight = FontWeight(800),
         color = MaterialTheme.colorScheme.onSurface
     )
 }
@@ -215,40 +205,33 @@ fun ReviewMiniCard(
     onCommentClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    Box(
+        modifier = modifier
+            .padding(horizontal = 12.dp)
+            .fillMaxWidth()
+            .shadow(6.dp, RoundedCornerShape(18.dp))
+            .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(18.dp))
+            .padding(14.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(info.pfp),
                     contentDescription = "pfp",
-                    modifier = Modifier
-                        .size(30.dp)
-                        .clip(CircleShape),
+                    modifier = Modifier.size(30.dp).clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
                     text = info.name,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight(800),
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             Text(
                 text = info.review,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 15.sp,
-                lineHeight = 24.sp
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Row(
@@ -258,7 +241,7 @@ fun ReviewMiniCard(
                 Text(
                     text = "Ver comentarios (${info.comments})",
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight(700),
                     modifier = Modifier.clickable(onClick = onCommentClick)
                 )
             }
@@ -275,50 +258,29 @@ fun ReviewInputBar(
 ) {
     var value by remember { mutableStateOf("") }
 
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .shadow(10.dp, RoundedCornerShape(24.dp))
+            .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(24.dp))
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
+        OutlinedTextField(
+            value = value,
+            onValueChange = { value = it },
+            placeholder = { Text(text) },
+            modifier = Modifier.weight(1f),
+            singleLine = true
+        )
+        Spacer(Modifier.width(10.dp))
+        Icon(
+            imageVector = Icons.Default.ThumbUp,
+            contentDescription = "Like",
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = value,
-                onValueChange = { value = it },
-                placeholder = { Text(text) },
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 52.dp),
-                singleLine = true,
-                shape = RoundedCornerShape(14.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences
-                )
-            )
-
-            Spacer(Modifier.width(10.dp))
-
-            Box(
-                modifier = Modifier
-                    .size(42.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.18f))
-                    .clickable(onClick = onLike),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ThumbUp,
-                    contentDescription = "Like",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        }
+                .size(26.dp)
+                .clickable(onClick = onLike),
+            tint = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
