@@ -26,6 +26,7 @@ import com.example.buy_it.ui.screens.prices.Prices
 import com.example.buy_it.ui.screens.prices.PricesViewModel
 import com.example.buy_it.ui.screens.detail.DetailViewModel
 import com.example.buy_it.ui.screens.comments.CommentsViewModel
+import com.example.buy_it.ui.screens.configuration.ConfigurationViewModel
 import com.example.buy_it.ui.screens.trends.TrendsViewModel
 import com.example.buy_it.ui.screens.revieweditor.ReviewEditor
 
@@ -126,10 +127,12 @@ fun AppNavigation(
         }
 
         composable(route = Screen.Configuration.route){
+            val configurationViewModel: ConfigurationViewModel = hiltViewModel()
             Configuration(
                 onBackPressed = {
                     navController.popBackStack()
-                }
+                },
+                configurationViewModel = configurationViewModel
             )
         }
 

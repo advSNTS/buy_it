@@ -48,6 +48,29 @@ fun Login(
     modifier: Modifier = Modifier
 ) {
     val state by loginViewModel.uiState.collectAsState()
+    LoginContent(
+        state = state,
+        onEmailChanged = { loginViewModel.onEmailChanged(it) },
+        onPasswordChanged = { loginViewModel.onPasswordChanged(it) },
+        onRememberMeChanged = { loginViewModel.onRememberMeChanged() },
+        togglePasswordVisibility = { loginViewModel.togglePasswordVisibility() },
+        onLoginButtonPressed = { loginViewModel.loginButtonPressed() },
+        onRegisterButtonPressed = onRegisterButtonPressed,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun LoginContent(
+    state: LoginState,
+    onEmailChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onRememberMeChanged: () -> Unit,
+    togglePasswordVisibility: () -> Unit,
+    onLoginButtonPressed: () -> Unit,
+    onRegisterButtonPressed: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val icono = if (!state.isPasswordVisible) R.drawable.hide else R.drawable.see
 
     Box(
@@ -73,19 +96,19 @@ fun Login(
                 TextInput(
                     placeholder = "Email", 
                     item = state.email, 
-                    onItemChange = { loginViewModel.onEmailChanged(it) }
+                    onItemChange = onEmailChanged
                 )
                 PasswordInput(
                     placeholder = "Contraseña", 
                     item = state.password, 
-                    onItemChange = { loginViewModel.onPasswordChanged(it) }, 
+                    onItemChange = onPasswordChanged, 
                     mostrar = state.isPasswordVisible, 
-                    onMostrarPassword = { loginViewModel.togglePasswordVisibility() }, 
+                    onMostrarPassword = togglePasswordVisibility, 
                     icono = icono
                 )
                 CheckAndText(
                     estado = state.isRememberMeChecked, 
-                    onEstadoChange = { loginViewModel.onRememberMeChanged() },
+                    onEstadoChange = { onRememberMeChanged() },
                     modifier = Modifier.padding(top = 10.dp)
                 )
                 Text(
@@ -97,7 +120,7 @@ fun Login(
                         .padding(top = 20.dp)
                         .fillMaxWidth(),
                     text = stringResource(R.string.iniciar_sesion),
-                    onClick = {loginViewModel.loginButtonPressed()}
+                    onClick = onLoginButtonPressed
                 )
                 SecondaryButton(
                     modifier = Modifier
@@ -133,5 +156,13 @@ fun Login(
 @Composable
 @Preview(showBackground = true)
 fun LoginPreview() {
-    Login(viewModel(),{})
+    LoginContent(
+        state = LoginState(),
+        onEmailChanged = {},
+        onPasswordChanged = {},
+        onRememberMeChanged = {},
+        togglePasswordVisibility = {},
+        onLoginButtonPressed = {},
+        onRegisterButtonPressed = {}
+    )
 }

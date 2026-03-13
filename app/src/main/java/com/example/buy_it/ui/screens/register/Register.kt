@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlancoRegister
@@ -35,28 +34,66 @@ import com.example.buy_it.ui.components.PanelGlass
 import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun Register(
     registerButtonPressed: () -> Unit,
     onBackScreen: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RegisterViewModel = viewModel(),
+    viewModel: RegisterViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // We pass the state and events to a stateless version of the Composable
+    // to allow Previews to work without a ViewModel instance.
+    RegisterContent(
+        uiState = uiState,
+        onUsernameChange = viewModel::onUsernameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+        onAcceptedTermsChange = { viewModel.onAcceptedTermsChange() },
+        onToggleMostrarPassword = viewModel::onToggleMostrarPassword,
+        onToggleMostrarConfirmPassword = viewModel::onToggleMostrarConfirmPassword,
+        onRegister = viewModel::onRegister,
+        onBackClicked = viewModel::onBackClicked,
+        onNavigationHandled = viewModel::onNavigationHandled,
+        registerButtonPressed = registerButtonPressed,
+        onBackScreen = onBackScreen,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun RegisterContent(
+    uiState: RegisterState,
+    onUsernameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onAcceptedTermsChange: (Boolean) -> Unit,
+    onToggleMostrarPassword: () -> Unit,
+    onToggleMostrarConfirmPassword: () -> Unit,
+    onRegister: () -> Unit,
+    onBackClicked: () -> Unit,
+    onNavigationHandled: () -> Unit,
+    registerButtonPressed: () -> Unit,
+    onBackScreen: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     // Manejo de navegación mediante flags del UiState
     LaunchedEffect(uiState.navigateToHome) {
         if (uiState.navigateToHome) {
             registerButtonPressed()
-            viewModel.onNavigationHandled()
+            onNavigationHandled()
         }
     }
 
     LaunchedEffect(uiState.navigateBack) {
         if (uiState.navigateBack) {
             onBackScreen()
-            viewModel.onNavigationHandled()
+            onNavigationHandled()
         }
     }
 
@@ -77,7 +114,7 @@ fun Register(
                 .padding(start = 30.dp)
                 .offset(y = 40.dp)
                 .size(35.dp)
-                .clickable { viewModel.onBackClicked() }
+                .clickable { onBackClicked() }
         )
         Column(
             modifier = Modifier
@@ -98,33 +135,33 @@ fun Register(
             TextInput(
                 placeholder = stringResource(R.string.nombre_de_usuario),
                 item = uiState.username,
-                onItemChange = { viewModel.onUsernameChange(it) }
+                onItemChange = onUsernameChange
             )
             TextInput(
                 placeholder = stringResource(R.string.email),
                 item = uiState.email,
-                onItemChange = { viewModel.onEmailChange(it) }
+                onItemChange = onEmailChange
             )
             PasswordInput(
                 placeholder = stringResource(R.string.contrasenna),
                 item = uiState.password,
-                onItemChange = { viewModel.onPasswordChange(it) },
+                onItemChange = onPasswordChange,
                 icono = iconoPassword,
                 mostrar = uiState.mostrarPassword,
-                onMostrarPassword = { viewModel.onToggleMostrarPassword() }
+                onMostrarPassword = onToggleMostrarPassword
             )
             PasswordInput(
                 placeholder = stringResource(R.string.contrasenna),
                 item = uiState.confirmPassword,
-                onItemChange = { viewModel.onConfirmPasswordChange(it) },
+                onItemChange = onConfirmPasswordChange,
                 icono = iconoConfirmPassword,
                 mostrar = uiState.mostrarConfirmPassword,
-                onMostrarPassword = { viewModel.onToggleMostrarConfirmPassword() }
+                onMostrarPassword = onToggleMostrarConfirmPassword
             )
             Spacer(Modifier.height(20.dp))
             CheckAndText(
                 estado = uiState.acceptedTerms,
-                onEstadoChange = { viewModel.onAcceptedTermsChange() },
+                onEstadoChange = onAcceptedTermsChange,
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)
@@ -144,7 +181,7 @@ fun Register(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
                 text = stringResource(R.string.crear_cuenta),
-                onClick = { viewModel.onRegister() }
+                onClick = onRegister
             )
         }
     }
@@ -153,5 +190,22 @@ fun Register(
 @Composable
 @Preview(showBackground = false)
 fun RegisterPreview() {
-    Buy_itTheme { Register({}, {}) }
+    Buy_itTheme {
+        // We use the stateless RegisterContent for the preview to avoid ViewModel instantiation issues.
+        RegisterContent(
+            uiState = RegisterState(),
+            onUsernameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onAcceptedTermsChange = {},
+            onToggleMostrarPassword = {},
+            onToggleMostrarConfirmPassword = {},
+            onRegister = {},
+            onBackClicked = {},
+            onNavigationHandled = {},
+            registerButtonPressed = {},
+            onBackScreen = {}
+        )
+    }
 }
