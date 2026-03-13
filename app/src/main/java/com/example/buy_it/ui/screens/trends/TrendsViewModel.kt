@@ -2,15 +2,12 @@ package com.example.buy_it.ui.screens.trends
 
 import androidx.lifecycle.ViewModel
 import com.example.buy_it.data.local.TrendProvider
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-@HiltViewModel
-class TrendsViewModel @Inject constructor() : ViewModel() {
+class TrendsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(TrendsState())
     val uiState: StateFlow<TrendsState> = _uiState
 

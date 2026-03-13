@@ -1,7 +1,7 @@
 package com.example.buy_it.ui.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,12 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.buy_it.R
+import com.example.buy_it.navigation.Screen
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlanco
 import com.example.buy_it.ui.components.GradientMessage
@@ -44,29 +48,6 @@ fun Login(
     modifier: Modifier = Modifier
 ) {
     val state by loginViewModel.uiState.collectAsState()
-    LoginContent(
-        state = state,
-        onEmailChanged = { loginViewModel.onEmailChanged(it) },
-        onPasswordChanged = { loginViewModel.onPasswordChanged(it) },
-        onRememberMeChanged = { loginViewModel.onRememberMeChanged() },
-        togglePasswordVisibility = { loginViewModel.togglePasswordVisibility() },
-        onLoginButtonPressed = { loginViewModel.loginButtonPressed() },
-        onRegisterButtonPressed = onRegisterButtonPressed,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun LoginContent(
-    state: LoginState,
-    onEmailChanged: (String) -> Unit,
-    onPasswordChanged: (String) -> Unit,
-    onRememberMeChanged: () -> Unit,
-    togglePasswordVisibility: () -> Unit,
-    onLoginButtonPressed: () -> Unit,
-    onRegisterButtonPressed: () -> Unit,
-    modifier: Modifier = Modifier
-) {
     val icono = if (!state.isPasswordVisible) R.drawable.hide else R.drawable.see
 
     Box(
@@ -74,152 +55,76 @@ fun LoginContent(
         contentAlignment = Alignment.Center
     ) {
         FondoBlanco()
-
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 24.dp)
+                .width(352.dp)
+                .height(800.dp)
                 .background(
                     color = colorResource(R.color.glasswhite),
-                    shape = RoundedCornerShape(28.dp)
-                )
-                .padding(horizontal = 24.dp, vertical = 28.dp)
+                    shape = RoundedCornerShape(size = 25.dp)
+                ),
+            contentAlignment = Alignment.TopCenter
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.padding(30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
-
-                GradientMessage(
-                    text = "buy it.",
-                    fontSize = 64.sp
+                GradientMessage(text = "buy it.")
+                TextInput(
+                    placeholder = "Email", 
+                    item = state.email, 
+                    onItemChange = { loginViewModel.onEmailChanged(it) }
                 )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
+                PasswordInput(
+                    placeholder = "Contraseña", 
+                    item = state.password, 
+                    onItemChange = { loginViewModel.onPasswordChanged(it) }, 
+                    mostrar = state.isPasswordVisible, 
+                    onMostrarPassword = { loginViewModel.togglePasswordVisibility() }, 
+                    icono = icono
+                )
+                CheckAndText(
+                    estado = state.isRememberMeChecked, 
+                    onEstadoChange = { loginViewModel.onRememberMeChanged() },
+                    modifier = Modifier.padding(top = 10.dp)
+                )
                 Text(
-                    text = "Descubre, compara y comparte opiniones",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                    textAlign = TextAlign.Center
+                    text = stringResource(R.string.olvido_su_contrasenna),
+                    textDecoration = TextDecoration.Underline,
                 )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    TextInput(
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = "Email",
-                        item = state.email,
-                        onItemChange = onEmailChanged
-                    )
-
-                    PasswordInput(
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = "Contraseña",
-                        item = state.password,
-                        onItemChange = onPasswordChanged,
-                        mostrar = state.isPasswordVisible,
-                        onMostrarPassword = togglePasswordVisibility,
-                        icono = icono
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CheckAndText(
-                        estado = state.isRememberMeChecked,
-                        onEstadoChange = { onRememberMeChanged() }
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        text = stringResource(R.string.olvido_su_contrasenna),
-                        textDecoration = TextDecoration.Underline,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-
-                if (state.mostrarMensaje && state.errorMessage.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = state.errorMessage,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
                 MainButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
+                        .padding(top = 20.dp)
+                        .fillMaxWidth(),
                     text = stringResource(R.string.iniciar_sesion),
-                    onClick = onLoginButtonPressed
+                    onClick = {loginViewModel.loginButtonPressed()}
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
                 SecondaryButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
+                        .padding(bottom = 40.dp)
+                        .fillMaxWidth(),
                     text = stringResource(R.string.crear_cuenta),
                     onClick = onRegisterButtonPressed
                 )
-
-                Spacer(modifier = Modifier.height(28.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.outlineVariant
-                    )
-                    Text(
-                        text = "  Otras formas de iniciar sesión  ",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.outlineVariant
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(22.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Text(
+                    modifier = Modifier.padding(bottom = 20.dp),
+                    text = stringResource(R.string.otras_formas_de_iniciar_sesion), 
+                    fontWeight = FontWeight(510), 
+                    fontSize = 16.sp
+                )
+                Row {
                     LoginOption(
-                        modifier = Modifier.size(68.dp),
-                        backgroundGlass = painterResource(R.drawable.elipse4),
+                        Modifier.size(74.dp),
+                        backgroundGlass = painterResource(R.drawable.elipse4), 
                         loginIcon = painterResource(R.drawable.googlewhite)
                     )
+                    Spacer(Modifier.width(30.dp))
                     LoginOption(
-                        modifier = Modifier.size(68.dp),
-                        backgroundGlass = painterResource(R.drawable.elipse5),
+                        Modifier.size(74.dp),
+                        backgroundGlass = painterResource(R.drawable.elipse5), 
                         loginIcon = painterResource(R.drawable.apple)
                     )
                 }
-
-                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
@@ -228,13 +133,5 @@ fun LoginContent(
 @Composable
 @Preview(showBackground = true)
 fun LoginPreview() {
-    LoginContent(
-        state = LoginState(),
-        onEmailChanged = {},
-        onPasswordChanged = {},
-        onRememberMeChanged = {},
-        togglePasswordVisibility = {},
-        onLoginButtonPressed = {},
-        onRegisterButtonPressed = {}
-    )
+    Login(viewModel(),{})
 }

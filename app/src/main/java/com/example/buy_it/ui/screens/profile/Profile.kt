@@ -1,7 +1,6 @@
 package com.example.buy_it.ui.screens.profile
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,11 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,13 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.components.ProfilePost
+import com.example.buy_it.ui.components.ProfileText
 import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
 import com.example.buy_it.ui.theme.Buy_itTheme
 
@@ -48,149 +42,79 @@ fun Profile(
     onTrendsClick: () -> Unit,
     profileViewModel: ProfileViewModel = viewModel(),
     modifier: Modifier = Modifier,
-) {
+){
     val state by profileViewModel.uiState.collectAsState()
 
     Box(
         modifier = modifier.fillMaxSize(),
-    ) {
+    ){
         ProfileCircles()
-
-        Image(
-            painter = painterResource(R.drawable.settings),
-            contentDescription = stringResource(R.string.ajustes),
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 26.dp, end = 20.dp)
-                .size(28.dp)
-                .clickable(onClick = onConfigurationEdit)
-        )
-
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .offset(y = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
-            Box(
-                contentAlignment = Alignment.BottomEnd
-            ) {
-                PictureWithCircle()
-
-                Card(
-                    modifier = Modifier
-                        .offset(x = 10.dp, y = (-4).dp)
-                        .clickable(onClick = onProfileEdit),
-                    shape = RoundedCornerShape(18.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.edit),
-                            contentDescription = stringResource(R.string.editar_perfil),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Text(
-                            text = "Editar perfil",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(18.dp))
-
+        ){
+            PictureWithCircle()
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
             ) {
-                ProfileStatItem(
-                    value = state.productosCount,
-                    label = stringResource(R.string.productos)
-                )
-                ProfileStatItem(
-                    value = state.seguidoresCount,
-                    label = stringResource(R.string.seguidores)
-                )
-                ProfileStatItem(
-                    value = state.seguidosCount,
-                    label = stringResource(R.string.seguidos)
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.productosCount)
+                    ProfileText(text = stringResource(R.string.productos))
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.seguidoresCount)
+                    ProfileText(text = stringResource(R.string.seguidores))
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ProfileText(text = state.seguidosCount)
+                    ProfileText(text = stringResource(R.string.seguidos))
+                }
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ){
                 items(state.profileItems) { item ->
                     ProfilePost(
                         img = item.img,
                         descripcion = item.descripcion
                     )
                 }
-
-                item {
-                    Spacer(modifier = Modifier.height(90.dp))
-                }
             }
         }
-    }
-}
-
-@Composable
-private fun ProfileStatItem(
-    value: String,
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+        Image(
+            painter = painterResource(R.drawable.settings),
+            contentDescription = stringResource(R.string.ajustes),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .size(30.dp)
+                .offset(x = (-20).dp, y = 30.dp)
+                .clickable(onClick = onConfigurationEdit)
         )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
+        Image(
+            painter = painterResource(R.drawable.edit),
+            contentDescription = stringResource(R.string.editar_perfil),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .size(120.dp)
+                .offset(x = 100.dp, y = 100.dp)
+                .clickable(onClick = onProfileEdit)
         )
     }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun ProfilePreview() {
-    Buy_itTheme {
-        Profile(
-            onProfileEdit = {},
-            onConfigurationEdit = {},
-            onHomeClick = {},
-            onProfileClick = {},
-            onTrendsClick = {},
-            profileViewModel = viewModel()
-        )
-    }
+fun ProfilePreview(){
+    Buy_itTheme { Profile({},{},{},{},{}, viewModel()) }
 }
