@@ -4,8 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger)
 
-    kotlin("kapt")
-
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
@@ -67,7 +65,7 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.compose.navigation)
     implementation(libs.androidx.junit.ktx)
-    kapt(libs.dagger.kapt)
+    ksp(libs.dagger.kapt)
 
     //Firebase
     implementation(platform(libs.firebase.bom))

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
@@ -34,27 +35,66 @@ import com.example.buy_it.ui.components.PanelGlass
 import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun Register(
     registerButtonPressed: () -> Unit,
     onBackScreen: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RegisterViewModel = viewModel(),
+    viewModel: RegisterViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // We pass the state and events to a stateless version of the Composable
+    // to allow Previews to work without a ViewModel instance.
+    RegisterContent(
+        uiState = uiState,
+        onUsernameChange = viewModel::onUsernameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+        onAcceptedTermsChange = { viewModel.onAcceptedTermsChange() },
+        onToggleMostrarPassword = viewModel::onToggleMostrarPassword,
+        onToggleMostrarConfirmPassword = viewModel::onToggleMostrarConfirmPassword,
+        onRegister = viewModel::onRegister,
+        onBackClicked = viewModel::onBackClicked,
+        onNavigationHandled = viewModel::onNavigationHandled,
+        registerButtonPressed = registerButtonPressed,
+        onBackScreen = onBackScreen,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun RegisterContent(
+    uiState: RegisterState,
+    onUsernameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onAcceptedTermsChange: (Boolean) -> Unit,
+    onToggleMostrarPassword: () -> Unit,
+    onToggleMostrarConfirmPassword: () -> Unit,
+    onRegister: () -> Unit,
+    onBackClicked: () -> Unit,
+    onNavigationHandled: () -> Unit,
+    registerButtonPressed: () -> Unit,
+    onBackScreen: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    // Manejo de navegación mediante flags del UiState
     LaunchedEffect(uiState.navigateToHome) {
         if (uiState.navigateToHome) {
             registerButtonPressed()
-            viewModel.onNavigationHandled()
+            onNavigationHandled()
         }
     }
 
     LaunchedEffect(uiState.navigateBack) {
         if (uiState.navigateBack) {
             onBackScreen()
-            viewModel.onNavigationHandled()
+            onNavigationHandled()
         }
     }
 
@@ -78,9 +118,10 @@ fun Register(
             contentDescription = stringResource(R.string.volver),
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 26.dp, top = 28.dp)
-                .height(28.dp)
-                .clickable { viewModel.onBackClicked() }
+                .padding(start = 30.dp)
+                .offset(y = 40.dp)
+                .size(35.dp)
+                .clickable { onBackClicked() }
         )
 
         Column(
@@ -94,17 +135,37 @@ fun Register(
 
             Text(
                 text = stringResource(R.string.crear_cuenta),
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                fontSize = 46.sp,
+                fontWeight = FontWeight(510),
+                color = colorResource(R.color.navybluebuyit),
+                textAlign = TextAlign.Center,
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Regístrate para empezar a compartir opiniones",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+            Spacer(Modifier.height(70.dp))
+            TextInput(
+                placeholder = stringResource(R.string.nombre_de_usuario),
+                item = uiState.username,
+                onItemChange = onUsernameChange
+            )
+            TextInput(
+                placeholder = stringResource(R.string.email),
+                item = uiState.email,
+                onItemChange = onEmailChange
+            )
+            PasswordInput(
+                placeholder = stringResource(R.string.contrasenna),
+                item = uiState.password,
+                onItemChange = onPasswordChange,
+                icono = iconoPassword,
+                mostrar = uiState.mostrarPassword,
+                onMostrarPassword = onToggleMostrarPassword
+            )
+            PasswordInput(
+                placeholder = stringResource(R.string.contrasenna),
+                item = uiState.confirmPassword,
+                onItemChange = onConfirmPasswordChange,
+                icono = iconoConfirmPassword,
+                mostrar = uiState.mostrarConfirmPassword,
+                onMostrarPassword = onToggleMostrarConfirmPassword
             )
 
             Spacer(modifier = Modifier.height(34.dp))
@@ -156,8 +217,10 @@ fun Register(
 
             CheckAndText(
                 estado = uiState.acceptedTerms,
-                onEstadoChange = { viewModel.onAcceptedTermsChange() },
-                modifier = Modifier.align(Alignment.Start)
+                onEstadoChange = onAcceptedTermsChange,
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .align(Alignment.Start)
             )
 
             if (uiState.mostrarMensaje && uiState.errorMessage.isNotEmpty()) {
@@ -177,7 +240,7 @@ fun Register(
                     .fillMaxWidth()
                     .height(52.dp),
                 text = stringResource(R.string.crear_cuenta),
-                onClick = { viewModel.onRegister() }
+                onClick = onRegister
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -203,7 +266,19 @@ private fun FormFieldLabel(
 @Preview(showBackground = false)
 fun RegisterPreview() {
     Buy_itTheme {
-        Register(
+        // We use the stateless RegisterContent for the preview to avoid ViewModel instantiation issues.
+        RegisterContent(
+            uiState = RegisterState(),
+            onUsernameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onAcceptedTermsChange = {},
+            onToggleMostrarPassword = {},
+            onToggleMostrarConfirmPassword = {},
+            onRegister = {},
+            onBackClicked = {},
+            onNavigationHandled = {},
             registerButtonPressed = {},
             onBackScreen = {}
         )

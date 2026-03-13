@@ -42,6 +42,23 @@ fun Configuration(
 ) {
     val state by configurationViewModel.uiState.collectAsState()
 
+    ConfigurationScreen(
+        state = state,
+        onBackPressed = onBackPressed,
+        onSearchQueryChanged = { configurationViewModel.onSearchQueryChanged(it) },
+        onToggleAccountPrivacy = { configurationViewModel.toggleAccountPrivacy() },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ConfigurationScreen(
+    state: ConfigurationState,
+    onBackPressed: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onToggleAccountPrivacy: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -69,7 +86,7 @@ fun Configuration(
 
         SearchBar(
             value = state.searchQuery,
-            onValueChange = { configurationViewModel.onSearchQueryChanged(it) }
+            onValueChange = onSearchQueryChanged
         )
 
         Spacer(modifier = Modifier.height(26.dp))
@@ -84,7 +101,7 @@ fun Configuration(
             icon = Icons.Default.Lock,
             text = stringResource(R.string.privacidad_de_la_cuenta),
             secondText = if (state.isAccountPrivate) stringResource(R.string.privada) else "Pública",
-            onClick = { configurationViewModel.toggleAccountPrivacy() }
+            onClick = onToggleAccountPrivacy
         )
 
         SubsectionItem(
@@ -148,6 +165,17 @@ private fun SettingsSectionTitle(
         style = MaterialTheme.typography.titleSmall,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.primary
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ConfigurationPreview() {
+    ConfigurationScreen(
+        state = ConfigurationState(),
+        onBackPressed = {},
+        onSearchQueryChanged = {},
+        onToggleAccountPrivacy = {}
     )
 }
 
