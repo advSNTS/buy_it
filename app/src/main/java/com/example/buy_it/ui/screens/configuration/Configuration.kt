@@ -2,6 +2,7 @@ package com.example.buy_it.ui.screens.configuration
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,8 +37,8 @@ import com.example.buy_it.R
 @Composable
 fun Configuration(
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
-    configurationViewModel: ConfigurationViewModel = viewModel()
+    configurationViewModel: ConfigurationViewModel = viewModel(),
+    modifier: Modifier = Modifier
 ) {
     val state by configurationViewModel.uiState.collectAsState()
 
@@ -175,5 +176,14 @@ fun ConfigurationPreview() {
         onBackPressed = {},
         onSearchQueryChanged = {},
         onToggleAccountPrivacy = {}
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ConfigurationPreview() {
+    Configuration(
+        onBackPressed = {},
+        configurationViewModel = viewModel()
     )
 }

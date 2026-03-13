@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Card
@@ -36,13 +36,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.data.CommentInfo
 
@@ -69,7 +66,7 @@ fun Comments(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 86.dp)
+                .padding(bottom = 12.dp)
         ) {
             CommentsTopBar(
                 title = "Comentarios",
@@ -86,7 +83,7 @@ fun Comments(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 items(state.comments) { c ->
@@ -100,28 +97,18 @@ fun Comments(
                         value = state.newCommentText,
                         onValueChange = { commentsViewModel.onCommentTextChanged(it) },
                         onPublish = {
-                            Log.d("FormSubmission", "Publicando comentario: '${state.newCommentText}' para el producto ID: $productId")
+                            Log.d(
+                                "FormSubmission",
+                                "Publicando comentario: '${state.newCommentText}' para el producto ID: $productId"
+                            )
                             commentsViewModel.publishComment(productId)
                         }
                     )
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(12.dp))
                 }
             }
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun CommentsPreview(){
-    Comments(
-        productId = "1",
-        onBackPressed = {},
-        onNotificationClick = {},
-        onHomeClick = {},
-        onProfileClick = {},
-        commentsViewModel = viewModel(),
-    )
 }
 
 @Composable
@@ -133,23 +120,27 @@ private fun CommentsTopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 12.dp, start = 10.dp, end = 16.dp, bottom = 6.dp),
+            .padding(start = 10.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
+        ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Volver",
                 modifier = Modifier
-                    .size(28.dp)
-                    .clickable { onBackPressed() }
+                    .size(24.dp)
+                    .clickable { onBackPressed() },
+                tint = MaterialTheme.colorScheme.primary
             )
             Spacer(Modifier.width(10.dp))
             Text(
                 text = title,
-                fontSize = 36.sp,
-                fontWeight = FontWeight(800),
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -158,7 +149,7 @@ private fun CommentsTopBar(
             painter = painterResource(R.drawable.campana),
             contentDescription = "Notificaciones",
             modifier = Modifier
-                .size(28.dp)
+                .size(24.dp)
                 .clickable(onClick = onNotificationClick)
         )
     }
@@ -167,14 +158,17 @@ private fun CommentsTopBar(
 @Composable
 private fun CommentCard(info: CommentInfo) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(6.dp, RoundedCornerShape(16.dp)),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -191,28 +185,26 @@ private fun CommentCard(info: CommentInfo) {
                     Spacer(Modifier.width(10.dp))
                     Text(
                         text = info.username,
-                        fontWeight = FontWeight(700),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = "More",
+                    contentDescription = "Opciones",
                     tint = MaterialTheme.colorScheme.outline
                 )
             }
 
-            Spacer(Modifier.height(10.dp))
-
             Text(
                 text = info.text,
-                fontSize = 22.sp,
-                fontWeight = FontWeight(700),
+                fontSize = 17.sp,
+                lineHeight = 24.sp,
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-
-            Spacer(Modifier.height(12.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -222,23 +214,29 @@ private fun CommentCard(info: CommentInfo) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(R.drawable.reloj),
-                        contentDescription = "time",
-                        modifier = Modifier.size(18.dp)
+                        contentDescription = "Tiempo",
+                        modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = info.timeAgo,
-                        color = MaterialTheme.colorScheme.outline
+                        color = MaterialTheme.colorScheme.outline,
+                        fontSize = 14.sp
                     )
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "${info.likes}", color = MaterialTheme.colorScheme.outline)
+                    Text(
+                        text = "${info.likes}",
+                        color = MaterialTheme.colorScheme.outline,
+                        fontSize = 14.sp
+                    )
                     Spacer(Modifier.width(6.dp))
                     Icon(
                         imageVector = Icons.Default.ThumbUp,
                         contentDescription = "Likes",
-                        tint = MaterialTheme.colorScheme.outline
+                        tint = MaterialTheme.colorScheme.outline,
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
@@ -256,54 +254,66 @@ private fun CommentInputCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     painter = painterResource(avatar),
                     contentDescription = "avatar",
-                    modifier = Modifier.size(28.dp).clip(CircleShape)
+                    modifier = Modifier
+                        .size(34.dp)
+                        .clip(CircleShape)
                 )
                 Spacer(Modifier.width(10.dp))
-                Text(text = username, fontWeight = FontWeight(700))
+                Text(
+                    text = username,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Spacer(Modifier.weight(1f))
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = "More",
+                    contentDescription = "Opciones",
                     tint = MaterialTheme.colorScheme.outline
                 )
             }
 
-            Spacer(Modifier.height(10.dp))
-
             OutlinedTextField(
                 value = value,
                 onValueChange = onValueChange,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(110.dp),
                 placeholder = { Text("Escribe un comentario...") },
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(16.dp)
             )
-
-            Spacer(Modifier.height(10.dp))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(14.dp))
                     .background(MaterialTheme.colorScheme.primary)
-                    .clickable {
-                        Log.d("Action", "Botón Publicar presionado por $username")
-                        onPublish()
-                    },
+                    .clickable { onPublish() },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "Publicar",
                     color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight(700)
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
                 )
             }
         }
