@@ -178,12 +178,3 @@ fun ConfigurationPreview() {
         onToggleAccountPrivacy = {}
     )
 }
-
-@Composable
-@Preview(showBackground = true)
-fun ConfigurationPreview() {
-    Configuration(
-        onBackPressed = {},
-        configurationViewModel = viewModel()
-    )
-}
