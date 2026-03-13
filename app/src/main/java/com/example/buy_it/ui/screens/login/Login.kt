@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -24,13 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlanco
@@ -39,7 +36,6 @@ import com.example.buy_it.ui.components.MainButton
 import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.SecondaryButton
 import com.example.buy_it.ui.components.TextInput
-import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Login(
@@ -93,24 +89,11 @@ fun LoginContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GradientMessage(text = "buy it.")
-                TextInput(
-                    placeholder = "Email", 
-                    item = state.email, 
-                    onItemChange = onEmailChanged
-                )
-                PasswordInput(
-                    placeholder = "Contraseña", 
-                    item = state.password, 
-                    onItemChange = onPasswordChanged, 
-                    mostrar = state.isPasswordVisible, 
-                    onMostrarPassword = togglePasswordVisibility, 
-                    icono = icono
-                )
-                CheckAndText(
-                    estado = state.isRememberMeChecked, 
-                    onEstadoChange = { onRememberMeChanged() },
-                    modifier = Modifier.padding(top = 10.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                GradientMessage(
+                    text = "buy it.",
+                    fontSize = 64.sp
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -132,16 +115,16 @@ fun LoginContent(
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = "Email",
                         item = state.email,
-                        onItemChange = { loginViewModel.onEmailChanged(it) }
+                        onItemChange = onEmailChanged
                     )
 
                     PasswordInput(
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = "Contraseña",
                         item = state.password,
-                        onItemChange = { loginViewModel.onPasswordChanged(it) },
+                        onItemChange = onPasswordChanged,
                         mostrar = state.isPasswordVisible,
-                        onMostrarPassword = { loginViewModel.togglePasswordVisibility() },
+                        onMostrarPassword = togglePasswordVisibility,
                         icono = icono
                     )
                 }
@@ -154,7 +137,7 @@ fun LoginContent(
                 ) {
                     CheckAndText(
                         estado = state.isRememberMeChecked,
-                        onEstadoChange = { loginViewModel.onRememberMeChanged() }
+                        onEstadoChange = { onRememberMeChanged() }
                     )
 
                     Spacer(modifier = Modifier.weight(1f))

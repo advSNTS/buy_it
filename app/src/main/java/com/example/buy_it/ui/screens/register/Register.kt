@@ -25,8 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlancoRegister
@@ -35,7 +34,6 @@ import com.example.buy_it.ui.components.PanelGlass
 import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun Register(
@@ -46,8 +44,6 @@ fun Register(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // We pass the state and events to a stateless version of the Composable
-    // to allow Previews to work without a ViewModel instance.
     RegisterContent(
         uiState = uiState,
         onUsernameChange = viewModel::onUsernameChange,
@@ -83,7 +79,6 @@ fun RegisterContent(
     onBackScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Manejo de navegación mediante flags del UiState
     LaunchedEffect(uiState.navigateToHome) {
         if (uiState.navigateToHome) {
             registerButtonPressed()
@@ -118,9 +113,8 @@ fun RegisterContent(
             contentDescription = stringResource(R.string.volver),
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 30.dp)
-                .offset(y = 40.dp)
-                .size(35.dp)
+                .padding(start = 26.dp, top = 28.dp)
+                .height(28.dp)
                 .clickable { onBackClicked() }
         )
 
@@ -135,37 +129,17 @@ fun RegisterContent(
 
             Text(
                 text = stringResource(R.string.crear_cuenta),
-                fontSize = 46.sp,
-                fontWeight = FontWeight(510),
-                color = colorResource(R.color.navybluebuyit),
-                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
-            Spacer(Modifier.height(70.dp))
-            TextInput(
-                placeholder = stringResource(R.string.nombre_de_usuario),
-                item = uiState.username,
-                onItemChange = onUsernameChange
-            )
-            TextInput(
-                placeholder = stringResource(R.string.email),
-                item = uiState.email,
-                onItemChange = onEmailChange
-            )
-            PasswordInput(
-                placeholder = stringResource(R.string.contrasenna),
-                item = uiState.password,
-                onItemChange = onPasswordChange,
-                icono = iconoPassword,
-                mostrar = uiState.mostrarPassword,
-                onMostrarPassword = onToggleMostrarPassword
-            )
-            PasswordInput(
-                placeholder = stringResource(R.string.contrasenna),
-                item = uiState.confirmPassword,
-                onItemChange = onConfirmPasswordChange,
-                icono = iconoConfirmPassword,
-                mostrar = uiState.mostrarConfirmPassword,
-                onMostrarPassword = onToggleMostrarConfirmPassword
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Regístrate para empezar a compartir opiniones",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
             )
 
             Spacer(modifier = Modifier.height(34.dp))
@@ -179,7 +153,7 @@ fun RegisterContent(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = stringResource(R.string.nombre_de_usuario),
                     item = uiState.username,
-                    onItemChange = { viewModel.onUsernameChange(it) }
+                    onItemChange = { onUsernameChange(it) }
                 )
 
                 FormFieldLabel(text = stringResource(R.string.email))
@@ -187,7 +161,7 @@ fun RegisterContent(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = stringResource(R.string.email),
                     item = uiState.email,
-                    onItemChange = { viewModel.onEmailChange(it) }
+                    onItemChange = { onEmailChange(it) }
                 )
 
                 FormFieldLabel(text = stringResource(R.string.contrasenna))
@@ -195,10 +169,10 @@ fun RegisterContent(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = stringResource(R.string.contrasenna),
                     item = uiState.password,
-                    onItemChange = { viewModel.onPasswordChange(it) },
+                    onItemChange = { onPasswordChange(it) },
                     icono = iconoPassword,
                     mostrar = uiState.mostrarPassword,
-                    onMostrarPassword = { viewModel.onToggleMostrarPassword() }
+                    onMostrarPassword = { onToggleMostrarPassword() }
                 )
 
                 FormFieldLabel(text = "Confirmar contraseña")
@@ -206,10 +180,10 @@ fun RegisterContent(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = "Confirmar contraseña",
                     item = uiState.confirmPassword,
-                    onItemChange = { viewModel.onConfirmPasswordChange(it) },
+                    onItemChange = { onConfirmPasswordChange(it) },
                     icono = iconoConfirmPassword,
                     mostrar = uiState.mostrarConfirmPassword,
-                    onMostrarPassword = { viewModel.onToggleMostrarConfirmPassword() }
+                    onMostrarPassword = { onToggleMostrarConfirmPassword() }
                 )
             }
 
@@ -218,9 +192,7 @@ fun RegisterContent(
             CheckAndText(
                 estado = uiState.acceptedTerms,
                 onEstadoChange = onAcceptedTermsChange,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-                    .align(Alignment.Start)
+                modifier = Modifier.align(Alignment.Start)
             )
 
             if (uiState.mostrarMensaje && uiState.errorMessage.isNotEmpty()) {
@@ -266,7 +238,6 @@ private fun FormFieldLabel(
 @Preview(showBackground = false)
 fun RegisterPreview() {
     Buy_itTheme {
-        // We use the stateless RegisterContent for the preview to avoid ViewModel instantiation issues.
         RegisterContent(
             uiState = RegisterState(),
             onUsernameChange = {},
