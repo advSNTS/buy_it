@@ -51,7 +51,8 @@ class LoginViewModel @Inject constructor(
                 if(result.isSuccess){
                     _uiState.update { it.copy(navigate = true) }
                 }else{
-                    _uiState.update { it.copy(mostrarMensaje = true, errorMessage = result.exceptionOrNull()?.message ?: "Error al iniciar sesión") }
+                    val mensaje = result.exceptionOrNull()?.message ?: "Error al iniciar sesión"
+                    _uiState.update { it.copy(mostrarMensaje = true, errorMessage = mensaje) }
                 }
             }
         }
