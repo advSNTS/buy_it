@@ -16,15 +16,15 @@ class AuthRepository @Inject constructor (
         try {
             authRemoteDataSource.signInWithEmailAndPassword(email, password)
             return Result.success(Unit)
-        }catch (e: Exception){
-            return Result.failure(e)
-        }catch (e: FirebaseAuthInvalidCredentialsException){
+        }
+        catch (e: FirebaseAuthInvalidCredentialsException){
             return Result.failure(Exception("Las credenciales son incorrectas"))
-        } catch (e: FirebaseAuthInvalidUserException){
+        }
+        catch (e: FirebaseAuthInvalidUserException){
             return Result.failure(Exception("El usuario no es válido"))
         }
         catch (e: Exception) {
-            return Result.failure(Exception("Error al crear el usuario"))
+            return Result.failure(Exception("Error inesperado: ${e.localizedMessage}"))
         }
     }
 
