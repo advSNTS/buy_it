@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
                     )
                     _uiState.update { it.copy(navigate = true) }
                 }catch (e: Exception){
-                    _uiState.update { it.copy(mostrarMensaje = true, errorMessage = "Paila") }
+                    _uiState.update { it.copy(mostrarMensaje = true, errorMessage = "Credenciales invalidas") }
                 }
             }
         }

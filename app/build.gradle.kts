@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
     implementation(libs.androidx.graphics.shapes)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
