@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.CommentItem
-import com.example.buy_it.data.local.CommentsProvider
+import com.example.buy_it.data.datasource.local.CommentsProvider
 
 @Composable
 fun CommentCard(

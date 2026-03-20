@@ -1,5 +1,10 @@
 package com.example.buy_it.ui.screens.editinfo
 
+import android.R.attr.action
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,10 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.FondoBlancoEditInfo
 import com.example.buy_it.ui.components.MainButton
@@ -32,6 +36,7 @@ import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
 
+// ✅ Este es el composable REAL que usa Hilt — no lo tocas
 @Composable
 fun EditInfo(
     onSaveChanges: () -> Unit,
@@ -39,6 +44,32 @@ fun EditInfo(
     viewModel: EditInfoViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // Solo pasa datos y lambdas al contenido puro
+    EditInfoContent(
+        uiState = uiState,
+        onNameChange = { viewModel.onNameChange(it) },
+        onEmailChange = { viewModel.onEmailChange(it) },
+        onPasswordChange = { viewModel.onPasswordChange(it) },
+        onToggleMostrarPassword = { viewModel.onToggleMostrarPassword() },
+        onSaveChanges = {
+            viewModel.onSaveChanges()
+            onSaveChanges()
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun EditInfoContent(
+    uiState: EditInfoState,
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onToggleMostrarPassword: () -> Unit,
+    onSaveChanges: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val icono = if (!uiState.mostrarPassword) R.drawable.hide else R.drawable.see
 
     Box(
@@ -63,6 +94,8 @@ fun EditInfo(
             Spacer(modifier = Modifier.height(16.dp))
 
             PictureWithCircle()
+
+            PickImage()
 
             Spacer(modifier = Modifier.height(28.dp))
 
@@ -92,7 +125,7 @@ fun EditInfo(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = stringResource(R.string.buy_it),
                     item = uiState.name,
-                    onItemChange = { viewModel.onNameChange(it) }
+                    onItemChange = onNameChange
                 )
 
                 FormFieldLabel(text = stringResource(R.string.email))
@@ -100,7 +133,7 @@ fun EditInfo(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = stringResource(R.string.buyit_buyit_com),
                     item = uiState.email,
-                    onItemChange = { viewModel.onEmailChange(it) }
+                    onItemChange = onEmailChange
                 )
 
                 FormFieldLabel(text = stringResource(R.string.contrasenna))
@@ -108,10 +141,10 @@ fun EditInfo(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = stringResource(R.string.contrasenna),
                     item = uiState.password,
-                    onItemChange = { viewModel.onPasswordChange(it) },
+                    onItemChange = onPasswordChange,
                     icono = icono,
                     mostrar = uiState.mostrarPassword,
-                    onMostrarPassword = { viewModel.onToggleMostrarPassword() }
+                    onMostrarPassword = onToggleMostrarPassword
                 )
             }
 
@@ -122,10 +155,7 @@ fun EditInfo(
                     .fillMaxWidth()
                     .height(52.dp),
                 text = stringResource(R.string.guardar_cambios),
-                onClick = {
-                    viewModel.onSaveChanges()
-                    onSaveChanges()
-                }
+                onClick = onSaveChanges
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -148,9 +178,42 @@ private fun FormFieldLabel(
 }
 
 @Composable
+fun PickImage(){
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            Log.d("PickImage", uri.toString())
+        }
+
+    }
+
+    Button(
+        onClick = {
+            launcher.launch("image/*")
+        },
+    ) {
+        Text(text = "Seleccionar imagen")
+    }
+}
+
+@Composable
 @Preview(showBackground = true)
 fun EditInfoPreview() {
     Buy_itTheme {
-        EditInfo(onSaveChanges = {})
+        EditInfoContent(
+            uiState = EditInfoState(
+                name = "Buy It",
+                email = "buyit@buyit.com",
+                password = "123456",
+                mostrarPassword = false
+            ),
+            onNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onToggleMostrarPassword = {},
+            onSaveChanges = {}
+        )
     }
 }

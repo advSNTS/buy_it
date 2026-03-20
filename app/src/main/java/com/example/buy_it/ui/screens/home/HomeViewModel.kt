@@ -1,7 +1,7 @@
 package com.example.buy_it.ui.screens.home
 
 import androidx.lifecycle.ViewModel
-import com.example.buy_it.data.local.ReviewProvider
+import com.example.buy_it.data.datasource.local.ReviewProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -5,4 +5,5 @@ data class EditInfoState(
     val email: String = "",
     val password: String = "",
     val mostrarPassword: Boolean = false,
+    val profileImage: String? = ""
 )
