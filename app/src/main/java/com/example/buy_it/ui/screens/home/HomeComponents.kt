@@ -41,24 +41,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.R
 import com.example.buy_it.data.ReviewInfo
+import com.example.buy_it.ui.components.ProfileAsyncImage
 
 @Composable
 fun ReviewCardUser(
     name: String,
-    @DrawableRes imagen: Int = R.drawable.predet,
+    imagen: String,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = imagen),
-            contentDescription = "Perfil",
-            modifier = Modifier
-                .size(34.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
+        ProfileAsyncImage(
+            profileLink = imagen,
+            size = 30
         )
 
         Spacer(modifier = Modifier.width(10.dp))
@@ -250,7 +247,7 @@ fun ReviewCard(
                     ) {
                         ReviewCardUser(
                             name = reviewInfo.name,
-                            imagen = reviewInfo.pfp
+                            imagen = reviewInfo.profileImage
                         )
 
                         Icon(

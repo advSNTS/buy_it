@@ -1,6 +1,5 @@
 package com.example.buy_it.ui.screens.editinfo
 
-import android.R.attr.action
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -13,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -23,11 +24,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.FondoBlancoEditInfo
 import com.example.buy_it.ui.components.MainButton
@@ -36,12 +44,11 @@ import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
 
-// ✅ Este es el composable REAL que usa Hilt — no lo tocas
 @Composable
 fun EditInfo(
     onSaveChanges: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: EditInfoViewModel = hiltViewModel(),
+    viewModel: EditInfoViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -52,6 +59,7 @@ fun EditInfo(
         onEmailChange = { viewModel.onEmailChange(it) },
         onPasswordChange = { viewModel.onPasswordChange(it) },
         onToggleMostrarPassword = { viewModel.onToggleMostrarPassword() },
+        onImageChange = { viewModel.uploadImageToFirebase(it) },
         onSaveChanges = {
             viewModel.onSaveChanges()
             onSaveChanges()
@@ -63,6 +71,7 @@ fun EditInfo(
 @Composable
 private fun EditInfoContent(
     uiState: EditInfoState,
+    onImageChange: (Uri) -> Unit,
     onNameChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
@@ -93,9 +102,12 @@ private fun EditInfoContent(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            PictureWithCircle()
-
-            PickImage()
+            PictureWithCircle(uiState.profileImage)
+            PickImage(
+                action = {
+                    onImageChange(it)
+                }
+            )
 
             Spacer(modifier = Modifier.height(28.dp))
 
@@ -178,13 +190,17 @@ private fun FormFieldLabel(
 }
 
 @Composable
-fun PickImage(){
+fun PickImage(
+    action: (uri:Uri) -> Unit = {}
+){
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
+        Log.d("PickImage", "Callback disparado. Uri: $uri")
         uri?.let {
             Log.d("PickImage", uri.toString())
+            action(uri)
         }
 
     }
@@ -213,6 +229,7 @@ fun EditInfoPreview() {
             onEmailChange = {},
             onPasswordChange = {},
             onToggleMostrarPassword = {},
+            onImageChange = {},
             onSaveChanges = {}
         )
     }

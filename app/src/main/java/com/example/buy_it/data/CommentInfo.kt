@@ -6,7 +6,7 @@ data class CommentInfo(
     val id: String,
     val productId: String,
     val username: String,
-    @DrawableRes val avatar: Int,
+    val profileImage: String,
     val text: String,
     val timeAgo: String,
     val likes: Int

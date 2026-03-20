@@ -2,6 +2,7 @@ package com.example.buy_it.ui.components
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.Size
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -46,6 +48,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,6 +63,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.buy_it.R
 import com.example.buy_it.ui.theme.Buy_itTheme
 import kotlin.math.cos
@@ -559,13 +564,13 @@ fun ProfileIcon(
         onClick = onClick,
         modifier = modifier.size(30.dp)
     ) {
-        Image(
-            painter = painterResource(id = imageRes),
+        Icon(
+            imageVector = Icons.Default.PersonPin,
             contentDescription = "Perfil",
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .size(30.dp)
                 .clip(CircleShape),
-            contentScale = ContentScale.Crop
         )
     }
 }
@@ -624,3 +629,23 @@ fun navPreview(){
         BarNav()
     }
 }
+
+@Composable
+fun ProfileAsyncImage(
+    profileLink: String?,
+    size: Int,
+    modifier: Modifier = Modifier
+){
+    AsyncImage(
+        contentDescription = "User image",
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(profileLink)
+            .crossfade(true)
+            .build(),
+        error = painterResource(id = R.drawable.user_image_icon),
+        placeholder = painterResource(id = R.drawable.loading_img),
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.size(size.dp).clip(CircleShape)
+    )
+}
+

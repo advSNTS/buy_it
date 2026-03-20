@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.R
 import com.example.buy_it.data.CommentInfo
+import com.example.buy_it.ui.components.ProfileAsyncImage
 
 @Composable
 fun Comments(
@@ -175,12 +176,9 @@ private fun CommentCard(info: CommentInfo) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(info.avatar),
-                        contentDescription = "avatar",
-                        modifier = Modifier
-                            .size(34.dp)
-                            .clip(CircleShape)
+                    ProfileAsyncImage(
+                        profileLink = info.profileImage,
+                        size = 30
                     )
                     Spacer(Modifier.width(10.dp))
                     Text(

@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.components.ProfilePost
@@ -46,7 +46,7 @@ fun Profile(
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
     onTrendsClick: () -> Unit,
-    profileViewModel: ProfileViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
     val state by profileViewModel.uiState.collectAsState()
@@ -77,7 +77,7 @@ fun Profile(
             Box(
                 contentAlignment = Alignment.BottomEnd
             ) {
-                PictureWithCircle()
+                PictureWithCircle(profileLink = state.profileImage)
 
                 Card(
                     modifier = Modifier
@@ -190,7 +190,6 @@ fun ProfilePreview() {
             onHomeClick = {},
             onProfileClick = {},
             onTrendsClick = {},
-            profileViewModel = viewModel()
         )
     }
 }

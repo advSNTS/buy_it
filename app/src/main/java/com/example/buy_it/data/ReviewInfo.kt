@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import java.time.LocalDate
 
 data class ReviewInfo(
-    @DrawableRes val pfp: Int,
+    val profileImage: String,
     @DrawableRes val imgProd: Int,
     val name: String,
     // val username: String,

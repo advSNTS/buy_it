@@ -1,7 +1,9 @@
 package com.example.buy_it.data.datasource
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -21,5 +23,14 @@ class AuthRemoteDataSource @Inject constructor (
 
     fun signOut(){
         auth.signOut()
+    }
+
+    suspend fun updateProfileImage(photoUrl: String): Unit{
+        val uri = Uri.parse(photoUrl)
+        currentUser?.updateProfile(
+            UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build()
+        )?.await()
     }
 }

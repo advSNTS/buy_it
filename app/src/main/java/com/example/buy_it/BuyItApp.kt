@@ -3,21 +3,37 @@ package com.example.buy_it
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,7 +42,24 @@ import com.example.buy_it.navigation.AppNavigation
 import com.example.buy_it.navigation.Screen
 import com.example.buy_it.ui.components.BarNav
 import com.example.buy_it.ui.components.MainBackground
-import com.example.buy_it.ui.components.TopBarBackground
+import com.example.buy_it.ui.components.ProfileAsyncImage
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
+
+data class DrawerItem(
+    val title: String,
+    val icon: ImageVector,
+    val route: String
+)
+
+val drawerItems = listOf(
+    DrawerItem("Inicio", Icons.Default.Home, Screen.Home.route),
+    DrawerItem("Tendencias", Icons.Default.TrendingUp, Screen.Trends.route),
+    DrawerItem("Perfil", Icons.Default.Person, Screen.Profile.route),
+    DrawerItem("Configuración", Icons.Default.Settings, Screen.Configuration.route),
+
+)
+
 
 @Composable
 fun BuyIt(
@@ -41,57 +74,100 @@ fun BuyIt(
                  currentRoute != Screen.Register.route &&
                  currentRoute != Screen.Profile.route &&
                  currentRoute != Screen.EditInfo.route &&
-                 currentRoute != Screen.Configuration.route
+                 currentRoute != Screen.Configuration.route &&
+                 currentRoute != Screen.Splash.route
 
     val showNavBar = currentRoute != null &&
             currentRoute != Screen.Login.route &&
             currentRoute != Screen.Register.route &&
-            currentRoute != Screen.Comments.route
+            currentRoute != Screen.Comments.route &&
+            currentRoute != Screen.Splash.route
+
+
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val photoUrl: String = currentUser?.photoUrl?.toString() ?: ""
+
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val scope = rememberCoroutineScope()
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (showTopBar) {
             MainBackground()
         }
-        Scaffold(
-            containerColor = Color.Transparent,
-            topBar = {
-                if (showTopBar) {
-                    BuyItTopAppBar()
-                }
-            },
-            bottomBar = {
-                if (showNavBar) {
-                    BarNav(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        onHomeClick = { 
-                            navController.navigate(Screen.Home.route) {
-                                popUpTo(Screen.Home.route) { inclusive = true }
-                            }
-                        },
-                        onBuscarClick = { navController.navigate(Screen.Trends.route) },
-                        onAddClick = { /* Acción para agregar */ },
-                        onProfileClick = { navController.navigate(Screen.Profile.route) }
+
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            gesturesEnabled = showTopBar || showNavBar,
+            drawerContent = {
+                ModalDrawerSheet {
+                    Text(
+                        text = "buy it.",
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
                     )
+                    HorizontalDivider()
+                    drawerItems.forEach { item ->
+                        NavigationDrawerItem(
+                            label = { Text(text = item.title) },
+                            icon = { Icon(item.icon, contentDescription = item.title) },
+                            selected = false,
+                            onClick = {},/*TODO*/
+                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                        )
+                    }
                 }
             }
-        ) { paddingValues ->
-            AppNavigation(
-                navController = navController,
-                modifier = Modifier.padding(paddingValues)
-            )
+        ) {
+            Scaffold(
+                containerColor = Color.Transparent,
+                topBar = {
+                        BuyItTopAppBar(
+                            imageProfile = photoUrl,
+                            profileClicked = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        )
+                },
+                bottomBar = {
+                    if (showNavBar) {
+                        BarNav(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            onHomeClick = {
+                                navController.navigate(Screen.Home.route) {
+                                    popUpTo(Screen.Home.route) { inclusive = true }
+                                }
+                            },
+                            onBuscarClick = { navController.navigate(Screen.Trends.route) },
+                            onAddClick = { /* Acción para agregar */ },
+                            onProfileClick = { navController.navigate(Screen.Profile.route) }
+                        )
+                    }
+                }
+            ) { paddingValues ->
+                AppNavigation(
+                    navController = navController,
+                    modifier = Modifier.padding(paddingValues)
+                )
+            }
         }
+
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BuyItTopAppBar(){
-    // 3. Quitamos el TopBarBackground de aquí para que use el MainBackground global
-    // O si quieres círculos extra, asegúrate de que el contenedor de la TopBar sea transparente
+fun BuyItTopAppBar(
+    imageProfile: String,
+    profileClicked: () -> Unit = {}
+){
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent, // Transparente para fusión total
+            containerColor = Color.Transparent,
             scrolledContainerColor = Color.Transparent
         ),
         title = {
@@ -111,6 +187,16 @@ fun BuyItTopAppBar(){
                     textAlign = TextAlign.Center
                 )
             )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = profileClicked
+            ) {
+                ProfileAsyncImage(
+                    profileLink = imageProfile,
+                    size = 40
+                )
+            }
         }
     )
 }

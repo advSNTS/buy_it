@@ -45,6 +45,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.buy_it.data.ReviewInfo
+import com.example.buy_it.ui.components.ProfileAsyncImage
 
 @Composable
 fun DetailTopBar(
@@ -228,13 +229,9 @@ fun ReviewMiniCard(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(info.pfp),
-                    contentDescription = "pfp",
-                    modifier = Modifier
-                        .size(30.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                ProfileAsyncImage(
+                    profileLink = info.profileImage,
+                    size = 30
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
