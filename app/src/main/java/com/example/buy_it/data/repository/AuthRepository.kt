@@ -1,8 +1,11 @@
 package com.example.buy_it.data.repository
 
 import com.example.buy_it.data.datasource.AuthRemoteDataSource
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
@@ -17,11 +20,14 @@ class AuthRepository @Inject constructor (
             authRemoteDataSource.signInWithEmailAndPassword(email, password)
             return Result.success(Unit)
         }
-        catch (e: FirebaseAuthInvalidCredentialsException){
-            return Result.failure(Exception("Las credenciales son incorrectas"))
-        }
-        catch (e: FirebaseAuthInvalidUserException){
+        catch (e: FirebaseAuthInvalidUserException) {
             return Result.failure(Exception("El usuario no es válido"))
+        }
+        catch (e: FirebaseAuthInvalidCredentialsException){
+            return Result.failure(Exception("El email o la contraseña es incorrecto"))
+        }
+        catch (e: FirebaseNetworkException) {
+            return Result.failure(Exception("Sin conexión a internet"))
         }
         catch (e: Exception) {
             return Result.failure(Exception("Error inesperado: ${e.localizedMessage}"))
@@ -33,8 +39,20 @@ class AuthRepository @Inject constructor (
             authRemoteDataSource.signUpWithEmailAndPassword(email, password)
             return Result.success(Unit)
         }
+        catch (e: FirebaseAuthUserCollisionException) {
+            return Result.failure(Exception("Este correo ya está registrado"))
+        }
+        catch (e: FirebaseAuthWeakPasswordException) {
+            return Result.failure(Exception("La contraseña es muy débil: ${e.reason}"))
+        }
+        catch (e: FirebaseAuthInvalidCredentialsException) {
+            return Result.failure(Exception("El formato del correo no es válido"))
+        }
+        catch (e: FirebaseNetworkException) {
+            return Result.failure(Exception("Sin conexión a internet"))
+        }
         catch (e: Exception) {
-            return Result.failure(Exception("Error al crear el usuario"))
+            return Result.failure(Exception("Error inesperado al crear la cuenta: ${e.localizedMessage}"))
         }
     }
 
