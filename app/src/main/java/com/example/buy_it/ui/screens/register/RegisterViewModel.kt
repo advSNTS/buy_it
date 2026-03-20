@@ -63,12 +63,12 @@ class RegisterViewModel @Inject constructor(
         } else {
 
             viewModelScope.launch{
-                try{
-                    authRepository.signUp(state.email, state.password)
-                    Log.d("Register", "Registrando usuario: ${state.username}")
+                val result = authRepository.signUp(_uiState.value.email, _uiState.value.password)
+                if(result.isSuccess){
                     _uiState.update { it.copy(navigateToHome = true) }
-                }catch (e: Exception){
-                    _uiState.update { it.copy(mostrarMensaje = true, errorMessage = e.message ?: "Error al registrar.") }
+                }else{
+                    val mensaje = result.exceptionOrNull()?.message ?: "Error al crear la cuenta"
+                    _uiState.update { it.copy(mostrarMensaje = true, errorMessage = mensaje) }
                 }
 
             }
