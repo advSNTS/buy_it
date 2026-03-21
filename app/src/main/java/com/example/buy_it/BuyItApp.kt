@@ -87,7 +87,7 @@ fun BuyIt(
     val currentUser = FirebaseAuth.getInstance().currentUser
     val photoUrl: String = currentUser?.photoUrl?.toString() ?: ""
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
 
@@ -112,8 +112,21 @@ fun BuyIt(
                         NavigationDrawerItem(
                             label = { Text(text = item.title) },
                             icon = { Icon(item.icon, contentDescription = item.title) },
-                            selected = false,
-                            onClick = {},/*TODO*/
+                            selected = currentRoute == item.route,
+                            onClick = {
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                                if (currentRoute != item.route) {
+                                    navController.navigate(item.route) {
+                                        popUpTo(Screen.Home.route) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            },
                             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                         )
                     }
@@ -123,6 +136,7 @@ fun BuyIt(
             Scaffold(
                 containerColor = Color.Transparent,
                 topBar = {
+                    if (showTopBar) {
                         BuyItTopAppBar(
                             imageProfile = photoUrl,
                             profileClicked = {
@@ -131,6 +145,7 @@ fun BuyIt(
                                 }
                             }
                         )
+                    }
                 },
                 bottomBar = {
                     if (showNavBar) {

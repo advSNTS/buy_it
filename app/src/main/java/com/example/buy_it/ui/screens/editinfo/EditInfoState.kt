@@ -8,4 +8,5 @@ data class EditInfoState(
     val password: String = "",
     val mostrarPassword: Boolean = false,
     val profileImage: String? = null,
+    val errormsg: String? = null,
 )

@@ -55,8 +55,10 @@ class EditInfoViewModel @Inject constructor(
     fun uploadImageToFirebase(uri: Uri){
         viewModelScope.launch {
              val result = storageRepository.uploadProfileImage(uri)
-            if(result.isSuccess){
+            if(result.isSuccess) {
                 _uiState.update { it.copy(profileImage = result.getOrNull()) }
+            } else {
+                _uiState.update { it.copy(errormsg = result.exceptionOrNull()?.message) }
             }
 
         }
