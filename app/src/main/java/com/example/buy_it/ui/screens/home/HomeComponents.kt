@@ -1,7 +1,5 @@
 package com.example.buy_it.ui.screens.home
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,92 +17,96 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Comment
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.buy_it.R
-import com.example.buy_it.data.ReviewInfo
+import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.ui.components.ProfileAsyncImage
 
 @Composable
-fun ReviewCardUser(
-    name: String,
-    imagen: String,
+fun ProductCard(
+    productInfo: ProductInfo,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
-        ProfileAsyncImage(
-            profileLink = imagen,
-            size = 30
-        )
-
-        Spacer(modifier = Modifier.width(10.dp))
-
-        Text(
-            text = name,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.SemiBold
-        )
-    }
-}
-
-@Composable
-fun ProductAndName(
-    @DrawableRes imagen: Int = R.drawable.rey,
-    product: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
-            Image(
-                painter = painterResource(id = imagen),
-                contentDescription = product,
-                modifier = Modifier
-                    .size(92.dp)
-                    .padding(10.dp),
-                contentScale = ContentScale.Fit
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Contenedor de imagen más moderno y estilizado
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    modifier = Modifier.size(90.dp),
+                    shadowElevation = 2.dp
+                ) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        ProfileAsyncImage(
+                            profileLink = productInfo.image,
+                            size = 90
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(18.dp))
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = productInfo.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.ExtraBold,
+                        maxLines = 1
+                    )
+                    
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    Text(
+                        text = productInfo.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                        lineHeight = 20.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            PostInfo(
+                percentageLikes = productInfo.likePercent,
+                range = productInfo.range,
+                comments = productInfo.ratingsCount
             )
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = product,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.outline,
-            textAlign = TextAlign.Center,
-            maxLines = 2
-        )
     }
 }
 
@@ -116,164 +118,73 @@ fun PostInfo(
     modifier: Modifier = Modifier
 ) {
     val contentColor = MaterialTheme.colorScheme.primary
+    val containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(containerColor)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        // Likes
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.Outlined.ThumbUp,
                 contentDescription = "Likes",
                 tint = contentColor,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "$percentageLikes%",
                 color = contentColor,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        // Divider (Opcional, ahora usamos un badge para el rango)
+        VerticalDivider(
+            modifier = Modifier.height(16.dp),
+            color = contentColor.copy(alpha = 0.3f)
+        )
+
+        // Range como Badge
+        Surface(
+            color = contentColor,
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Text(
+                text = range,
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
             )
         }
 
         VerticalDivider(
-            modifier = Modifier.height(18.dp),
-            color = MaterialTheme.colorScheme.outlineVariant
+            modifier = Modifier.height(16.dp),
+            color = contentColor.copy(alpha = 0.3f)
         )
 
-        Text(
-            text = range,
-            color = contentColor,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
-        )
-
-        VerticalDivider(
-            modifier = Modifier.height(18.dp),
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-
+        // Comments
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Comment,
                 contentDescription = "Comments",
                 tint = contentColor,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                text = "$comments",
+                text = comments.toString(),
                 color = contentColor,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium
-            )
-        }
-    }
-}
-
-@Composable
-fun BodyReview(
-    text: String,
-    isLike: Boolean,
-    modifier: Modifier = Modifier
-) {
-    val backgroundIcon = if (isLike) Icons.Outlined.ThumbUp else Icons.Outlined.ThumbDown
-    val iconRotation = if (isLike) -18f else 18f
-
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Icon(
-            imageVector = backgroundIcon,
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .size(90.dp)
-                .rotate(iconRotation),
-            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
-        )
-
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            lineHeight = 28.sp
-        )
-    }
-}
-
-@Composable
-fun ReviewCard(
-    reviewInfo: ReviewInfo,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                ProductAndName(
-                    imagen = reviewInfo.imgProd,
-                    product = reviewInfo.product,
-                    modifier = Modifier.weight(0.34f)
-                )
-
-                Spacer(modifier = Modifier.width(14.dp))
-
-                Column(
-                    modifier = Modifier.weight(0.66f)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        ReviewCardUser(
-                            name = reviewInfo.name,
-                            imagen = reviewInfo.profileImage
-                        )
-
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Opciones",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    BodyReview(
-                        text = reviewInfo.review,
-                        isLike = reviewInfo.like,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            PostInfo(
-                percentageLikes = reviewInfo.percentageLikes,
-                range = reviewInfo.range,
-                comments = reviewInfo.comments
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold
             )
         }
     }

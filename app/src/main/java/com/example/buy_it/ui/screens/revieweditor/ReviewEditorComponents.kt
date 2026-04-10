@@ -25,6 +25,7 @@ import com.example.buy_it.R
 import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
+import coil.compose.AsyncImage
 
 @Composable
 fun ReviewEditorTopBar(
@@ -71,7 +72,7 @@ fun ReviewEditorTopBar(
 fun ReviewEditorCard(
     username: String,
     productName: String,
-    @DrawableRes productImage: Int,
+    productImage: String,
     likeChoice: LikeChoice,
     onLikeChoiceChange: (LikeChoice) -> Unit,
     opinion: String,
@@ -121,8 +122,8 @@ fun ReviewEditorCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(productImage),
+                AsyncImage(
+                    model = productImage,
                     contentDescription = productName,
                     modifier = Modifier
                         .size(140.dp)

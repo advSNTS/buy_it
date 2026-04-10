@@ -5,8 +5,9 @@ import androidx.annotation.DrawableRes
 data class ProductInfo(
     val id: String,
     val name: String,
-    @DrawableRes val image: Int,
-    val range: String,
+    val image: String,
+    val description: String,
     val likePercent: Int,
+    val range: String,
     val ratingsCount: Int
 )

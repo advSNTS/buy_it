@@ -1,6 +1,8 @@
 package com.example.buy_it.data.injection
 
 import com.example.buy_it.data.datasource.services.ReviewRetrofitService
+import com.example.buy_it.data.datasource.services.UserRetrofitService
+import com.example.buy_it.data.datasource.services.ProductRetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +18,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(): Retrofit {
+    fun provideRetrofit(): Retrofit{
         return Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -30,5 +32,14 @@ object AppModule {
         retrofit: Retrofit
     ): ReviewRetrofitService {
         return retrofit.create(ReviewRetrofitService::class.java)
+    fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService{
+        return retrofit.create(UserRetrofitService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesProductRetrofitService(retrofit: Retrofit): ProductRetrofitService {
+        return retrofit.create(ProductRetrofitService::class.java)
+
     }
 }

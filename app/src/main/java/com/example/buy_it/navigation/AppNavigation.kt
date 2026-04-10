@@ -142,7 +142,15 @@ fun AppNavigation(
                     navController.navigate(Screen.Trends.route) {
                         launchSingleTop = true
                     }
-                }
+                },
+                /*
+                *
+                *
+                *
+                * OJO QUE ACA SE QUEMO EL USER ID OJO MUCHO OJO POR FAVOR OJO
+                *
+                * */
+                userId = "1",
             )
         }
 
