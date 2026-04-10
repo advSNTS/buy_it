@@ -1,5 +1,6 @@
 package com.example.buy_it.data.dtos
 
+import androidx.core.R
 import com.example.buy_it.data.ReviewInfo
 import java.time.LocalDate
 
@@ -15,6 +16,7 @@ data class ReviewDTO(
 )
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
+    android.util.Log.d("ReviewDTO", "product: ${product.name}, percentageLikes: ${product.percentageLike}, range: ${product.range}")
     return ReviewInfo(
         id = id,
         profileImage = user.pfpurl ?: "",
@@ -25,11 +27,7 @@ fun ReviewDTO.toReviewInfo(): ReviewInfo {
         product = product.name,
         like = like,
         percentageLikes = product.percentageLike,
-        date = try {
-            LocalDate.parse(createdAt.substring(0, 10))
-        } catch (e: Exception) {
-            LocalDate.now()
-        },
+        date = LocalDate.parse(createdAt.substring(0, 10)), // "2026-04-09T..." → "2026-04-09"
         range = product.range,
         comments = comments
     )

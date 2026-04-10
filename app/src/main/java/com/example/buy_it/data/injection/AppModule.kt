@@ -1,5 +1,6 @@
 package com.example.buy_it.data.injection
 
+import com.example.buy_it.data.datasource.services.UserRetrofitService
 import com.example.buy_it.data.datasource.services.ProductRetrofitService
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -31,6 +32,8 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService{
+        return retrofit.create(UserRetrofitService::class.java)
     fun providesProductRetrofitService(retrofit: Retrofit): ProductRetrofitService {
         return retrofit.create(ProductRetrofitService::class.java)
     }
