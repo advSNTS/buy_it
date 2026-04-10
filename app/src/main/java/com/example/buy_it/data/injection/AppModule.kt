@@ -1,5 +1,6 @@
 package com.example.buy_it.data.injection
 
+import com.example.buy_it.data.datasource.services.ReviewRetrofitService
 import com.example.buy_it.data.datasource.services.UserRetrofitService
 import com.example.buy_it.data.datasource.services.ProductRetrofitService
 import com.example.buy_it.data.datasource.services.ReviewRetrofitService
@@ -24,6 +25,14 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun providesReviewRetrofitService(
+        retrofit: Retrofit
+    ): ReviewRetrofitService {
+        return retrofit.create(ReviewRetrofitService::class.java)
     }
 
     @Singleton

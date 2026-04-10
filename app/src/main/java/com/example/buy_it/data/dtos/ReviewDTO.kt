@@ -2,6 +2,7 @@ package com.example.buy_it.data.dtos
 
 import androidx.core.R
 import com.example.buy_it.data.ReviewInfo
+import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
 
 data class ReviewDTO(

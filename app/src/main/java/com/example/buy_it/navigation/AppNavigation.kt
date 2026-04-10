@@ -32,6 +32,7 @@ import com.example.buy_it.ui.screens.trends.TrendsViewModel
 import com.example.buy_it.ui.screens.revieweditor.ReviewEditor
 import com.example.buy_it.ui.screens.splash.SplashScreen
 import com.example.buy_it.ui.screens.splash.SplashViewModel
+import androidx.navigation.navArgument
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
@@ -53,8 +54,14 @@ sealed class Screen(val route: String) {
     object Comments : Screen("comments/{productId}") {
         fun createRoute(productId: String) = "comments/$productId"
     }
-    object ReviewEditorScreen : Screen("review_editor/{productId}") {
-        fun createRoute(productId: String) = "review_editor/$productId"
+    object ReviewEditorScreen : Screen("review_editor/{productId}?reviewId={reviewId}") {
+        fun createRoute(productId: String, reviewId: String? = null): String {
+            return if (reviewId == null) {
+                "review_editor/$productId"
+            } else {
+                "review_editor/$productId?reviewId=$reviewId"
+            }
+        }
     }
 }
 
@@ -213,6 +220,14 @@ fun AppNavigation(
         composable(route = Screen.Detail.route) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
             val detailViewModel: DetailViewModel = hiltViewModel()
+
+            val refresh = backStackEntry.savedStateHandle.get<Boolean>("refresh_detail") == true
+
+            if (refresh) {
+                detailViewModel.loadProductDetail(productId)
+                backStackEntry.savedStateHandle["refresh_detail"] = false
+            }
+
             Detail(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
@@ -222,6 +237,19 @@ fun AppNavigation(
                 },
                 onSeeStores = {
                     navController.navigate(Screen.Prices.createRoute(productId))
+                },
+                onOpenReviewEditor = { selectedProductId ->
+                    navController.navigate(
+                        Screen.ReviewEditorScreen.createRoute(selectedProductId)
+                    )
+                },
+                onEditReview = { selectedProductId, reviewId ->
+                    navController.navigate(
+                        Screen.ReviewEditorScreen.createRoute(
+                            productId = selectedProductId,
+                            reviewId = reviewId
+                        )
+                    )
                 },
                 detailViewModel = detailViewModel
             )
@@ -235,15 +263,28 @@ fun AppNavigation(
             )
         }
 
-        composable(route = Screen.ReviewEditorScreen.route) { backStackEntry ->
+        composable(
+            route = Screen.ReviewEditorScreen.route,
+            arguments = listOf(
+                navArgument("reviewId") {
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId").orEmpty()
+            val reviewId = backStackEntry.arguments?.getString("reviewId")
+
             ReviewEditor(
                 productId = productId,
-                onBackPressed = { navController.popBackStack() },
-                onNotificationClick = { /* TODO */ },
-                onPublish = {
+                reviewId = reviewId,
+                onBackPressed = {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("refresh_detail", true)
                     navController.popBackStack()
-                }
+                },
+                onNotificationClick = { /* TODO */ }
             )
         }
 

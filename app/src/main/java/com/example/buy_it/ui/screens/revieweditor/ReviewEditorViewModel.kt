@@ -1,33 +1,150 @@
 package com.example.buy_it.ui.screens.revieweditor
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.buy_it.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
-class ReviewEditorViewModel @Inject constructor() : ViewModel() {
+class ReviewEditorViewModel @Inject constructor(
+    private val reviewRepository: ReviewRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReviewEditorState())
     val uiState: StateFlow<ReviewEditorState> = _uiState.asStateFlow()
 
+    private fun recalculate(state: ReviewEditorState): ReviewEditorState {
+        return state.copy(
+            canPublish = state.likeChoice != LikeChoice.None &&
+                    state.opinion.trim().isNotEmpty()
+        )
+    }
+
     fun onLikeChoiceChange(likeChoice: LikeChoice) {
-        _uiState.update { it.copy(likeChoice = likeChoice) }
+        _uiState.update { current ->
+            recalculate(current.copy(likeChoice = likeChoice))
+        }
     }
 
     fun onOpinionChange(opinion: String) {
-        _uiState.update { it.copy(opinion = opinion) }
+        _uiState.update { current ->
+            recalculate(current.copy(opinion = opinion))
+        }
     }
 
-    fun buildDraft(productId: String): ReviewDraft {
-        val state = _uiState.value
-        return ReviewDraft(
-            productId = productId,
-            likeChoice = state.likeChoice,
-            opinion = state.opinion.trim()
-        )
+    fun loadReviewForEdit(reviewId: String) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true, errorMessage = null)
+            }
+
+            val result = reviewRepository.getReviewById(reviewId)
+
+            if (result.isSuccess) {
+                val review = result.getOrThrow()
+                _uiState.update {
+                    recalculate(
+                        it.copy(
+                            reviewId = review.id,
+                            likeChoice = if (review.like) LikeChoice.Like else LikeChoice.Dislike,
+                            opinion = review.review,
+                            isLoading = false,
+                            isEditMode = true
+                        )
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = result.exceptionOrNull()?.message ?: "Error al cargar"
+                    )
+                }
+            }
+        }
+    }
+
+    fun submitReview(productId: String) {
+        viewModelScope.launch {
+            val state = _uiState.value
+
+            _uiState.update {
+                it.copy(isLoading = true, errorMessage = null, navigateBack = false)
+            }
+
+            val likeValue = state.likeChoice == LikeChoice.Like
+
+            val result = if (state.reviewId == null) {
+                reviewRepository.createReview(
+                    productId = productId,
+                    like = likeValue,
+                    comment = state.opinion.trim(),
+                    userId = "1"
+                )
+            } else {
+                reviewRepository.updateReview(
+                    reviewId = state.reviewId,
+                    productId = productId,
+                    like = likeValue,
+                    comment = state.opinion.trim(),
+                    userId = "1"
+                )
+            }
+
+            if (result.isSuccess) {
+                _uiState.update {
+                    it.copy(isLoading = false, navigateBack = true)
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = result.exceptionOrNull()?.message ?: "Error al guardar"
+                    )
+                }
+            }
+        }
+    }
+
+    fun deleteReview() {
+        val reviewId = _uiState.value.reviewId ?: return
+
+        viewModelScope.launch {
+            android.util.Log.d("ReviewDelete", "Intentando eliminar reviewId=$reviewId")
+
+            _uiState.update {
+                it.copy(isLoading = true, errorMessage = null, navigateBack = false)
+            }
+
+            val result = reviewRepository.deleteReview(reviewId)
+
+            if (result.isSuccess) {
+                android.util.Log.d("ReviewDelete", "Eliminación exitosa")
+                _uiState.update {
+                    it.copy(isLoading = false, navigateBack = true)
+                }
+            } else {
+                android.util.Log.e(
+                    "ReviewDelete",
+                    "Error al eliminar: ${result.exceptionOrNull()?.message}"
+                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = result.exceptionOrNull()?.message ?: "Error al eliminar"
+                    )
+                }
+            }
+        }
+    }
+
+    fun onNavigatedBack() {
+        _uiState.update { it.copy(navigateBack = false) }
     }
 }
