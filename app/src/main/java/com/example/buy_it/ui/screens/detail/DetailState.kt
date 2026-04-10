@@ -7,5 +7,6 @@ data class DetailState(
     val product: ProductInfo? = null,
     val reviews: List<ReviewInfo> = emptyList(),
     val isLoading: Boolean = false,
-    val navigateToProfileUserId: String? = null
+    val navigateToProfileUserId: String? = null,
+    val currentUserId: String? = null
 )

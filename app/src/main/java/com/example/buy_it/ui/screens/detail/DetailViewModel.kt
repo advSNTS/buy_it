@@ -2,6 +2,7 @@ package com.example.buy_it.ui.screens.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.buy_it.data.repository.AuthRepository
 import com.example.buy_it.data.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,9 +13,12 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val productRepository: ProductRepository
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(DetailState())
+    private val _uiState = MutableStateFlow(DetailState(
+        currentUserId = authRepository.currentUser?.uid
+    ))
     val uiState: StateFlow<DetailState> = _uiState
 
     fun onUserClicked(userId: String) {
