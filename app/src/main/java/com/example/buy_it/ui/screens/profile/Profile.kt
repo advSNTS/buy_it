@@ -34,9 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.buy_it.R
+import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
-import com.example.buy_it.ui.screens.home.ReviewCard
+import com.example.buy_it.ui.screens.home.ProductCard
 import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
@@ -138,7 +139,17 @@ fun Profile(
             }
 
             items(state.reviews) { review ->
-                ReviewCard(reviewInfo = review)
+                ProductCard(
+                    productInfo = ProductInfo(
+                        id = review.id,
+                        name = review.product,
+                        image = review.profileImage,
+                        description = review.review,
+                        likePercent = review.percentageLikes,
+                        range = review.range,
+                        ratingsCount = review.comments
+                    )
+                )
             }
         }
     }

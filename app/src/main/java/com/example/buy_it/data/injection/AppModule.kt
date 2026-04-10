@@ -2,11 +2,6 @@ package com.example.buy_it.data.injection
 
 import com.example.buy_it.data.datasource.services.UserRetrofitService
 import com.example.buy_it.data.datasource.services.ProductRetrofitService
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +29,12 @@ object AppModule {
     @Provides
     fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService{
         return retrofit.create(UserRetrofitService::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun providesProductRetrofitService(retrofit: Retrofit): ProductRetrofitService {
         return retrofit.create(ProductRetrofitService::class.java)
+
     }
 }
