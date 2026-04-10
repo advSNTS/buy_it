@@ -84,16 +84,14 @@ class ReviewEditorViewModel @Inject constructor(
                 reviewRepository.createReview(
                     productId = productId,
                     like = likeValue,
-                    comment = state.opinion.trim(),
-                    userId = "1"
+                    comment = state.opinion.trim()
                 )
             } else {
                 reviewRepository.updateReview(
-                    reviewId = state.reviewId,
+                    id = state.reviewId,
                     productId = productId,
                     like = likeValue,
-                    comment = state.opinion.trim(),
-                    userId = "1"
+                    comment = state.opinion.trim()
                 )
             }
 

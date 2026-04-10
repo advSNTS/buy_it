@@ -3,7 +3,6 @@ package com.example.buy_it.data.injection
 import com.example.buy_it.data.datasource.services.ReviewRetrofitService
 import com.example.buy_it.data.datasource.services.UserRetrofitService
 import com.example.buy_it.data.datasource.services.ProductRetrofitService
-import com.example.buy_it.data.datasource.services.ReviewRetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,11 +44,5 @@ object AppModule {
     @Provides
     fun providesProductRetrofitService(retrofit: Retrofit): ProductRetrofitService {
         return retrofit.create(ProductRetrofitService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun providesReviewRetrofitService(retrofit: Retrofit): ReviewRetrofitService {
-        return retrofit.create(ReviewRetrofitService::class.java)
     }
 }

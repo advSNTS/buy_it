@@ -26,9 +26,6 @@ class ReviewRetrofitDataSourceImplementation @Inject constructor(
         service.updateReview(id, review)
 
     override suspend fun deleteReview(id: String) {
-        val response = service.deleteReview(id)
-        if (!response.isSuccessful) {
-            throw retrofit2.HttpException(response)
-        }
+        service.deleteReview(id)
     }
 }
