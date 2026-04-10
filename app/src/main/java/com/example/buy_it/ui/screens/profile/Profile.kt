@@ -143,7 +143,7 @@ fun Profile(
                     productInfo = ProductInfo(
                         id = review.id,
                         name = review.product,
-                        image = review.profileImage,
+                        image = review.imgProd,
                         description = review.review,
                         likePercent = review.percentageLikes,
                         range = review.range,

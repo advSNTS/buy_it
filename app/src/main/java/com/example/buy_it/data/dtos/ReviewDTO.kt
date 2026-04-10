@@ -20,7 +20,7 @@ fun ReviewDTO.toReviewInfo(): ReviewInfo {
     return ReviewInfo(
         id = id,
         profileImage = user.pfpurl ?: "",
-        imgProd = 0,
+        imgProd = product.imageURL ?:"",
         name = user.name,
         review = comment,
         productId = productId,

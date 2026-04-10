@@ -6,7 +6,7 @@ import java.time.LocalDate
 data class ReviewInfo(
     val id: String,
     val profileImage: String,
-    @DrawableRes val imgProd: Int,
+    val imgProd: String,
     val name: String,
     // val username: String,
     val review: String,

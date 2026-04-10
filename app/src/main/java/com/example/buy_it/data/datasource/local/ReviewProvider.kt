@@ -9,7 +9,7 @@ object ReviewProvider {
     val feed = listOf(
         ReviewInfo(
             profileImage = "https://store.networkchuck.com/cdn/shop/files/NetworkChuck-logo_new_155091cc-4294-4449-859d-92f5c27921d0.png?v=1595374929",
-            imgProd = R.drawable.rey,
+            imgProd = "",
             name = "buy it.",
             review = "Buen jabón, con él me hago los rituales de purificación.",
             productId = "rey_300g",
@@ -23,7 +23,7 @@ object ReviewProvider {
         ),
         ReviewInfo(
             profileImage = "https://img.fcbayern.com/image/upload/f_auto/q_auto/t_cms-1x1-seo/v1753859302/cms/public/images/fcbayern-com/players/spielerportraits/teaser/luis-diaz.png",
-            imgProd = R.drawable.cafe,
+            imgProd = "",
             name = "@buy it.",
             review = "Es feo, pero barato. Además me rinde para unas 8 tazas.",
             productId = "cafe_110g",
@@ -37,7 +37,7 @@ object ReviewProvider {
         ),
         ReviewInfo(
             profileImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqS1-EhtFMw2cHi_ub7A_YP90Z6eaa1egQ0A&s",
-            imgProd = R.drawable.rey,
+            imgProd = "",
             name = "@Danny_Slicer",
             review = "Como es eso de que el dueño de la app se purifica con esto jajaja, en fin. Buen jabón.",
             productId = "rey_300g",
