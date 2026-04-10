@@ -8,5 +8,6 @@ data class ProfileState(
     val seguidoresCount: String = "0",
     val memberSince: String = "",
     val profileImage: String? = "",
-    val user: UserProfileInfo? = null
+    val user: UserProfileInfo? = null,
+    val isCurrentUser: Boolean = false
 )

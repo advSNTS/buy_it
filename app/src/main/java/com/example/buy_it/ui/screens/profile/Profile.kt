@@ -117,6 +117,23 @@ fun Profile(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(12.dp))
+
+                state.user?.let { user ->
+                    Text(
+                        text = user.name,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = "@${user.username}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(18.dp))
 
                 Row(
@@ -136,6 +153,28 @@ fun Profile(
                     )
                 }
 
+                if (state.isCurrentUser) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Tus reseñas",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Reseñas de ${state.user?.name ?: ""}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
@@ -150,7 +189,13 @@ fun Profile(
                         range = review.range,
                         ratingsCount = review.comments
                     ),
-                    onClick = { onOpenDetail(review.productId) }
+                    onClick = {
+                        if (state.isCurrentUser) {
+                            onOpenDetail(review.productId) // O onEditReview si existiera
+                        } else {
+                            onOpenDetail(review.productId)
+                        }
+                    }
                 )
             }
         }

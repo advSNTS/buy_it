@@ -31,9 +31,11 @@ class ProfileViewModel @Inject constructor(
             if (result.isSuccess) {
                 val userProfileInfo = result.getOrNull()
                 if (userProfileInfo != null) {
+                    val isCurrentUser = userId == authRepository.currentUser?.uid
                     //!!!! esto prioriza la foto de fuegobase, y luego la del backend arcáico
                     _uiState.value = _uiState.value.copy(
                         user = userProfileInfo,
+                        isCurrentUser = isCurrentUser,
                         seguidoresCount = userProfileInfo.followersCount.toString(),
                         memberSince = "Desde ${userProfileInfo.createdAt.year}",
                         profileImage = authRepository.currentUser?.photoUrl?.toString()
