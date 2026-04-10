@@ -32,6 +32,10 @@ object AppModule {
         retrofit: Retrofit
     ): ReviewRetrofitService {
         return retrofit.create(ReviewRetrofitService::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService{
         return retrofit.create(UserRetrofitService::class.java)
     }
