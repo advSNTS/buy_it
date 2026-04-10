@@ -6,6 +6,7 @@ import com.example.buy_it.data.datasource.ProductRemoteDataSource
 import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.toProductInfo
+import com.example.buy_it.data.dtos.toReviewInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
@@ -42,5 +43,28 @@ class ProductRepository @Inject constructor(
         }
     }
 
+    suspend fun getProductById(id: String): Result<ProductInfo> {
+        return try {
+            val productDTO = productRemoteDataSource.getProduct(id)
+            val reviews = try {
+                productRemoteDataSource.getProductReviews(id)
+            } catch (e: Exception) {
+                emptyList()
+            }
+            Result.success(productDTO.toProductInfo().copy(ratingsCount = reviews.size))
+        } catch (e: HttpException) {
+            Result.failure(e)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
+    suspend fun getProductReviews(id: String): Result<List<com.example.buy_it.data.ReviewInfo>> {
+        return try {
+            val reviews = productRemoteDataSource.getProductReviews(id)
+            Result.success(reviews.map { it.toReviewInfo() })
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

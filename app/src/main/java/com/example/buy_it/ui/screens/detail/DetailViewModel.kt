@@ -1,35 +1,34 @@
 package com.example.buy_it.ui.screens.detail
 
 import androidx.lifecycle.ViewModel
-import com.example.buy_it.data.datasource.local.ProductProvider
-import com.example.buy_it.data.datasource.local.ReviewProvider
+import androidx.lifecycle.viewModelScope
+import com.example.buy_it.data.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(): ViewModel() {
+class DetailViewModel @Inject constructor(
+    private val productRepository: ProductRepository
+): ViewModel() {
     private val _uiState = MutableStateFlow(DetailState())
     val uiState: StateFlow<DetailState> = _uiState
 
     fun loadProductDetail(productId: String) {
         _uiState.update { it.copy(isLoading = true) }
         
-        val product = ProductProvider.byId(productId)
-        val allReviews = ReviewProvider.feed
-        
-        val filteredReviews = if (product != null) {
-            allReviews.filter { it.product == product.name }.ifEmpty { allReviews }
-        } else {
-            emptyList()
+        viewModelScope.launch {
+            val productResult = productRepository.getProductById(productId)
+            val reviewsResult = productRepository.getProductReviews(productId)
+            
+            _uiState.update { it.copy(
+                product = productResult.getOrNull(),
+                reviews = reviewsResult.getOrDefault(emptyList()),
+                isLoading = false
+            ) }
         }
-
-        _uiState.update { it.copy(
-            product = product,
-            reviews = filteredReviews,
-            isLoading = false
-        ) }
     }
 }

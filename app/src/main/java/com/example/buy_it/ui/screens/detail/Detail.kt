@@ -31,6 +31,13 @@ fun Detail(
         detailViewModel.loadProductDetail(productId)
     }
 
+    if (state.isLoading) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            androidx.compose.material3.CircularProgressIndicator()
+        }
+        return
+    }
+
     val product = state.product ?: return
 
     Box(
