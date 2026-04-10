@@ -1,35 +1,45 @@
 package com.example.buy_it.data.dtos
 
-import androidx.core.R
 import com.example.buy_it.data.ReviewInfo
-import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
+import android.util.Log
 
 data class ReviewDTO(
     val id: String,
-    val userID: String,
-    val productId: String,val like: Boolean,
+    val userId: String,
+    val productId: String,
+    val like: Boolean,
     val comment: String,
     val comments: Int,
     val createdAt: String,
-    val user: UserDTO,
-    val product: ProductDTO
+    val user: UserDTO?,
+    val product: ProductDTO?
 )
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
-    android.util.Log.d("ReviewDTO", "product: ${product.name}, percentageLikes: ${product.percentageLike}, range: ${product.range}")
+    val parsedDate = try {
+        if (createdAt.contains("T")) {
+            LocalDate.parse(createdAt.substring(0, 10))
+        } else {
+            LocalDate.parse(createdAt)
+        }
+    } catch (e: Exception) {
+        Log.e("ReviewDTO", "Error parseando fecha: $createdAt", e)
+        LocalDate.now()
+    }
+
     return ReviewInfo(
         id = id,
-        profileImage = user.pfpurl ?: "",
-        imgProd = product.imageURL ?:"",
-        name = user.name,
+        profileImage = user?.pfpURL ?: "",
+        imgProd = product?.imageURL ?: "",
+        name = user?.name ?: "Usuario desconocido",
         review = comment,
         productId = productId,
-        product = product.name,
+        product = product?.name ?: "",
         like = like,
-        percentageLikes = product.percentageLike,
-        date = LocalDate.parse(createdAt.substring(0, 10)), // "2026-04-09T..." → "2026-04-09"
-        range = product.range,
+        percentageLikes = product?.percentageLike ?: 0,
+        date = parsedDate,
+        range = product?.range ?: "",
         comments = comments
     )
 }

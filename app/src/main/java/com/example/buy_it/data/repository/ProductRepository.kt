@@ -2,6 +2,7 @@ package com.example.buy_it.data.repository
 
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
+import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.datasource.ProductRemoteDataSource
 import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
 import com.example.buy_it.data.dtos.CreateProductDTO
@@ -59,7 +60,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun getProductReviews(id: String): Result<List<com.example.buy_it.data.ReviewInfo>> {
+    suspend fun getProductReviews(id: String): Result<List<ReviewInfo>> {
         return try {
             val reviews = productRemoteDataSource.getProductReviews(id)
             Result.success(reviews.map { it.toReviewInfo() })

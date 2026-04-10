@@ -258,17 +258,6 @@ fun ReviewMiniCard(
                 lineHeight = 24.sp
             )
 
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Ver comentarios (${info.comments})",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.clickable(onClick = onCommentClick)
-                )
-            }
         }
     }
 }

@@ -23,7 +23,7 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             val productResult = productRepository.getProductById(productId)
             val reviewsResult = productRepository.getProductReviews(productId)
-            
+
             _uiState.update { it.copy(
                 product = productResult.getOrNull(),
                 reviews = reviewsResult.getOrDefault(emptyList()),
