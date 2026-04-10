@@ -10,5 +10,5 @@ interface UserRetrofitService {
     suspend fun getReviewsByUser(@Path("userId") userId: String): List<ReviewDTO>
 
     @GET("users/{userId}")
-    suspend fun getUserById(@Path("userId") userId: String): UserProfileDTO
+    suspend fun getUserById(@Path("userId") userId: Int): UserProfileDTO
 }

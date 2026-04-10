@@ -17,9 +17,17 @@ class DetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DetailState())
     val uiState: StateFlow<DetailState> = _uiState
 
+    fun onUserClicked(userId: String) {
+        _uiState.update { it.copy(navigateToProfileUserId = userId) }
+    }
+
+    fun onNavigationHandled() {
+        _uiState.update { it.copy(navigateToProfileUserId = null) }
+    }
+
     fun loadProductDetail(productId: String) {
         _uiState.update { it.copy(isLoading = true) }
-        
+
         viewModelScope.launch {
             val productResult = productRepository.getProductById(productId)
             val reviewsResult = productRepository.getProductReviews(productId)

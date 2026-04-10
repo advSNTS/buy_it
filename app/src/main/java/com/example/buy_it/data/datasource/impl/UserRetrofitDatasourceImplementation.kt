@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class UserRetrofitDatasourceImplementation @Inject constructor(private val service: UserRetrofitService): UserRemoteDatasource {
     override suspend fun getUserById(id: String): UserProfileDTO {
-        return service.getUserById(id)
+        return service.getUserById(id.toInt())
     }
 
     override suspend fun getUserReviews(id: String): List<ReviewDTO> {

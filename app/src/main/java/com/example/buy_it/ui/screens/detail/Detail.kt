@@ -24,6 +24,7 @@ fun Detail(
     onSeeStores: () -> Unit,
     onOpenReviewEditor: (String) -> Unit,
     onEditReview: (String, String) -> Unit,
+    onNavigateToProfile: (String) -> Unit,
     detailViewModel: DetailViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -31,6 +32,13 @@ fun Detail(
 
     LaunchedEffect(productId) {
         detailViewModel.loadProductDetail(productId)
+    }
+
+    LaunchedEffect(state.navigateToProfileUserId) {
+        state.navigateToProfileUserId?.let { userId ->
+            onNavigateToProfile(userId)
+            detailViewModel.onNavigationHandled()
+        }
     }
 
     if (state.isLoading) {
@@ -81,7 +89,8 @@ fun Detail(
                         onCommentClick = onOpenComments,
                         onClick = {
                             onEditReview(productId, review.id)
-                        }
+                        },
+                        onUserClick = { detailViewModel.onUserClicked(review.userId) }
                     )
                 }
 

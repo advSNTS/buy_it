@@ -6,6 +6,7 @@ import com.example.buy_it.data.UserProfileInfo
 import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.dtos.toReviewInfo
 import com.example.buy_it.data.dtos.toUserProfileInfo
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val userRetrofitDatasourceImplementation: UserRetrofitDatasourceImplementation) {
@@ -15,6 +16,8 @@ class UserRepository @Inject constructor(private val userRetrofitDatasourceImple
             val user = userRetrofitDatasourceImplementation.getUserById(id)
             val userProfileInfo = user.toUserProfileInfo()
             Result.success(userProfileInfo)
+        } catch (e: HttpException){
+            Result.failure(e)
         } catch (e: Exception){
             Result.failure(e)
         }

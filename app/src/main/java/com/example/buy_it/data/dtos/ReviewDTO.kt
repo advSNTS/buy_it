@@ -30,6 +30,7 @@ fun ReviewDTO.toReviewInfo(): ReviewInfo {
 
     return ReviewInfo(
         id = id,
+        userId = userId,
         profileImage = user?.pfpURL ?: "",
         imgProd = product?.imageURL ?: "",
         name = user?.name ?: "Usuario desconocido",

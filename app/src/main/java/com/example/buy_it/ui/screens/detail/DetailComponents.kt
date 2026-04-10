@@ -220,6 +220,7 @@ fun ReviewMiniCard(
     info: ReviewInfo,
     onCommentClick: () -> Unit,
     onClick: () -> Unit,
+    onUserClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -245,7 +246,8 @@ fun ReviewMiniCard(
                 Text(
                     text = info.name,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.clickable { onUserClick(info.userId) }
                 )
             }
 

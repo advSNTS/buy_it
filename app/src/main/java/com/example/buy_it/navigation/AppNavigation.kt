@@ -32,6 +32,7 @@ import com.example.buy_it.ui.screens.trends.TrendsViewModel
 import com.example.buy_it.ui.screens.revieweditor.ReviewEditor
 import com.example.buy_it.ui.screens.splash.SplashScreen
 import com.example.buy_it.ui.screens.splash.SplashViewModel
+import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed class Screen(val route: String) {
@@ -54,6 +55,10 @@ sealed class Screen(val route: String) {
     object Comments : Screen("comments/{productId}") {
         fun createRoute(productId: String) = "comments/$productId"
     }
+    object UserProfile : Screen("userProfile/{userId}") {
+        fun createRoute(userId: String) = "userProfile/$userId"
+    }
+
     object ReviewEditorScreen : Screen("review_editor/{productId}?reviewId={reviewId}") {
         fun createRoute(productId: String, reviewId: String? = null): String {
             return if (reviewId == null) {
@@ -247,6 +252,9 @@ fun AppNavigation(
                         )
                     )
                 },
+                onNavigateToProfile = { userId ->
+                    navController.navigate(Screen.UserProfile.createRoute(userId))
+                },
                 detailViewModel = detailViewModel
             )
         }
@@ -284,11 +292,28 @@ fun AppNavigation(
             )
         }
 
+        composable(
+            route = Screen.UserProfile.route,
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId").orEmpty()
+            Profile(
+                userId = userId,
+                onProfileEdit = { },
+                onConfigurationEdit = { },
+                onHomeClick = { navController.navigate(Screen.Home.route) },
+                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onTrendsClick = { navController.navigate(Screen.Trends.route) },
+                onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) }
+            )
+        }
+
         composable(route = Screen.Prices.route) { backStackEntry ->
             val pricesViewModel: PricesViewModel = hiltViewModel()
             Prices(pricesViewModel = pricesViewModel)
         }
     }
+
 }
 
 @Composable

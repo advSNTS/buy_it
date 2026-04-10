@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 data class ReviewInfo(
     val id: String,
+    val userId: String,
     val profileImage: String,
     val imgProd: String,
     val name: String,
