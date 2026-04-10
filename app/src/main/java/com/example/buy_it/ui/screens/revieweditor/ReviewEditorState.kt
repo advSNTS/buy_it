@@ -17,4 +17,5 @@ data class ReviewEditorState(
     val errorMessage: String? = null,
     val navigateBack: Boolean = false,
     val isEditMode: Boolean = false,
+    val canEditOrDelete: Boolean = true,
 )

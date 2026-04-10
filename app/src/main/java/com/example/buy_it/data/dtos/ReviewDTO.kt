@@ -1,8 +1,8 @@
 package com.example.buy_it.data.dtos
 
+import android.util.Log
 import com.example.buy_it.data.ReviewInfo
 import java.time.LocalDate
-import android.util.Log
 
 data class ReviewDTO(
     val id: String,

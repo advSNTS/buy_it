@@ -91,6 +91,14 @@ fun ReviewEditor(
                             .padding(top = 10.dp)
                     )
 
+                    if (uiState.isEditMode && !uiState.canEditOrDelete) {
+                        Text(
+                            text = "Solo puedes editar o eliminar tus propias reseñas.",
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+                    }
+
                     PublishReviewButton(
                         enabled = uiState.canPublish && !uiState.isLoading,
                         text = if (uiState.isEditMode) "Guardar cambios" else "Publicar reseña",
@@ -108,7 +116,7 @@ fun ReviewEditor(
                         )
                     }
 
-                    if (uiState.isEditMode) {
+                    if (uiState.isEditMode && uiState.canEditOrDelete) {
                         Button(
                             onClick = { viewModel.deleteReview() },
                             enabled = !uiState.isLoading,
@@ -122,6 +130,8 @@ fun ReviewEditor(
                         ) {
                             Text("Eliminar reseña")
                         }
+                    } else {
+                        Spacer(modifier = Modifier.height(90.dp))
                     }
 
                     if (uiState.isLoading) {

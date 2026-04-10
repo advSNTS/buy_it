@@ -1,6 +1,5 @@
 package com.example.buy_it.data
 
-import androidx.annotation.DrawableRes
 import java.time.LocalDate
 
 data class ReviewInfo(
@@ -9,7 +8,6 @@ data class ReviewInfo(
     val profileImage: String,
     val imgProd: String,
     val name: String,
-    // val username: String,
     val review: String,
     val productId: String,
     val product: String,

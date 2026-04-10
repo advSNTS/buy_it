@@ -21,20 +21,36 @@ class ReviewEditorViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ReviewEditorState())
     val uiState: StateFlow<ReviewEditorState> = _uiState.asStateFlow()
 
+    private val currentUserId = "1"
+
     private fun recalculate(state: ReviewEditorState): ReviewEditorState {
+        val baseCanPublish = state.likeChoice != LikeChoice.None &&
+                state.opinion.trim().isNotEmpty()
+
+        val finalCanPublish = if (state.isEditMode) {
+            baseCanPublish && state.canEditOrDelete
+        } else {
+            baseCanPublish
+        }
+
         return state.copy(
-            canPublish = state.likeChoice != LikeChoice.None &&
-                    state.opinion.trim().isNotEmpty()
+            canPublish = finalCanPublish
         )
     }
 
     fun onLikeChoiceChange(likeChoice: LikeChoice) {
+        // Si está editando una reseña ajena, no dejamos cambiar estado
+        if (_uiState.value.isEditMode && !_uiState.value.canEditOrDelete) return
+
         _uiState.update { current ->
             recalculate(current.copy(likeChoice = likeChoice))
         }
     }
 
     fun onOpinionChange(opinion: String) {
+        // Si está editando una reseña ajena, no dejamos cambiar estado
+        if (_uiState.value.isEditMode && !_uiState.value.canEditOrDelete) return
+
         _uiState.update { current ->
             recalculate(current.copy(opinion = opinion))
         }
@@ -87,6 +103,8 @@ class ReviewEditorViewModel @Inject constructor(
 
             if (result.isSuccess) {
                 val review = result.getOrThrow()
+                val isOwner = review.userId == currentUserId
+
                 _uiState.update {
                     recalculate(
                         it.copy(
@@ -94,8 +112,9 @@ class ReviewEditorViewModel @Inject constructor(
                             likeChoice = if (review.like) LikeChoice.Like else LikeChoice.Dislike,
                             opinion = review.review,
                             isLoading = false,
-                            errorMessage = null,
-                            isEditMode = true
+                            errorMessage = if (isOwner) null else "No puedes editar ni eliminar la reseña de otro usuario.",
+                            isEditMode = true,
+                            canEditOrDelete = isOwner
                         )
                     )
                 }
@@ -113,6 +132,18 @@ class ReviewEditorViewModel @Inject constructor(
     fun submitReview(productId: String) {
         viewModelScope.launch {
             val state = _uiState.value
+
+            if (state.isEditMode && !state.canEditOrDelete) {
+                _uiState.update {
+                    recalculate(
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "No puedes editar una reseña de otro usuario."
+                        )
+                    )
+                }
+                return@launch
+            }
 
             _uiState.update {
                 it.copy(isLoading = true, errorMessage = null, navigateBack = false)
@@ -151,7 +182,20 @@ class ReviewEditorViewModel @Inject constructor(
     }
 
     fun deleteReview() {
-        val reviewId = _uiState.value.reviewId ?: return
+        val state = _uiState.value
+        val reviewId = state.reviewId ?: return
+
+        if (!state.canEditOrDelete) {
+            _uiState.update {
+                recalculate(
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "No puedes eliminar una reseña de otro usuario."
+                    )
+                )
+            }
+            return
+        }
 
         viewModelScope.launch {
             _uiState.update {
