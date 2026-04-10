@@ -48,6 +48,7 @@ fun Profile(
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
     onTrendsClick: () -> Unit,
+    onOpenDetail: (String) -> Unit,
     profileViewModel: ProfileViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
@@ -141,14 +142,15 @@ fun Profile(
             items(state.reviews) { review ->
                 ProductCard(
                     productInfo = ProductInfo(
-                        id = review.id,
+                        id = review.productId,
                         name = review.product,
                         image = review.imgProd,
                         description = review.review,
                         likePercent = review.percentageLikes,
                         range = review.range,
                         ratingsCount = review.comments
-                    )
+                    ),
+                    onClick = { onOpenDetail(review.productId) }
                 )
             }
         }
@@ -190,6 +192,7 @@ fun ProfilePreview() {
             onHomeClick = {},
             onProfileClick = {},
             onTrendsClick = {},
+            onOpenDetail = {},
             userId = "1",
         )
     }

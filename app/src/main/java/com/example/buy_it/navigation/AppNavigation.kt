@@ -143,13 +143,9 @@ fun AppNavigation(
                         launchSingleTop = true
                     }
                 },
-                /*
-                *
-                *
-                *
-                * OJO QUE ACA SE QUEMO EL USER ID OJO MUCHO OJO POR FAVOR OJO
-                *
-                * */
+                onOpenDetail = { id ->
+                    navController.navigate(Screen.Detail.createRoute(id))
+                },
                 userId = "1",
             )
         }
