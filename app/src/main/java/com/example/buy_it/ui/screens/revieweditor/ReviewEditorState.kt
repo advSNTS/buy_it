@@ -8,6 +8,8 @@ enum class LikeChoice {
 
 data class ReviewEditorState(
     val reviewId: String? = null,
+    val productName: String = "",
+    val productImage: String = "",
     val likeChoice: LikeChoice = LikeChoice.None,
     val opinion: String = "",
     val canPublish: Boolean = false,

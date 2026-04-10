@@ -2,6 +2,7 @@ package com.example.buy_it.ui.screens.revieweditor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.buy_it.data.repository.ProductRepository
 import com.example.buy_it.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ReviewEditorViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val productRepository: ProductRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReviewEditorState())
@@ -38,7 +40,44 @@ class ReviewEditorViewModel @Inject constructor(
         }
     }
 
-    fun loadReviewForEdit(reviewId: String) {
+    fun loadEditor(productId: String, reviewId: String?) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true, errorMessage = null)
+            }
+
+            val productResult = productRepository.getProductById(productId)
+
+            if (productResult.isFailure) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = productResult.exceptionOrNull()?.message ?: "Error al cargar el producto"
+                    )
+                }
+                return@launch
+            }
+
+            val product = productResult.getOrThrow()
+
+            _uiState.update {
+                recalculate(
+                    it.copy(
+                        productName = product.name,
+                        productImage = product.image,
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                )
+            }
+
+            if (!reviewId.isNullOrBlank()) {
+                loadReviewForEdit(reviewId)
+            }
+        }
+    }
+
+    private fun loadReviewForEdit(reviewId: String) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true, errorMessage = null)
@@ -55,6 +94,7 @@ class ReviewEditorViewModel @Inject constructor(
                             likeChoice = if (review.like) LikeChoice.Like else LikeChoice.Dislike,
                             opinion = review.review,
                             isLoading = false,
+                            errorMessage = null,
                             isEditMode = true
                         )
                     )
@@ -63,7 +103,7 @@ class ReviewEditorViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = result.exceptionOrNull()?.message ?: "Error al cargar"
+                        errorMessage = result.exceptionOrNull()?.message ?: "Error al cargar la reseña"
                     )
                 }
             }
@@ -97,13 +137,13 @@ class ReviewEditorViewModel @Inject constructor(
 
             if (result.isSuccess) {
                 _uiState.update {
-                    it.copy(isLoading = false, navigateBack = true)
+                    it.copy(isLoading = false, errorMessage = null, navigateBack = true)
                 }
             } else {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = result.exceptionOrNull()?.message ?: "Error al guardar"
+                        errorMessage = result.exceptionOrNull()?.message ?: "Error al guardar la reseña"
                     )
                 }
             }
@@ -114,8 +154,6 @@ class ReviewEditorViewModel @Inject constructor(
         val reviewId = _uiState.value.reviewId ?: return
 
         viewModelScope.launch {
-            android.util.Log.d("ReviewDelete", "Intentando eliminar reviewId=$reviewId")
-
             _uiState.update {
                 it.copy(isLoading = true, errorMessage = null, navigateBack = false)
             }
@@ -123,19 +161,14 @@ class ReviewEditorViewModel @Inject constructor(
             val result = reviewRepository.deleteReview(reviewId)
 
             if (result.isSuccess) {
-                android.util.Log.d("ReviewDelete", "Eliminación exitosa")
                 _uiState.update {
-                    it.copy(isLoading = false, navigateBack = true)
+                    it.copy(isLoading = false, errorMessage = null, navigateBack = true)
                 }
             } else {
-                android.util.Log.e(
-                    "ReviewDelete",
-                    "Error al eliminar: ${result.exceptionOrNull()?.message}"
-                )
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = result.exceptionOrNull()?.message ?: "Error al eliminar"
+                        errorMessage = result.exceptionOrNull()?.message ?: "Error al eliminar la reseña"
                     )
                 }
             }
