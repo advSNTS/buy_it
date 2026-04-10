@@ -22,6 +22,8 @@ fun Detail(
     onNotificationClick: () -> Unit,
     onOpenComments: () -> Unit,
     onSeeStores: () -> Unit,
+    onOpenReviewEditor: (String) -> Unit,
+    onEditReview: (String, String) -> Unit,
     detailViewModel: DetailViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -68,7 +70,10 @@ fun Detail(
                 items(state.reviews) { review ->
                     ReviewMiniCard(
                         info = review,
-                        onCommentClick = onOpenComments
+                        onCommentClick = onOpenComments,
+                        onClick = {
+                            onEditReview(productId, review.id)
+                        }
                     )
                 }
 
@@ -85,8 +90,8 @@ fun Detail(
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             text = "Reseñar...",
-            onSend = { /* mantener actual */ },
-            onLike = { /* mantener actual */ }
+            onSend = { onOpenReviewEditor(productId) },
+            onLike = { onOpenReviewEditor(productId) }
         )
     }
 }

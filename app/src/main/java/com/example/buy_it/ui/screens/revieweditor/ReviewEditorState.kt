@@ -1,7 +1,18 @@
 package com.example.buy_it.ui.screens.revieweditor
 
+enum class LikeChoice {
+    None,
+    Like,
+    Dislike
+}
+
 data class ReviewEditorState(
+    val reviewId: String? = null,
     val likeChoice: LikeChoice = LikeChoice.None,
     val opinion: String = "",
     val canPublish: Boolean = false,
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val navigateBack: Boolean = false,
+    val isEditMode: Boolean = false,
 )

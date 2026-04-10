@@ -1,5 +1,6 @@
 package com.example.buy_it.data.injection
 
+import com.example.buy_it.data.datasource.services.ReviewRetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,18 +10,25 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule{
+object AppModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(): Retrofit{
+    fun providesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun providesReviewRetrofitService(
+        retrofit: Retrofit
+    ): ReviewRetrofitService {
+        return retrofit.create(ReviewRetrofitService::class.java)
     }
 }
