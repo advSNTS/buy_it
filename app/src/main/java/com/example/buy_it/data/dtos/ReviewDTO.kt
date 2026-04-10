@@ -3,19 +3,7 @@ package com.example.buy_it.data.dtos
 import com.example.buy_it.data.ReviewInfo
 import java.time.LocalDate
 
-data class UserDTO(
-    val id: Int,
-    val name: String,
-    val pfpurl: String?
-)
 
-data class ProductDTO(
-    val id: Int,
-    val name: String,
-    val imageUrl: String?,
-    val percentageLikes: Int,
-    val range: String
-)
 
 data class ReviewDTO(
     val id: Int,
