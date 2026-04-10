@@ -1,6 +1,5 @@
 package com.example.buy_it.ui.screens.detail
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,16 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -48,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.ui.components.ProfileAsyncImage
-import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.buy_it.R
 
@@ -103,6 +99,7 @@ fun ProductHeaderCard(
     name: String,
     imageRes: String,
     range: String,
+    description: String,
     likePercent: Int,
     ratingsCount: Int,
     modifier: Modifier = Modifier,
@@ -147,6 +144,13 @@ fun ProductHeaderCard(
                 )
             }
 
+            Text(
+                text = description,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 4
+            )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -165,12 +169,6 @@ fun ProductHeaderCard(
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
-
-            Text(
-                text = "Opiniones del producto",
-                color = MaterialTheme.colorScheme.outline,
-                fontWeight = FontWeight.SemiBold
-            )
 
             Row(
                 verticalAlignment = Alignment.Bottom

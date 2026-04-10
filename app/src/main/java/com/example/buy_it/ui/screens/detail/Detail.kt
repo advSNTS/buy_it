@@ -64,6 +64,7 @@ fun Detail(
                         name = product.name,
                         imageRes = product.image,
                         range = product.range,
+                        description = product.description,
                         likePercent = product.likePercent,
                         ratingsCount = product.ratingsCount,
                         onClickArrow = onSeeStores
