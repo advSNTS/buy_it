@@ -1,24 +1,26 @@
 package com.example.buy_it.data.dtos
 
 import com.example.buy_it.data.ProductInfo
-import com.example.buy_it.data.ReviewInfo
-import java.time.LocalDate
 
 data class ProductDTO(
-    val id: Int,
+    val id: String,
     val name: String,
-    val imageUrl: String?,
-    val percentageLikes: Int,
-    val range: String
+    val brand: String,
+    val imageURL: String?,
+    val description: String?,
+    val percentageLike: Int,
+    val range: String,
+    val created: String
 )
 
 fun ProductDTO.toProductInfo(): ProductInfo {
     return ProductInfo(
-        id = id.toString(),
+        id = id,
         name = name,
-        image = 0,
+        image = imageURL ?: "",
+        description = description ?: "",
+        likePercent = percentageLike,
         range = range,
-        likePercent = percentageLikes,
         ratingsCount = 0
     )
 }

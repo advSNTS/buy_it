@@ -3,13 +3,10 @@ package com.example.buy_it.data.dtos
 import com.example.buy_it.data.ReviewInfo
 import java.time.LocalDate
 
-
-
 data class ReviewDTO(
-    val id: Int,
-    val userID: Int,
-    val productId: Int,
-    val like: Boolean,
+    val id: String,
+    val userID: String,
+    val productId: String,val like: Boolean,
     val comment: String,
     val comments: Int,
     val createdAt: String,
@@ -19,16 +16,20 @@ data class ReviewDTO(
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
     return ReviewInfo(
-        id = id.toString(),
+        id = id,
         profileImage = user.pfpurl ?: "",
-        imgProd = 0,    //ojo que es drawable res hay que cambiarlo
+        imgProd = 0,
         name = user.name,
         review = comment,
-        productId = productId.toString(),
+        productId = productId,
         product = product.name,
         like = like,
-        percentageLikes = product.percentageLikes,
-        date = LocalDate.parse(createdAt.substring(0, 10)), // "2026-04-09T..." → "2026-04-09"
+        percentageLikes = product.percentageLike,
+        date = try {
+            LocalDate.parse(createdAt.substring(0, 10))
+        } catch (e: Exception) {
+            LocalDate.now()
+        },
         range = product.range,
         comments = comments
     )

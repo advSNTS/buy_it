@@ -1,5 +1,6 @@
 package com.example.buy_it.data.injection
 
+import com.example.buy_it.data.datasource.services.ProductRetrofitService
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -26,5 +27,11 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun providesProductRetrofitService(retrofit: Retrofit): ProductRetrofitService {
+        return retrofit.create(ProductRetrofitService::class.java)
     }
 }
