@@ -1,5 +1,6 @@
 package com.example.buy_it.data.injection
 
+import com.example.buy_it.data.datasource.services.UserRetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,5 +23,11 @@ object AppModule{
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService{
+        return retrofit.create(UserRetrofitService::class.java)
     }
 }

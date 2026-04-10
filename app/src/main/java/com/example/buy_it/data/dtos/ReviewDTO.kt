@@ -1,5 +1,6 @@
 package com.example.buy_it.data.dtos
 
+import androidx.core.R
 import com.example.buy_it.data.ReviewInfo
 import java.time.LocalDate
 
@@ -13,7 +14,7 @@ data class ProductDTO(
     val id: Int,
     val name: String,
     val imageUrl: String?,
-    val percentageLikes: Int,
+    val percentageLike: Int,
     val range: String
 )
 
@@ -30,16 +31,17 @@ data class ReviewDTO(
 )
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
+    android.util.Log.d("ReviewDTO", "product: ${product.name}, percentageLikes: ${product.percentageLike}, range: ${product.range}")
     return ReviewInfo(
         id = id.toString(),
         profileImage = user.pfpurl ?: "",
-        imgProd = 0,    //ojo que es drawable res hay que cambiarlo
+        imgProd = com.example.buy_it.R.drawable.rey,    //ojo que es drawable res hay que cambiarlo
         name = user.name,
         review = comment,
         productId = productId.toString(),
         product = product.name,
         like = like,
-        percentageLikes = product.percentageLikes,
+        percentageLikes = product.percentageLike,
         date = LocalDate.parse(createdAt.substring(0, 10)), // "2026-04-09T..." → "2026-04-09"
         range = product.range,
         comments = comments

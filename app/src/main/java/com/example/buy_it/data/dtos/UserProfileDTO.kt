@@ -9,7 +9,7 @@ data class UserProfileDTO(
     val name: String,
     val pfpURL: String?,
     val biography: String,
-    val createdAt: String,
+    val created: String?,
     val email: String,
     val password: String,
     val followersCount: Int
@@ -22,7 +22,7 @@ fun UserProfileDTO.toUserProfileInfo(): UserProfileInfo{
         name = name,
         pfpURL = pfpURL ?: "",
         biography = biography,
-        createdAt = LocalDate.parse(createdAt.substring(0, 10)),
+        createdAt = if (!created.isNullOrEmpty()) LocalDate.parse(created.substring(0, 10)) else LocalDate.now(),
         email = email,
         password = password,
         followersCount = followersCount

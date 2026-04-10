@@ -22,6 +22,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -40,6 +41,7 @@ import com.example.buy_it.ui.theme.Buy_itTheme
 
 @Composable
 fun Profile(
+    userId: String,
     onProfileEdit: () -> Unit,
     onConfigurationEdit: () -> Unit,
     onHomeClick: () -> Unit,
@@ -49,6 +51,11 @@ fun Profile(
     modifier: Modifier = Modifier,
 ) {
     val state by profileViewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        profileViewModel.getUserProfile(userId)
+        profileViewModel.getUserReviews(userId)
+    }
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -118,8 +125,8 @@ fun Profile(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     ProfileStatItem(
-                        value = state.productosCount,
-                        label = stringResource(R.string.productos)
+                        value = state.memberSince,
+                        label = "Miembro"
                     )
                     ProfileStatItem(
                         value = state.seguidoresCount,
@@ -172,6 +179,7 @@ fun ProfilePreview() {
             onHomeClick = {},
             onProfileClick = {},
             onTrendsClick = {},
+            userId = "1",
         )
     }
 }
