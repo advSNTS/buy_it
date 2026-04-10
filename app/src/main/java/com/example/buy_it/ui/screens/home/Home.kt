@@ -40,10 +40,10 @@ fun Home(
                     bottom = 90.dp
                 )
             ) {
-                items(state.reviews) { review ->
-                    ReviewCard(
-                        reviewInfo = review,
-                        onClick = { onOpenDetail(review.productId) }
+                items(state.products) { product ->
+                    ProductCard(
+                        productInfo = product,
+                        onClick = { onOpenDetail(product.id) }
                     )
                 }
             }

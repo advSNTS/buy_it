@@ -39,13 +39,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.ui.components.ProfileAsyncImage
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.buy_it.R
 
 @Composable
 fun DetailTopBar(
@@ -96,7 +101,7 @@ fun DetailTopBar(
 @Composable
 fun ProductHeaderCard(
     name: String,
-    @DrawableRes imageRes: Int,
+    imageRes: String,
     range: String,
     likePercent: Int,
     ratingsCount: Int,
@@ -129,14 +134,16 @@ fun ProductHeaderCard(
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
-                Image(
-                    painter = painterResource(imageRes),
-                    contentDescription = name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp)
-                        .padding(10.dp),
-                    contentScale = ContentScale.Fit
+                AsyncImage(
+                    contentDescription = "User image",
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageRes)
+                        .crossfade(true)
+                        .build(),
+                    error = painterResource(id = R.drawable.user_image_icon),
+                    placeholder = painterResource(id = R.drawable.loading_img),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(220.dp).clip(CircleShape)
                 )
             }
 

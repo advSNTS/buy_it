@@ -8,7 +8,6 @@ import java.util.Date
 object ReviewProvider {
     val feed = listOf(
         ReviewInfo(
-            id = "1",
             profileImage = "https://store.networkchuck.com/cdn/shop/files/NetworkChuck-logo_new_155091cc-4294-4449-859d-92f5c27921d0.png?v=1595374929",
             imgProd = R.drawable.rey,
             name = "buy it.",
@@ -19,10 +18,10 @@ object ReviewProvider {
             percentageLikes = 89,
             date = LocalDate.now(),
             range = "$5000 - $6000",
-            comments = 25
+            comments = 25,
+            id = TODO()
         ),
         ReviewInfo(
-            id = "2",
             profileImage = "https://img.fcbayern.com/image/upload/f_auto/q_auto/t_cms-1x1-seo/v1753859302/cms/public/images/fcbayern-com/players/spielerportraits/teaser/luis-diaz.png",
             imgProd = R.drawable.cafe,
             name = "@buy it.",
@@ -33,10 +32,10 @@ object ReviewProvider {
             percentageLikes = 60,
             date = LocalDate.now(),
             range = "$5000 - $6000",
-            comments = 33
+            comments = 33,
+            id = TODO()
         ),
         ReviewInfo(
-            id = "3",
             profileImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqS1-EhtFMw2cHi_ub7A_YP90Z6eaa1egQ0A&s",
             imgProd = R.drawable.rey,
             name = "@Danny_Slicer",
@@ -47,7 +46,8 @@ object ReviewProvider {
             percentageLikes = 89,
             date = LocalDate.now(),
             range = "$5000 - $6000",
-            comments = 25
+            comments = 25,
+            id = TODO()
         )
     )
 }
