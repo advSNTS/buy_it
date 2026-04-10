@@ -3,15 +3,17 @@ package com.example.buy_it.data.repository
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.data.ReviewInfo
-import com.example.buy_it.data.datasource.ProductRemoteDataSource
 import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
+import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.toProductInfo
 import com.example.buy_it.data.dtos.toReviewInfo
+import com.example.buy_it.data.dtos.toUserProfileInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
-    private val productRemoteDataSource: ProductRetrofitDatasourceImpl
+    private val productRemoteDataSource: ProductRetrofitDatasourceImpl,
+    private val userRemoteDataSource: UserRetrofitDatasourceImplementation
 ){
     suspend fun getAllProducts(): Result<List<ProductInfo>> {
         return try {
@@ -62,8 +64,25 @@ class ProductRepository @Inject constructor(
 
     suspend fun getProductReviews(id: String): Result<List<ReviewInfo>> {
         return try {
-            val reviews = productRemoteDataSource.getProductReviews(id)
-            Result.success(reviews.map { it.toReviewInfo() })
+            val reviewDTOs = productRemoteDataSource.getProductReviews(id)
+            val userCache = mutableMapOf<String, com.example.buy_it.data.UserProfileInfo>()
+
+            val reviewInfos = reviewDTOs.map { dto ->
+                var info = dto.toReviewInfo()
+                
+                // Si el nombre es "Usuario desconocido", intentamos cargarlo manualmente por su userId
+                if (info.name == "Usuario desconocido") {
+                    val userInfo = userCache.getOrPut(dto.userId) {
+                        userRemoteDataSource.getUserById(dto.userId).toUserProfileInfo()
+                    }
+                    info = info.copy(
+                        name = userInfo.name,
+                        profileImage = userInfo.pfpURL
+                    )
+                }
+                info
+            }
+            Result.success(reviewInfos)
         } catch (e: Exception) {
             Result.failure(e)
         }
