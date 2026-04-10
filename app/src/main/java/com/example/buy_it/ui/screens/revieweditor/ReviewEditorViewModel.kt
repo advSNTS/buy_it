@@ -2,6 +2,7 @@ package com.example.buy_it.ui.screens.revieweditor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.buy_it.data.repository.AuthRepository
 import com.example.buy_it.data.repository.ProductRepository
 import com.example.buy_it.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,11 +15,14 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ReviewEditorViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val reviewRepository: ReviewRepository,
     private val productRepository: ProductRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ReviewEditorState())
+    private val _uiState = MutableStateFlow(ReviewEditorState(
+        currentUserId = authRepository.currentUser?.uid
+    ))
     val uiState: StateFlow<ReviewEditorState> = _uiState.asStateFlow()
 
     private fun recalculate(state: ReviewEditorState): ReviewEditorState {
@@ -91,6 +95,7 @@ class ReviewEditorViewModel @Inject constructor(
                     recalculate(
                         it.copy(
                             reviewId = review.id,
+                            authorId = review.userId,
                             likeChoice = if (review.like) LikeChoice.Like else LikeChoice.Dislike,
                             opinion = review.review,
                             isLoading = false,
@@ -119,6 +124,16 @@ class ReviewEditorViewModel @Inject constructor(
             }
 
             val likeValue = state.likeChoice == LikeChoice.Like
+
+            if (state.reviewId != null && state.authorId != state.currentUserId) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "No tienes permiso para editar esta reseña"
+                    )
+                }
+                return@launch
+            }
 
             val result = if (state.reviewId == null) {
                 reviewRepository.createReview(
@@ -151,7 +166,15 @@ class ReviewEditorViewModel @Inject constructor(
     }
 
     fun deleteReview() {
-        val reviewId = _uiState.value.reviewId ?: return
+        val state = _uiState.value
+        val reviewId = state.reviewId ?: return
+
+        if (state.authorId != state.currentUserId) {
+            _uiState.update {
+                it.copy(errorMessage = "No tienes permiso para eliminar esta reseña")
+            }
+            return
+        }
 
         viewModelScope.launch {
             _uiState.update {
