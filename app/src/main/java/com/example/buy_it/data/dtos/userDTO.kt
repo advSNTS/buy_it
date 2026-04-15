@@ -4,4 +4,6 @@ data class UserDTO(
     val id: String,
     val name: String,
     val pfpURL: String?
-)
+){
+    constructor(): this("", "", "")
+}

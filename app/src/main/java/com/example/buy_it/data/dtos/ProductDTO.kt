@@ -11,7 +11,9 @@ data class ProductDTO(
     val percentageLike: Int,
     val range: String,
     val created: String
-)
+){
+    constructor(): this ("", "", "", "", "", 0, "", "")
+}
 
 fun ProductDTO.toProductInfo(): ProductInfo {
     return ProductInfo(
