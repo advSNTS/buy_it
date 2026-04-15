@@ -56,7 +56,7 @@ fun Profile(
 
     LaunchedEffect(Unit) {
         profileViewModel.getUserProfile(userId)
-        profileViewModel.getUserReviews(userId)
+        //profileViewModel.getUserReviews(userId)
     }
 
     Box(

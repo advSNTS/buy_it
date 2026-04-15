@@ -83,6 +83,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    //Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
     implementation(libs.androidx.graphics.shapes)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

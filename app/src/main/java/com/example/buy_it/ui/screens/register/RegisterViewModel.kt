@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.buy_it.data.repository.AuthRepository
+import com.example.buy_it.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
@@ -65,6 +67,16 @@ class RegisterViewModel @Inject constructor(
             viewModelScope.launch{
                 val result = authRepository.signUp(_uiState.value.email, _uiState.value.password)
                 if(result.isSuccess){
+
+                    val userId = authRepository.currentUser?.uid ?: throw Exception("No se pudo obtener el usuario actual")
+
+                    userRepository.registerUser(
+                        username = state.username,
+                        userId = userId!!
+                    )
+
+
+
                     _uiState.update { it.copy(navigateToHome = true) }
                 }else{
                     val mensaje = result.exceptionOrNull()?.message ?: "Error al crear la cuenta"
