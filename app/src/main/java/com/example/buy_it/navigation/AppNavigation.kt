@@ -34,6 +34,7 @@ import com.example.buy_it.ui.screens.splash.SplashScreen
 import com.example.buy_it.ui.screens.splash.SplashViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.google.firebase.auth.FirebaseAuth
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
@@ -74,7 +75,9 @@ sealed class Screen(val route: String) {
 fun AppNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier
+
 ){
+    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route,
@@ -151,7 +154,7 @@ fun AppNavigation(
                 onOpenDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
                 },
-                userId = "1",
+                userId = currentUserId,
             )
         }
 

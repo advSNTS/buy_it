@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.profile
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -56,6 +57,7 @@ fun Profile(
 
     LaunchedEffect(Unit) {
         profileViewModel.getUserProfile(userId)
+        Log.d("Profile", "UserIdCargado: $userId")
         //profileViewModel.getUserReviews(userId)
     }
 
