@@ -1,5 +1,6 @@
 package com.example.buy_it.data.datasource.impl.firestore
 
+import android.util.Log
 import com.example.buy_it.data.datasource.UserRemoteDatasource
 import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.dtos.RegisterUserDto
@@ -24,7 +25,17 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getUserReviews(id: String): List<ReviewDTO> {
-        return userRetrofitDatasource.getUserReviews(id)
+        return try {
+            val snapshot = db.collectionGroup("reviews")
+                .whereEqualTo("userId", id)
+                .get()
+                .await()
+
+            snapshot.toObjects(ReviewDTO::class.java)
+        } catch (e: Exception) {
+            Log.e("UserReviews", "Error al obtener reseñas del usuario: ${e.message}")
+            emptyList()
+        }
     }
 
     override suspend fun registerUser(registerUserDto: RegisterUserDto, userId: String) {

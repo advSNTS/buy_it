@@ -58,7 +58,7 @@ fun Profile(
     LaunchedEffect(Unit) {
         profileViewModel.getUserProfile(userId)
         Log.d("Profile", "UserIdCargado: $userId")
-        //profileViewModel.getUserReviews(userId)
+        profileViewModel.getUserReviews(userId)
     }
 
     Box(
