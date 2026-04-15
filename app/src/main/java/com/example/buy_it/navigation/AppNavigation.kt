@@ -1,5 +1,6 @@
 package com.example.buy_it.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ import com.example.buy_it.ui.screens.splash.SplashScreen
 import com.example.buy_it.ui.screens.splash.SplashViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.buy_it.ui.screens.createreview.Createreview
 import com.google.firebase.auth.FirebaseAuth
 
 sealed class Screen(val route: String) {
@@ -59,6 +61,7 @@ sealed class Screen(val route: String) {
     object UserProfile : Screen("userProfile/{userId}") {
         fun createRoute(userId: String) = "userProfile/$userId"
     }
+    object CreateReview : Screen("createreview")
 
     object ReviewEditorScreen : Screen("review_editor/{productId}?reviewId={reviewId}") {
         fun createRoute(productId: String, reviewId: String? = null): String {
@@ -315,6 +318,18 @@ fun AppNavigation(
         composable(route = Screen.Prices.route) { backStackEntry ->
             val pricesViewModel: PricesViewModel = hiltViewModel()
             Prices(pricesViewModel = pricesViewModel)
+        }
+
+        composable(route = Screen.CreateReview.route){
+            Createreview(
+                onReviewSubmitted = {
+
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                },
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 

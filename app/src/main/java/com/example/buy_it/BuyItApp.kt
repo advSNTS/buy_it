@@ -158,7 +158,7 @@ fun BuyIt(
                                 }
                             },
                             onBuscarClick = { navController.navigate(Screen.Trends.route) },
-                            onAddClick = { /* Acción para agregar */ },
+                            onAddClick = { navController.navigate(Screen.CreateReview.route)},
                             onProfileClick = { navController.navigate(Screen.Profile.route) }
                         )
                     }
