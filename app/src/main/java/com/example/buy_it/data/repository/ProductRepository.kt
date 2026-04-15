@@ -8,7 +8,6 @@ import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementat
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.toProductInfo
 import com.example.buy_it.data.dtos.toReviewInfo
-import com.example.buy_it.data.dtos.toUserProfileInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(

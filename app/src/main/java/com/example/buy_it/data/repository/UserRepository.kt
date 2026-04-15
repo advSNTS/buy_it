@@ -5,7 +5,6 @@ import com.example.buy_it.data.UserProfileInfo
 import com.example.buy_it.data.datasource.UserRemoteDatasource
 import com.example.buy_it.data.dtos.RegisterUserDto
 import com.example.buy_it.data.dtos.toReviewInfo
-import com.example.buy_it.data.dtos.toUserProfileInfo
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val userRemoteDatasource: UserRemoteDatasource) {
