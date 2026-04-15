@@ -77,7 +77,7 @@ fun AppNavigation(
     modifier: Modifier = Modifier
 
 ){
-    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route,
@@ -132,6 +132,7 @@ fun AppNavigation(
         }
 
         composable(route = Screen.Profile.route){
+            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
             Profile(
                 onProfileEdit = {
                     navController.navigate(Screen.EditInfo.route)

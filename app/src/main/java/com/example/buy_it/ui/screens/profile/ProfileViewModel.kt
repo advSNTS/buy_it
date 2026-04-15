@@ -26,6 +26,10 @@ class ProfileViewModel @Inject constructor(
     val uiState: StateFlow<ProfileState> = _uiState
 
     fun getUserProfile(userId: String) {
+        if (userId.isBlank()) {
+            android.util.Log.e("ProfileViewModel", "ERROR: Se intentó cargar un perfil con ID vacío")
+            return
+        }
         viewModelScope.launch {
             val result = userRepository.getUserById(userId)
             if (result.isSuccess) {
