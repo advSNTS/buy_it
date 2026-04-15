@@ -1,34 +1,46 @@
 package com.example.buy_it.data.repository
 
+import android.util.Log
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
 import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
+import com.example.buy_it.data.datasource.impl.firestore.ProductFirestoreDatasourceImpl
+import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.toProductInfo
 import com.example.buy_it.data.dtos.toReviewInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
-    private val productRemoteDataSource: ProductRetrofitDatasourceImpl,
-    private val userRemoteDataSource: UserRetrofitDatasourceImplementation
+    private val productRemoteDataSource: ProductFirestoreDatasourceImpl,
+    private val userRemoteDataSource: UserFirestoreDataSourceImpl
 ){
     suspend fun getAllProducts(): Result<List<ProductInfo>> {
         return try {
             val products = productRemoteDataSource.getAllProducts()
             val productsInfo = products.map { dto ->
+                Log.d("getAllProds", "id pasado: ${dto.id}")
                 val reviews = try {
                     productRemoteDataSource.getProductReviews(dto.id)
                 } catch (e: Exception) {
+                    Log.d("ratings", "no se encontro review by prod")
+                    Log.e("ratings", "Error real: ${e.message}")
+                    Log.e("ratings", "Stacktrace: ${e.printStackTrace()}")
                     emptyList()
+
                 }
+                Log.d("ratings", "ratings count: ${reviews.size}")
                 dto.toProductInfo().copy(ratingsCount = reviews.size)
             }
+            Log.d("prods", "Productos: $productsInfo")
             Result.success(productsInfo)
         }catch (e: HttpException){
+            Log.d("prods", "ERROR http: $e")
             Result.failure(e)
         } catch (e: Exception) {
+            Log.d("prods", "ERROR: $e")
             Result.failure(e)
         }
     }

@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.buy_it.data.datasource.local.ReviewProvider
@@ -21,6 +22,7 @@ class HomeViewModel @Inject constructor(
     fun getAllProducts(){
         viewModelScope.launch {
             val result = productRepository.getAllProducts()
+            Log.d("Home", "All Prods: $result")
             if (result.isSuccess){
                 _uiState.update {
                     it.copy(

@@ -12,9 +12,11 @@ data class ReviewDTO(
     val comment: String,
     val comments: Int,
     val createdAt: String,
-    val user: UserDTO?,
-    val product: ProductDTO?
-)
+    val user: UserDTO? = null,
+    val product: ProductDTO? = null
+){
+    constructor(): this("", "", "", true, "", 0, "")
+}
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
     val parsedDate = try {

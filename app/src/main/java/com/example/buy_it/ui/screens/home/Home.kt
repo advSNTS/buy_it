@@ -1,5 +1,6 @@
 package com.example.buy_it.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,7 +44,9 @@ fun Home(
                 items(state.products) { product ->
                     ProductCard(
                         productInfo = product,
-                        onClick = { onOpenDetail(product.id) }
+                        onClick = {
+                            Log.d("Home", "productIdPasado: ${product.id}")
+                            onOpenDetail(product.id) }
                     )
                 }
             }
