@@ -3,12 +3,13 @@ package com.example.buy_it.data.repository
 import retrofit2.HttpException
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.datasource.impl.ReviewRetrofitDataSourceImplementation
+import com.example.buy_it.data.datasource.impl.firestore.ReviewFirestoreDatasourceImpl
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.toReviewInfo
 import javax.inject.Inject
 
 class ReviewRepository @Inject constructor(
-    private val reviewRemoteDataSource: ReviewRetrofitDataSourceImplementation
+    private val reviewRemoteDataSource: ReviewFirestoreDatasourceImpl
 ) {
 
     suspend fun getReviews(): Result<List<ReviewInfo>> {
