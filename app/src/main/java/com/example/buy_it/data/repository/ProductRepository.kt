@@ -4,6 +4,8 @@ import android.util.Log
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.data.ReviewInfo
+import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
+import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.datasource.impl.firestore.ProductFirestoreDatasourceImpl
 import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.buy_it.data.dtos.CreateProductDTO
@@ -11,8 +13,8 @@ import com.example.buy_it.data.dtos.toProductInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
-    private val productRemoteDataSource: ProductFirestoreDatasourceImpl,
-    private val userRemoteDataSource: UserFirestoreDataSourceImpl,
+    private val productRemoteDataSource: ProductRetrofitDatasourceImpl,
+    private val userRemoteDataSource: UserRetrofitDatasourceImplementation,
     private val reviewRepository: ReviewRepository
 ){
     suspend fun getAllProducts(): Result<List<ProductInfo>> {

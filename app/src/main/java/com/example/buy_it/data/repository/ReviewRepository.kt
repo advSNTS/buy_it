@@ -2,6 +2,7 @@ package com.example.buy_it.data.repository
 
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.datasource.AuthRemoteDataSource
+import com.example.buy_it.data.datasource.impl.ReviewRetrofitDataSourceImplementation
 import com.example.buy_it.data.datasource.impl.firestore.ReviewFirestoreDatasourceImpl
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.toReviewInfo
@@ -9,7 +10,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class ReviewRepository @Inject constructor(
-    private val reviewRemoteDataSource: ReviewFirestoreDatasourceImpl,
+    private val reviewRemoteDataSource: ReviewRetrofitDataSourceImplementation,
     private val authRemoteDataSource: AuthRemoteDataSource
 ) {
 
