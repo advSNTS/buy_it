@@ -5,10 +5,12 @@ import com.example.buy_it.data.datasource.services.UserRetrofitService
 import com.example.buy_it.data.dtos.RegisterUserDto
 import com.example.buy_it.data.dtos.ReviewDTO
 import com.example.buy_it.data.dtos.UserProfileRetrofitDTO
+import com.example.buy_it.data.repository.AuthRepository
 import javax.inject.Inject
 
 class UserRetrofitDatasourceImplementation @Inject constructor(
-    private val service: UserRetrofitService
+    private val service: UserRetrofitService,
+    private val repo : AuthRepository
 ) : UserRemoteDatasource {
 
     override suspend fun getUserById(id: String): UserProfileRetrofitDTO {
@@ -20,7 +22,20 @@ class UserRetrofitDatasourceImplementation @Inject constructor(
     }
 
     override suspend fun registerUser(registerUserDto: RegisterUserDto, userId: String) {
-        TODO("Not yet implemented")
+        val  email = repo.currentUser?.email ?: throw Exception("No se pudo obtener el email del usuario")
+        val user = UserProfileRetrofitDTO(
+            id = userId,
+            username = registerUserDto.username,
+            name = registerUserDto.name,
+            pfpURL = null,
+            biography = "",
+            created = null,
+            email = email,
+            password = "",
+            followersCount = 0
+        )
+
+        return service.createUser(user)
     }
 
     override suspend fun updateUserProfile(userId: String, name: String, pfpURL: String?) {

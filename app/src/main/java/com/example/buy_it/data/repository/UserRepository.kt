@@ -3,12 +3,13 @@ package com.example.buy_it.data.repository
 import android.util.Log
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.UserProfileInfo
+import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.buy_it.data.dtos.RegisterUserDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
-    private val userRemoteDatasource: UserFirestoreDataSourceImpl,
+    private val userRemoteDatasource: UserRetrofitDatasourceImplementation,
     private val reviewRepository: ReviewRepository
 ) {
 

@@ -38,7 +38,7 @@ data class UserProfileFirestoreDTO(
 }
 
 data class UserProfileRetrofitDTO(
-    val id: Int,
+    val id: String,
     val username: String,
     val name: String,
     val pfpURL: String?,
@@ -48,11 +48,11 @@ data class UserProfileRetrofitDTO(
     val password: String,
     val followersCount: Int
 ): UserDtoGeneric(){
-    constructor() : this(0, "", "", "", "", "", "", "", 0)
+    constructor() : this("", "", "", "", "", "", "", "", 0)
 
     override fun toUserProfileInfo(): UserProfileInfo {
         return UserProfileInfo(
-            id = id.toString(),
+            id = id,
             username = username,
             name = name,
             pfpURL = pfpURL ?: "",

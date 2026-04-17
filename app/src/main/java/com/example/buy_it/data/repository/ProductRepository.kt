@@ -4,6 +4,8 @@ import android.util.Log
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.data.ReviewInfo
+import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
+import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.datasource.impl.firestore.ProductFirestoreDatasourceImpl
 import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.buy_it.data.dtos.CreateProductDTO
@@ -11,8 +13,8 @@ import com.example.buy_it.data.dtos.toProductInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
-    private val productRemoteDataSource: ProductFirestoreDatasourceImpl,
-    private val userRemoteDataSource: UserFirestoreDataSourceImpl,
+    private val productRemoteDataSource: ProductRetrofitDatasourceImpl,
+    private val userRemoteDataSource: UserRetrofitDatasourceImplementation,
     private val reviewRepository: ReviewRepository
 ){
     suspend fun getAllProducts(): Result<List<ProductInfo>> {
@@ -20,6 +22,8 @@ class ProductRepository @Inject constructor(
             val products = productRemoteDataSource.getAllProducts()
             val productsInfo = products.map { dto ->
                 val reviews = reviewRepository.getReviewsByProductId(dto.id).getOrDefault(emptyList())
+                Log.d("prods, ", "Id: ${dto.id}")
+                Log.d("prods", "Reviews: $reviews")
                 dto.toProductInfo().copy(ratingsCount = reviews.size)
             }
             Log.d("prods", "Productos: $productsInfo")
