@@ -30,4 +30,6 @@ interface ReviewRetrofitService {
     @GET("users/{userId}/reviews")
     suspend fun getReviewsByUserId(@Path("userId") userId: String): List<ReviewDTO>
 
+    @GET("products/{id}/reviews")
+    suspend fun getProductReviews(@Path("id") id: String): List<ReviewDTO>
 }

@@ -22,6 +22,8 @@ class ProductRepository @Inject constructor(
             val products = productRemoteDataSource.getAllProducts()
             val productsInfo = products.map { dto ->
                 val reviews = reviewRepository.getReviewsByProductId(dto.id).getOrDefault(emptyList())
+                Log.d("prods, ", "Id: ${dto.id}")
+                Log.d("prods", "Reviews: $reviews")
                 dto.toProductInfo().copy(ratingsCount = reviews.size)
             }
             Log.d("prods", "Productos: $productsInfo")

@@ -1,5 +1,6 @@
 package com.example.buy_it.data.repository
 
+import android.util.Log
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.datasource.AuthRemoteDataSource
 import com.example.buy_it.data.datasource.impl.ReviewRetrofitDataSourceImplementation
@@ -115,6 +116,7 @@ class ReviewRepository @Inject constructor(
         return try {
             val reviewDTOs = reviewRemoteDataSource.getReviewsByProductId(productId)
             val reviewsInfo = reviewDTOs.map { it.toReviewInfo() }
+            Log.d("reviews", "Id: $productId, Reviews: $reviewsInfo")
             Result.success(reviewsInfo)
         } catch (e: HttpException) {
             Result.failure(e)

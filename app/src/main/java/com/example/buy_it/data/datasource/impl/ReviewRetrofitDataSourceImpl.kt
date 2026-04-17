@@ -1,5 +1,6 @@
 package com.example.buy_it.data.datasource.impl
 
+import android.util.Log
 import com.example.buy_it.data.datasource.ReviewRemoteDataSource
 import com.example.buy_it.data.datasource.services.ReviewRetrofitService
 import com.example.buy_it.data.dtos.CreateReviewDTO
@@ -20,7 +21,8 @@ class ReviewRetrofitDataSourceImplementation @Inject constructor(
         service.getReviewsByUserId(userId)
 
     override suspend fun getReviewsByProductId(productId: String): List<ReviewDTO> {
-        return emptyList()
+        Log.d("reviews_debug", "Retrofit enviando id=$productId")
+        return service.getProductReviews(productId)
     }
 
     override suspend fun createReview(review: CreateReviewDTO) =
