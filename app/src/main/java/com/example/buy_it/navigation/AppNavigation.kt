@@ -166,7 +166,10 @@ fun AppNavigation(
             val editInfoViewModel: EditInfoViewModel = hiltViewModel()
             EditInfo(
                 onSaveChanges = {
-                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route) {
+                        popUpTo(Screen.Profile.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
                 },
                 viewModel = editInfoViewModel
             )

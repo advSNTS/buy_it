@@ -5,23 +5,23 @@ import com.example.buy_it.data.datasource.UserRemoteDatasource
 import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.dtos.RegisterUserDto
 import com.example.buy_it.data.dtos.ReviewDTO
-import com.example.buy_it.data.dtos.UserDtoGeneric
 import com.example.buy_it.data.dtos.UserProfileFirestoreDTO
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class UserFirestoreDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore,
     private val userRetrofitDatasource: UserRetrofitDatasourceImplementation
-): UserRemoteDatasource {
+) : UserRemoteDatasource {
 
     override suspend fun getUserById(id: String): UserProfileFirestoreDTO {
-
         val docRef = db.collection("users").document(id)
         val respuesta = docRef.get().await()
 
-        return respuesta.toObject(UserProfileFirestoreDTO::class.java) ?: throw Exception("Usuario no encontrado.")
+        return respuesta.toObject(UserProfileFirestoreDTO::class.java)
+            ?: throw Exception("Usuario no encontrado.")
     }
 
     override suspend fun getUserReviews(id: String): List<ReviewDTO> {
@@ -41,5 +41,20 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     override suspend fun registerUser(registerUserDto: RegisterUserDto, userId: String) {
         val docRef = db.collection("users").document(userId)
         docRef.set(registerUserDto).await()
+    }
+
+    override suspend fun updateUserProfile(userId: String, name: String, pfpURL: String?) {
+        val updates = mutableMapOf<String, Any>(
+            "name" to name
+        )
+
+        if (!pfpURL.isNullOrBlank()) {
+            updates["pfpURL"] = pfpURL
+        }
+
+        db.collection("users")
+            .document(userId)
+            .set(updates, SetOptions.merge())
+            .await()
     }
 }

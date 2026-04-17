@@ -10,30 +10,66 @@ import javax.inject.Inject
 class ReviewFirestoreDatasourceImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : ReviewRemoteDataSource {
+
     override suspend fun getAllReviews(): List<ReviewDTO> {
-        TODO("Not yet implemented")
+        val snapshot = db.collection("reviews").get().await()
+        return snapshot.documents.mapNotNull { doc ->
+            val dto = doc.toObject(ReviewDTO::class.java)
+            dto?.copy(id = doc.id)
+        }
     }
 
     override suspend fun getReviewById(id: String): ReviewDTO {
-        TODO("Not yet implemented")
+        val doc = db.collection("reviews").document(id).get().await()
+        val dto = doc.toObject(ReviewDTO::class.java)
+            ?: throw Exception("Review no encontrada")
+        return dto.copy(id = doc.id)
     }
 
     override suspend fun getReviewsByUserId(userId: String): List<ReviewDTO> {
-        TODO("Not yet implemented")
+        val snapshot = db.collection("reviews")
+            .whereEqualTo("userId", userId)
+            .get()
+            .await()
+
+        return snapshot.documents.mapNotNull { doc ->
+            val dto = doc.toObject(ReviewDTO::class.java)
+            dto?.copy(id = doc.id)
+        }
+    }
+
+    override suspend fun getReviewsByProductId(productId: String): List<ReviewDTO> {
+        val snapshot = db.collection("reviews")
+            .whereEqualTo("productId", productId)
+            .get()
+            .await()
+
+        return snapshot.documents.mapNotNull { doc ->
+            val dto = doc.toObject(ReviewDTO::class.java)
+            dto?.copy(id = doc.id)
+        }
     }
 
     override suspend fun createReview(review: CreateReviewDTO) {
-        db.collection("reviews").add(review).await()
+        db.collection("reviews")
+            .add(review)
+            .await()
     }
 
     override suspend fun updateReview(
         id: String,
         review: CreateReviewDTO
     ) {
-        TODO("Not yet implemented")
+        db.collection("reviews")
+            .document(id)
+            .set(review)
+            .await()
     }
 
     override suspend fun deleteReview(id: String) {
-        TODO("Not yet implemented")
+        db.collection("reviews")
+            .document(id)
+            .delete()
+            .await()
     }
 }

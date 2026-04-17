@@ -2,6 +2,7 @@ package com.example.buy_it.ui.screens.revieweditor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.buy_it.data.repository.AuthRepository
 import com.example.buy_it.data.repository.ProductRepository
 import com.example.buy_it.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +16,15 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class ReviewEditorViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReviewEditorState())
     val uiState: StateFlow<ReviewEditorState> = _uiState.asStateFlow()
 
-    private val currentUserId = "1"
+    private val currentUserId: String?
+        get() = authRepository.currentUser?.uid
 
     private fun recalculate(state: ReviewEditorState): ReviewEditorState {
         val baseCanPublish = state.likeChoice != LikeChoice.None &&
@@ -39,7 +42,6 @@ class ReviewEditorViewModel @Inject constructor(
     }
 
     fun onLikeChoiceChange(likeChoice: LikeChoice) {
-        // Si está editando una reseña ajena, no dejamos cambiar estado
         if (_uiState.value.isEditMode && !_uiState.value.canEditOrDelete) return
 
         _uiState.update { current ->
@@ -48,7 +50,6 @@ class ReviewEditorViewModel @Inject constructor(
     }
 
     fun onOpinionChange(opinion: String) {
-        // Si está editando una reseña ajena, no dejamos cambiar estado
         if (_uiState.value.isEditMode && !_uiState.value.canEditOrDelete) return
 
         _uiState.update { current ->

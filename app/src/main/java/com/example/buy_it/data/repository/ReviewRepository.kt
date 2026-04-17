@@ -1,15 +1,16 @@
 package com.example.buy_it.data.repository
 
-import retrofit2.HttpException
 import com.example.buy_it.data.ReviewInfo
-import com.example.buy_it.data.datasource.impl.ReviewRetrofitDataSourceImplementation
+import com.example.buy_it.data.datasource.AuthRemoteDataSource
 import com.example.buy_it.data.datasource.impl.firestore.ReviewFirestoreDatasourceImpl
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.toReviewInfo
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class ReviewRepository @Inject constructor(
-    private val reviewRemoteDataSource: ReviewFirestoreDatasourceImpl
+    private val reviewRemoteDataSource: ReviewFirestoreDatasourceImpl,
+    private val authRemoteDataSource: AuthRemoteDataSource
 ) {
 
     suspend fun getReviews(): Result<List<ReviewInfo>> {
@@ -47,14 +48,22 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun createReview(productId: String, like: Boolean, comment: String): Result<Unit> {
+    suspend fun createReview(
+        productId: String,
+        like: Boolean,
+        comment: String
+    ): Result<Unit> {
         return try {
+            val currentUserId = authRemoteDataSource.currentUser?.uid
+                ?: throw Exception("No hay un usuario autenticado")
+
             val reviewDTO = CreateReviewDTO(
-                userId = "1",
+                userId = currentUserId,
                 productId = productId,
                 like = like,
                 comment = comment
             )
+
             reviewRemoteDataSource.createReview(reviewDTO)
             Result.success(Unit)
         } catch (e: HttpException) {
@@ -64,14 +73,23 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun updateReview(id: String, productId: String, like: Boolean, comment: String): Result<Unit> {
+    suspend fun updateReview(
+        id: String,
+        productId: String,
+        like: Boolean,
+        comment: String
+    ): Result<Unit> {
         return try {
+            val currentUserId = authRemoteDataSource.currentUser?.uid
+                ?: throw Exception("No hay un usuario autenticado")
+
             val reviewDTO = CreateReviewDTO(
-                userId = "1",
+                userId = currentUserId,
                 productId = productId,
                 like = like,
                 comment = comment
             )
+
             reviewRemoteDataSource.updateReview(id, reviewDTO)
             Result.success(Unit)
         } catch (e: HttpException) {
@@ -85,6 +103,18 @@ class ReviewRepository @Inject constructor(
         return try {
             reviewRemoteDataSource.deleteReview(id)
             Result.success(Unit)
+        } catch (e: HttpException) {
+            Result.failure(e)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getReviewsByProductId(productId: String): Result<List<ReviewInfo>> {
+        return try {
+            val reviewDTOs = reviewRemoteDataSource.getReviewsByProductId(productId)
+            val reviewsInfo = reviewDTOs.map { it.toReviewInfo() }
+            Result.success(reviewsInfo)
         } catch (e: HttpException) {
             Result.failure(e)
         } catch (e: Exception) {

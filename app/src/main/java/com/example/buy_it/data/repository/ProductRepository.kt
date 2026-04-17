@@ -4,39 +4,27 @@ import android.util.Log
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.data.ReviewInfo
-import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
-import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.datasource.impl.firestore.ProductFirestoreDatasourceImpl
 import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.toProductInfo
-import com.example.buy_it.data.dtos.toReviewInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
     private val productRemoteDataSource: ProductFirestoreDatasourceImpl,
-    private val userRemoteDataSource: UserFirestoreDataSourceImpl
+    private val userRemoteDataSource: UserFirestoreDataSourceImpl,
+    private val reviewRepository: ReviewRepository
 ){
     suspend fun getAllProducts(): Result<List<ProductInfo>> {
         return try {
             val products = productRemoteDataSource.getAllProducts()
             val productsInfo = products.map { dto ->
-                Log.d("getAllProds", "id pasado: ${dto.id}")
-                val reviews = try {
-                    productRemoteDataSource.getProductReviews(dto.id)
-                } catch (e: Exception) {
-                    Log.d("ratings", "no se encontro review by prod")
-                    Log.e("ratings", "Error real: ${e.message}")
-                    Log.e("ratings", "Stacktrace: ${e.printStackTrace()}")
-                    emptyList()
-
-                }
-                Log.d("ratings", "ratings count: ${reviews.size}")
+                val reviews = reviewRepository.getReviewsByProductId(dto.id).getOrDefault(emptyList())
                 dto.toProductInfo().copy(ratingsCount = reviews.size)
             }
             Log.d("prods", "Productos: $productsInfo")
             Result.success(productsInfo)
-        }catch (e: HttpException){
+        } catch (e: HttpException){
             Log.d("prods", "ERROR http: $e")
             Result.failure(e)
         } catch (e: Exception) {
@@ -45,7 +33,13 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun createProduct(name: String, brand: String, imageUrl: String?, description: String?, range: String?): Result<Unit> {
+    suspend fun createProduct(
+        name: String,
+        brand: String,
+        imageUrl: String?,
+        description: String?,
+        range: String?
+    ): Result<Unit> {
         return try {
             val createProductDTO = CreateProductDTO(name, brand, imageUrl, description, range)
             productRemoteDataSource.createProduct(createProductDTO)
@@ -60,11 +54,7 @@ class ProductRepository @Inject constructor(
     suspend fun getProductById(id: String): Result<ProductInfo> {
         return try {
             val productDTO = productRemoteDataSource.getProduct(id)
-            val reviews = try {
-                productRemoteDataSource.getProductReviews(id)
-            } catch (e: Exception) {
-                emptyList()
-            }
+            val reviews = reviewRepository.getReviewsByProductId(id).getOrDefault(emptyList())
             Result.success(productDTO.toProductInfo().copy(ratingsCount = reviews.size))
         } catch (e: HttpException) {
             Result.failure(e)
@@ -75,25 +65,25 @@ class ProductRepository @Inject constructor(
 
     suspend fun getProductReviews(id: String): Result<List<ReviewInfo>> {
         return try {
-            val reviewDTOs = productRemoteDataSource.getProductReviews(id)
-            val userCache = mutableMapOf<String, com.example.buy_it.data.UserProfileInfo>()
+            val reviewInfos = reviewRepository.getReviewsByProductId(id).getOrDefault(emptyList())
 
-            val reviewInfos = reviewDTOs.map { dto ->
-                var info = dto.toReviewInfo()
-                
-                // Si el nombre es "Usuario desconocido", intentamos cargarlo manualmente por su userId
+            val completedReviews = reviewInfos.map { info ->
                 if (info.name == "Usuario desconocido") {
-                    val userInfo = userCache.getOrPut(dto.userId) {
-                        userRemoteDataSource.getUserById(dto.userId).toUserProfileInfo()
+                    try {
+                        val userInfo = userRemoteDataSource.getUserById(info.userId).toUserProfileInfo()
+                        info.copy(
+                            name = userInfo.name,
+                            profileImage = userInfo.pfpURL
+                        )
+                    } catch (e: Exception) {
+                        info
                     }
-                    info = info.copy(
-                        name = userInfo.name,
-                        profileImage = userInfo.pfpURL
-                    )
+                } else {
+                    info
                 }
-                info
             }
-            Result.success(reviewInfos)
+
+            Result.success(completedReviews)
         } catch (e: Exception) {
             Result.failure(e)
         }

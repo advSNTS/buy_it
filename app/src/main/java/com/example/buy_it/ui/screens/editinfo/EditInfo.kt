@@ -52,8 +52,9 @@ fun EditInfo(
         onToggleMostrarPassword = { viewModel.onToggleMostrarPassword() },
         onImageChange = { viewModel.uploadImageToFirebase(it) },
         onSaveChanges = {
-            viewModel.onSaveChanges()
-            onSaveChanges()
+            viewModel.onSaveChanges(
+                onSuccess = onSaveChanges
+            )
         },
         modifier = modifier
     )

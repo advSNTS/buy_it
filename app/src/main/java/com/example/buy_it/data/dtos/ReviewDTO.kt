@@ -1,34 +1,33 @@
 package com.example.buy_it.data.dtos
 
-import android.util.Log
 import com.example.buy_it.data.ReviewInfo
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 
 data class ReviewDTO(
-    val id: String,
-    val userId: String,
-    val productId: String,
-    val like: Boolean,
-    val comment: String,
-    val comments: Int,
-    val createdAt: String,
+    val id: String = "",
+    val userId: String = "",
+    val productId: String = "",
+    val like: Boolean = false,
+    val comment: String = "",
+    val comments: Int = 0,
+    val createdAt: Long = 0L,
     val user: UserDTO? = null,
     val product: ProductDTO? = null
-){
-    constructor(): this("", "", "", true, "", 0, "")
+) {
+    constructor() : this("", "", "", true, "", 0, 0L, null, null)
 }
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
-    val parsedDate = try {
-        if (createdAt.contains("T")) {
-            LocalDate.parse(createdAt.substring(0, 10))
+    val parsedDate =
+        if (createdAt > 0L) {
+            Instant.ofEpochMilli(createdAt)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
         } else {
-            LocalDate.parse(createdAt)
+            LocalDate.now()
         }
-    } catch (e: Exception) {
-        Log.e("ReviewDTO", "Error parseando fecha: $createdAt", e)
-        LocalDate.now()
-    }
 
     return ReviewInfo(
         id = id,
