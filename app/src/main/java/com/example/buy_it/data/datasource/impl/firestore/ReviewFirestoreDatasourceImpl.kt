@@ -1,5 +1,6 @@
 package com.example.buy_it.data.datasource.impl.firestore
 
+import android.util.Log
 import com.example.buy_it.data.datasource.ReviewRemoteDataSource
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.ReviewDTO
@@ -13,8 +14,11 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
 
     override suspend fun getAllReviews(): List<ReviewDTO> {
         val snapshot = db.collection("reviews").get().await()
+        Log.d("reviews-firestore", "Total reviews: ${snapshot.size()}")
+
         return snapshot.documents.mapNotNull { doc ->
             val dto = doc.toObject(ReviewDTO::class.java)
+            Log.d("reviews-firestore", "Doc ${doc.id}: $dto")
             dto?.copy(id = doc.id)
         }
     }
@@ -32,8 +36,11 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
             .get()
             .await()
 
+        Log.d("reviews-firestore", "Reviews por userId=$userId: ${snapshot.size()}")
+
         return snapshot.documents.mapNotNull { doc ->
             val dto = doc.toObject(ReviewDTO::class.java)
+            Log.d("reviews-firestore", "Doc ${doc.id}: $dto")
             dto?.copy(id = doc.id)
         }
     }
@@ -44,8 +51,11 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
             .get()
             .await()
 
+        Log.d("reviews-firestore", "Reviews por productId=$productId: ${snapshot.size()}")
+
         return snapshot.documents.mapNotNull { doc ->
             val dto = doc.toObject(ReviewDTO::class.java)
+            Log.d("reviews-firestore", "Doc ${doc.id}: $dto")
             dto?.copy(id = doc.id)
         }
     }

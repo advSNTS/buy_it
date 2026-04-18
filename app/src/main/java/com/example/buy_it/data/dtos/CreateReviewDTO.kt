@@ -5,5 +5,6 @@ data class CreateReviewDTO(
     val productId: String = "",
     val like: Boolean = false,
     val comment: String = "",
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val product: ProductDTO? = null
 )

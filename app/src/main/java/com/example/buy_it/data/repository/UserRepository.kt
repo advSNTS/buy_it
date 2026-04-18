@@ -9,7 +9,7 @@ import com.example.buy_it.data.dtos.RegisterUserDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
-    private val userRemoteDatasource: UserRetrofitDatasourceImplementation,
+    private val userRemoteDatasource: UserFirestoreDataSourceImpl,
     private val reviewRepository: ReviewRepository
 ) {
 

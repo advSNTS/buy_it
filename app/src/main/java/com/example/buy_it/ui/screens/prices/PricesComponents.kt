@@ -43,7 +43,7 @@ fun PriceCard(
             .clickable(onClick = onClick),
         shape = shape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
@@ -91,7 +91,7 @@ fun PriceCard(
                     ) {
                         Text(
                             text = "Precio reportado:",
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium
                         )
                         Spacer(Modifier.size(6.dp))
@@ -107,7 +107,7 @@ fun PriceCard(
                     ) {
                         Text(
                             text = "Oferta:",
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium
                         )
                         Spacer(Modifier.size(8.dp))

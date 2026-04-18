@@ -4,14 +4,15 @@ import com.example.buy_it.data.datasource.ProductRemoteDataSource
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.ProductDTO
 import com.example.buy_it.data.dtos.ReviewDTO
-import com.example.buy_it.data.dtos.UserProfileFirestoreDTO
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class ProductFirestoreDatasourceImpl @Inject constructor(
     private val db: FirebaseFirestore
-): ProductRemoteDataSource {
+) : ProductRemoteDataSource {
+
     override suspend fun getAllProducts(): List<ProductDTO> {
         val snapshot = db.collection("products").get().await()
 
@@ -25,7 +26,10 @@ class ProductFirestoreDatasourceImpl @Inject constructor(
         val docRef = db.collection("products").document(id)
         val respuesta = docRef.get().await()
 
-        return respuesta.toObject(ProductDTO::class.java) ?: throw Exception("Producto no Encontrado.")
+        val dto = respuesta.toObject(ProductDTO::class.java)
+            ?: throw Exception("Producto no encontrado.")
+
+        return dto.copy(id = respuesta.id)
     }
 
     override suspend fun getProductReviews(id: String): List<ReviewDTO> {
@@ -35,6 +39,7 @@ class ProductFirestoreDatasourceImpl @Inject constructor(
                 .collection("reviews")
                 .get()
                 .await()
+
             snapshot.toObjects(ReviewDTO::class.java)
         } catch (e: Exception) {
             throw Exception("Error al obtener reseñas: ${e.message}")
@@ -42,17 +47,43 @@ class ProductFirestoreDatasourceImpl @Inject constructor(
     }
 
     override suspend fun createProduct(tweet: CreateProductDTO) {
-        TODO("Not yet implemented")
+        val productData = hashMapOf(
+            "name" to tweet.name,
+            "brand" to tweet.brand,
+            "imageURL" to (tweet.imageUrl ?: ""),
+            "description" to (tweet.description ?: ""),
+            "percentageLike" to 0,
+            "range" to (tweet.range ?: ""),
+            "created" to System.currentTimeMillis().toString()
+        )
+
+        db.collection("products")
+            .add(productData)
+            .await()
     }
 
     override suspend fun deleteProduct(id: String) {
-        TODO("Not yet implemented")
+        db.collection("products")
+            .document(id)
+            .delete()
+            .await()
     }
 
     override suspend fun updateProduct(
         id: String,
         tweet: CreateProductDTO
     ) {
-        TODO("Not yet implemented")
+        val productData = hashMapOf(
+            "name" to tweet.name,
+            "brand" to tweet.brand,
+            "imageURL" to (tweet.imageUrl ?: ""),
+            "description" to (tweet.description ?: ""),
+            "range" to (tweet.range ?: "")
+        )
+
+        db.collection("products")
+            .document(id)
+            .set(productData, SetOptions.merge())
+            .await()
     }
 }

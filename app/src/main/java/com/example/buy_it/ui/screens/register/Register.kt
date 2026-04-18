@@ -139,7 +139,7 @@ fun RegisterContent(
             Text(
                 text = "Regístrate para empezar a compartir opiniones",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(34.dp))

@@ -3,7 +3,7 @@ package com.example.buy_it.data.repository
 import android.util.Log
 import com.example.buy_it.data.ReviewInfo
 import com.example.buy_it.data.datasource.AuthRemoteDataSource
-import com.example.buy_it.data.datasource.impl.ReviewRetrofitDataSourceImplementation
+import com.example.buy_it.data.datasource.impl.firestore.ProductFirestoreDatasourceImpl
 import com.example.buy_it.data.datasource.impl.firestore.ReviewFirestoreDatasourceImpl
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.toReviewInfo
@@ -11,8 +11,9 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class ReviewRepository @Inject constructor(
-    private val reviewRemoteDataSource: ReviewRetrofitDataSourceImplementation,
-    private val authRemoteDataSource: AuthRemoteDataSource
+    private val reviewRemoteDataSource: ReviewFirestoreDatasourceImpl,
+    private val authRemoteDataSource: AuthRemoteDataSource,
+    private val productRemoteDataSource: ProductFirestoreDatasourceImpl
 ) {
 
     suspend fun getReviews(): Result<List<ReviewInfo>> {
@@ -59,11 +60,14 @@ class ReviewRepository @Inject constructor(
             val currentUserId = authRemoteDataSource.currentUser?.uid
                 ?: throw Exception("No hay un usuario autenticado")
 
+            val productSnapshot = productRemoteDataSource.getProduct(productId)
+
             val reviewDTO = CreateReviewDTO(
                 userId = currentUserId,
                 productId = productId,
                 like = like,
-                comment = comment
+                comment = comment,
+                product = productSnapshot
             )
 
             reviewRemoteDataSource.createReview(reviewDTO)
@@ -85,11 +89,14 @@ class ReviewRepository @Inject constructor(
             val currentUserId = authRemoteDataSource.currentUser?.uid
                 ?: throw Exception("No hay un usuario autenticado")
 
+            val productSnapshot = productRemoteDataSource.getProduct(productId)
+
             val reviewDTO = CreateReviewDTO(
                 userId = currentUserId,
                 productId = productId,
                 like = like,
-                comment = comment
+                comment = comment,
+                product = productSnapshot
             )
 
             reviewRemoteDataSource.updateReview(id, reviewDTO)

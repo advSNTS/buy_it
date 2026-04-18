@@ -12,14 +12,21 @@ data class ReviewDTO(
     val like: Boolean = false,
     val comment: String = "",
     val comments: Int = 0,
-    val createdAt: String = "",
+    val createdAt: Long = 0L,
     val user: UserDTO? = null,
     val product: ProductDTO? = null
 ) {
-    constructor() : this("", "", "", true, "", 0, "", null, null)
+    constructor() : this("", "", "", false, "", 0, 0L, null, null)
 }
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
+    val reviewDate = if (createdAt > 0L) {
+        Instant.ofEpochMilli(createdAt)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+    } else {
+        LocalDate.now()
+    }
 
     return ReviewInfo(
         id = id,
@@ -32,7 +39,7 @@ fun ReviewDTO.toReviewInfo(): ReviewInfo {
         product = product?.name ?: "",
         like = like,
         percentageLikes = product?.percentageLike ?: 0,
-        date = LocalDate.now(),
+        date = reviewDate,
         range = product?.range ?: "",
         comments = comments
     )

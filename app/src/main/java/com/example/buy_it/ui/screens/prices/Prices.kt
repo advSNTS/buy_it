@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.buy_it.ui.components.GradientMessage
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun Prices(
@@ -27,6 +29,7 @@ fun Prices(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 14.dp, vertical = 10.dp)
     ) {
         GradientMessage("Precios", fontSize = 32.sp)

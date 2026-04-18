@@ -4,19 +4,46 @@ import android.util.Log
 import coil.network.HttpException
 import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.data.ReviewInfo
-import com.example.buy_it.data.datasource.impl.ProductRetrofitDatasourceImpl
-import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.datasource.impl.firestore.ProductFirestoreDatasourceImpl
 import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
+import com.example.buy_it.data.datasource.local.FirestoreSeedProducts
 import com.example.buy_it.data.dtos.CreateProductDTO
 import com.example.buy_it.data.dtos.toProductInfo
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
-    private val productRemoteDataSource: ProductRetrofitDatasourceImpl,
-    private val userRemoteDataSource: UserRetrofitDatasourceImplementation,
+    private val productRemoteDataSource: ProductFirestoreDatasourceImpl,
+    private val userRemoteDataSource: UserFirestoreDataSourceImpl,
     private val reviewRepository: ReviewRepository
-){
+) {
+
+    suspend fun seedFirestoreProductsIfNeeded(): Result<Unit> {
+        return try {
+            val currentProducts = productRemoteDataSource.getAllProducts()
+
+            if (currentProducts.size >= 10) {
+                return Result.success(Unit)
+            }
+
+            val existingKeys = currentProducts
+                .map { "${it.name.trim().lowercase()}|${it.brand.trim().lowercase()}" }
+                .toMutableSet()
+
+            FirestoreSeedProducts.items.forEach { product ->
+                val key = "${product.name.trim().lowercase()}|${product.brand.trim().lowercase()}"
+                if (!existingKeys.contains(key)) {
+                    productRemoteDataSource.createProduct(product)
+                    existingKeys.add(key)
+                }
+            }
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.d("prods", "ERROR seed Firestore: $e")
+            Result.failure(e)
+        }
+    }
+
     suspend fun getAllProducts(): Result<List<ProductInfo>> {
         return try {
             val products = productRemoteDataSource.getAllProducts()
@@ -28,7 +55,7 @@ class ProductRepository @Inject constructor(
             }
             Log.d("prods", "Productos: $productsInfo")
             Result.success(productsInfo)
-        } catch (e: HttpException){
+        } catch (e: HttpException) {
             Log.d("prods", "ERROR http: $e")
             Result.failure(e)
         } catch (e: Exception) {

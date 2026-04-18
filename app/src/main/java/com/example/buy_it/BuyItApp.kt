@@ -45,6 +45,7 @@ import com.example.buy_it.ui.components.MainBackground
 import com.example.buy_it.ui.components.ProfileAsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.background
 
 data class DrawerItem(
     val title: String,
@@ -70,12 +71,12 @@ fun BuyIt(
     val currentRoute = currentBackStackEntry.value?.destination?.route
 
     val showTopBar = currentRoute != null &&
-                 currentRoute != Screen.Login.route && 
-                 currentRoute != Screen.Register.route &&
-                 currentRoute != Screen.Profile.route &&
-                 currentRoute != Screen.EditInfo.route &&
-                 currentRoute != Screen.Configuration.route &&
-                 currentRoute != Screen.Splash.route
+            currentRoute != Screen.Login.route &&
+            currentRoute != Screen.Register.route &&
+            currentRoute != Screen.Profile.route &&
+            currentRoute != Screen.EditInfo.route &&
+            currentRoute != Screen.Configuration.route &&
+            currentRoute != Screen.Splash.route
 
     val showNavBar = currentRoute != null &&
             currentRoute != Screen.Login.route &&
@@ -83,15 +84,17 @@ fun BuyIt(
             currentRoute != Screen.Comments.route &&
             currentRoute != Screen.Splash.route
 
-
     val currentUser = FirebaseAuth.getInstance().currentUser
     val photoUrl: String = currentUser?.photoUrl?.toString() ?: ""
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         if (showTopBar) {
             MainBackground()
         }
@@ -100,18 +103,33 @@ fun BuyIt(
             drawerState = drawerState,
             gesturesEnabled = showTopBar || showNavBar,
             drawerContent = {
-                ModalDrawerSheet {
+                ModalDrawerSheet(
+                    drawerContainerColor = MaterialTheme.colorScheme.surfaceContainer
+                ) {
                     Text(
                         text = "buy it.",
                         modifier = Modifier.padding(16.dp),
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    HorizontalDivider()
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
                     drawerItems.forEach { item ->
                         NavigationDrawerItem(
-                            label = { Text(text = item.title) },
-                            icon = { Icon(item.icon, contentDescription = item.title) },
+                            label = {
+                                Text(
+                                    text = item.title,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            },
+                            icon = {
+                                Icon(
+                                    item.icon,
+                                    contentDescription = item.title,
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            },
                             selected = currentRoute == item.route,
                             onClick = {
                                 scope.launch {
@@ -127,14 +145,22 @@ fun BuyIt(
                                     }
                                 }
                             },
-                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                            colors = NavigationDrawerItemDefaults.colors(
+                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                unselectedContainerColor = Color.Transparent,
+                                selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         )
                     }
                 }
             }
         ) {
             Scaffold(
-                containerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.background,
                 topBar = {
                     if (showTopBar) {
                         BuyItTopAppBar(
@@ -158,19 +184,25 @@ fun BuyIt(
                                 }
                             },
                             onBuscarClick = { navController.navigate(Screen.Trends.route) },
-                            onAddClick = { navController.navigate(Screen.CreateReview.route)},
+                            onAddClick = { navController.navigate(Screen.CreateReview.route) },
                             onProfileClick = { navController.navigate(Screen.Profile.route) }
                         )
                     }
                 }
             ) { paddingValues ->
-                AppNavigation(
-                    navController = navController,
-                    modifier = Modifier.padding(paddingValues)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(paddingValues)
+                ) {
+                    AppNavigation(
+                        navController = navController,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
-
     }
 }
 

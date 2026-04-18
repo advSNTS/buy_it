@@ -235,18 +235,31 @@ fun TextInput(
     placeholder: String,
     item: String,
     onItemChange: (String) -> Unit,
-){
+) {
     TextField(
-        placeholder = {Text(placeholder)},
+        placeholder = {
+            Text(
+                placeholder,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        },
         modifier = modifier,
         value = item,
         textStyle = TextStyle(
-            color = MaterialTheme.colorScheme.outline
+            color = MaterialTheme.colorScheme.onSurface
         ),
         onValueChange = onItemChange,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent
+            focusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            unfocusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            disabledContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
     )
 }
@@ -265,16 +278,31 @@ fun TextInputRounded(
     placeholder: String,
     item: String,
     onItemChange: (String) -> Unit,
-){
+) {
     TextField(
-        placeholder = {Text(placeholder)},
+        placeholder = {
+            Text(
+                placeholder,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        },
         modifier = modifier.clip(RoundedCornerShape(14.dp)),
         value = item,
         textStyle = TextStyle(
-            color = MaterialTheme.colorScheme.outline
+            color = MaterialTheme.colorScheme.onSurface
         ),
         onValueChange = onItemChange,
-
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     )
 }
 
@@ -299,23 +327,41 @@ fun PasswordInput(
     TextField(
         value = item,
         onValueChange = onItemChange,
-        placeholder = { Text(placeholder) },
+        placeholder = {
+            Text(
+                placeholder,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        },
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
         visualTransformation = if (mostrar) VisualTransformation.None else PasswordVisualTransformation(),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent
+            focusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            unfocusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            disabledContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         trailingIcon = {
             IconButton(onClick = onMostrarPassword) {
                 Icon(
                     painter = painterResource(icono),
                     contentDescription = stringResource(R.string.iniciar_sesion),
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier.size(25.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     )
 }
+
 @Composable
 @Preview(showBackground = true)
 fun PasswordInputPreview(){
@@ -357,8 +403,6 @@ fun CheckAndTextPreview(){
 
 }
 
-//Boton Iniciar Sesión, el texto es pasado por parámetro
-//A veces el color se bugea
 @Composable
 fun MainButton(
     onClick: () -> Unit,
@@ -369,12 +413,11 @@ fun MainButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
-        Text(
-            text = text
-        )
+        Text(text = text)
     }
 }
 
@@ -386,7 +429,6 @@ fun MainButtonPreview(){
 
 }
 
-//Boton Registrarse, el texto es pasado por parámetro
 @Composable
 fun SecondaryButton(
     onClick: () -> Unit,
@@ -397,13 +439,11 @@ fun SecondaryButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         )
     ) {
-        Text(
-            text = text,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-        )
+        Text(text = text)
     }
 }
 
@@ -610,7 +650,7 @@ fun BarNav(
                 clip = false
             )
             .clip(RoundedCornerShape(30.dp))
-            .background(MaterialTheme.colorScheme.tertiary),
+            .background(MaterialTheme.colorScheme.tertiaryContainer),
 
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
