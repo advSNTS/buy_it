@@ -32,12 +32,27 @@ class UserRetrofitDatasourceImplementation @Inject constructor(
             created = null,
             email = email,
             password = "",
-            followersCount = 0
+            followersCount = 0,
+            followingCount = 0,
+            followed = false
         )
 
         return service.createUser(user)
     }
 
     override suspend fun updateUserProfile(userId: String, name: String, pfpURL: String?) {
+    }
+
+    override suspend fun getUserById(
+        id: String,
+        currentUserId: String?
+    ): UserProfileRetrofitDTO {
+        return getUserById(id)
+    }
+
+    override suspend fun followOrUnfollowUser(
+        currentUserId: String,
+        targetUserId: String
+    ) {
     }
 }

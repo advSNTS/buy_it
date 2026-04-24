@@ -40,6 +40,7 @@ import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
 import com.example.buy_it.ui.screens.home.ProductCard
 import com.example.buy_it.ui.theme.Buy_itTheme
+import androidx.compose.material3.Button
 
 @Composable
 fun Profile(
@@ -66,15 +67,17 @@ fun Profile(
     ) {
         ProfileCircles()
 
-        Image(
-            painter = painterResource(R.drawable.settings),
-            contentDescription = stringResource(R.string.ajustes),
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 26.dp, end = 20.dp)
-                .size(28.dp)
-                .clickable(onClick = onConfigurationEdit)
-        )
+        if (state.isCurrentUser) {
+            Image(
+                painter = painterResource(R.drawable.settings),
+                contentDescription = stringResource(R.string.ajustes),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 26.dp, end = 20.dp)
+                    .size(28.dp)
+                    .clickable(onClick = onConfigurationEdit)
+            )
+        }
 
         LazyColumn(
             modifier = Modifier
@@ -89,32 +92,34 @@ fun Profile(
                 Box(contentAlignment = Alignment.BottomEnd) {
                     PictureWithCircle(profileLink = state.profileImage)
 
-                    Card(
-                        modifier = Modifier
-                            .offset(x = 10.dp, y = (-4).dp)
-                            .clickable(onClick = onProfileEdit),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    if (state.isCurrentUser) {
+                        Card(
+                            modifier = Modifier
+                                .offset(x = 10.dp, y = (-4).dp)
+                                .clickable(onClick = onProfileEdit),
+                            shape = RoundedCornerShape(18.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                         ) {
-                            Image(
-                                painter = painterResource(R.drawable.edit),
-                                contentDescription = stringResource(R.string.editar_perfil),
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "Editar perfil",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.edit),
+                                    contentDescription = stringResource(R.string.editar_perfil),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = "Editar perfil",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                         }
                     }
                 }
@@ -149,10 +154,32 @@ fun Profile(
                         value = state.memberSince,
                         label = "Miembro"
                     )
+
                     ProfileStatItem(
                         value = state.seguidoresCount,
                         label = stringResource(R.string.seguidores)
                     )
+
+                    ProfileStatItem(
+                        value = state.siguiendoCount,
+                        label = "Siguiendo"
+                    )
+                }
+
+                if (!state.isCurrentUser) {
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Button(
+                        onClick = { profileViewModel.followOrUnfollowUser() }
+                    ) {
+                        Text(
+                            text = if (state.isFollowing) {
+                                "Dejar de seguir"
+                            } else {
+                                "Seguir"
+                            }
+                        )
+                    }
                 }
 
                 if (state.isCurrentUser) {

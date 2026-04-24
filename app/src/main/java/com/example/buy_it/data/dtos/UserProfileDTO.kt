@@ -9,7 +9,7 @@ abstract class UserDtoGeneric{
 }
 
 data class UserProfileFirestoreDTO(
-    val id: Int,
+    val id: String = "",
     val username: String,
     val name: String,
     val pfpURL: String?,
@@ -17,13 +17,15 @@ data class UserProfileFirestoreDTO(
     val created: String?,
     val email: String,
     val password: String,
-    val followersCount: Int
+    val followersCount: Int,
+    val followingCount: Int = 0,
+    var followed: Boolean = false
 ): UserDtoGeneric(){
-    constructor() : this(0, "", "", "", "", "", "", "", 0)
+    constructor() : this("", "", "", "", "", "", "", "", 0, 0, false)
 
     override fun toUserProfileInfo(): UserProfileInfo {
         return UserProfileInfo(
-            id = id.toString(),
+            id = id,
             username = username,
             name = name,
             pfpURL = pfpURL ?: "",
@@ -31,8 +33,9 @@ data class UserProfileFirestoreDTO(
             createdAt = if (!created.isNullOrEmpty()) LocalDate.parse(created.substring(0, 10)) else LocalDate.now(),
             email = email,
             password = password,
-            followersCount = followersCount
-
+            followersCount = followersCount,
+            followingCount = followingCount,
+            followed = followed
         )
     }
 }
@@ -46,9 +49,11 @@ data class UserProfileRetrofitDTO(
     val created: String?,
     val email: String,
     val password: String,
-    val followersCount: Int
+    val followersCount: Int,
+    val followingCount: Int = 0,
+    var followed: Boolean = false
 ): UserDtoGeneric(){
-    constructor() : this("", "", "", "", "", "", "", "", 0)
+    constructor() : this("", "", "", "", "", "", "", "", 0, 0, false)
 
     override fun toUserProfileInfo(): UserProfileInfo {
         return UserProfileInfo(
@@ -60,8 +65,9 @@ data class UserProfileRetrofitDTO(
             createdAt = if (!created.isNullOrEmpty()) LocalDate.parse(created.substring(0, 10)) else LocalDate.now(),
             email = email,
             password = password,
-            followersCount = followersCount
-
+            followersCount = followersCount,
+            followingCount = followingCount,
+            followed = followed
         )
     }
 }

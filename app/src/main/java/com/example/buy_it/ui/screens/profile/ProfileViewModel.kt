@@ -36,14 +36,15 @@ class ProfileViewModel @Inject constructor(
                 val userProfileInfo = result.getOrNull()
                 if (userProfileInfo != null) {
                     val isCurrentUser = userId == authRepository.currentUser?.uid
-                    //!!!! esto prioriza la foto de fuegobase, y luego la del backend arcáico
                     _uiState.value = _uiState.value.copy(
                         user = userProfileInfo,
                         isCurrentUser = isCurrentUser,
-                        seguidoresCount = userProfileInfo.followersCount.toString(),
                         memberSince = "Desde ${userProfileInfo.createdAt.year}",
                         profileImage = authRepository.currentUser?.photoUrl?.toString()
-                            ?: userProfileInfo.pfpURL.ifEmpty { null }
+                            ?: userProfileInfo.pfpURL.ifEmpty { null },
+                        seguidoresCount = userProfileInfo.followersCount.toString(),
+                        siguiendoCount = userProfileInfo.followingCount.toString(),
+                        isFollowing = userProfileInfo.followed
                     )
                 }
             } else {
@@ -59,6 +60,43 @@ class ProfileViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(reviews = result.getOrNull()!!)
             } else {
                 android.util.Log.e("ProfileViewModel", "getUserReviews error: ${result.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
+    fun followOrUnfollowUser() {
+        val targetUserId = _uiState.value.user?.id ?: return
+
+        viewModelScope.launch {
+            val wasFollowing = _uiState.value.isFollowing
+            val currentFollowers = _uiState.value.seguidoresCount.toIntOrNull() ?: 0
+
+            val result = userRepository.followOrUnfollowUser(targetUserId)
+
+            if (result.isSuccess) {
+                _uiState.update { state ->
+                    state.copy(
+                        isFollowing = !wasFollowing,
+                        seguidoresCount = if (wasFollowing) {
+                            (currentFollowers - 1).coerceAtLeast(0).toString()
+                        } else {
+                            (currentFollowers + 1).toString()
+                        },
+                        user = state.user?.copy(
+                            followed = !wasFollowing,
+                            followersCount = if (wasFollowing) {
+                                (currentFollowers - 1).coerceAtLeast(0)
+                            } else {
+                                currentFollowers + 1
+                            }
+                        )
+                    )
+                }
+            } else {
+                android.util.Log.e(
+                    "ProfileViewModel",
+                    "followOrUnfollow error: ${result.exceptionOrNull()?.message}"
+                )
             }
         }
     }

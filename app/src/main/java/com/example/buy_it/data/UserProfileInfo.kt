@@ -11,5 +11,7 @@ data class UserProfileInfo(
     val createdAt: LocalDate,
     val email: String,
     val password: String,
-    val followersCount: Int
+    val followersCount: Int,
+    val followingCount: Int = 0,
+    val followed: Boolean = false
 )
