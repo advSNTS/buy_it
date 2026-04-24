@@ -70,4 +70,17 @@ class UserRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    suspend fun getFollowingIds(): Result<List<String>> {
+        return try {
+            val currentUserId = authRemoteDataSource.currentUser?.uid
+                ?: throw Exception("No hay un usuario autenticado")
+
+            val followingIds = userRemoteDatasource.getFollowingIds(currentUserId)
+
+            Result.success(followingIds)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

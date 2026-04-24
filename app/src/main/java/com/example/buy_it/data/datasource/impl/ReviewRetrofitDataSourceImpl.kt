@@ -44,4 +44,8 @@ class ReviewRetrofitDataSourceImplementation @Inject constructor(
 
     override suspend fun sendReviewLike(reviewId: String, userId: String) {
     }
+
+    override suspend fun getReviewsByUserIds(userIds: List<String>): List<ReviewDTO> {
+        return emptyList()
+    }
 }

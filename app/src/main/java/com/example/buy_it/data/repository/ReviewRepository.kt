@@ -153,4 +153,15 @@ class ReviewRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    suspend fun getReviewsByUserIds(userIds: List<String>): Result<List<ReviewInfo>> {
+        return try {
+            val reviewDTOs = reviewRemoteDataSource.getReviewsByUserIds(userIds)
+            val reviewsInfo = reviewDTOs.map { it.toReviewInfo() }
+
+            Result.success(reviewsInfo)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
