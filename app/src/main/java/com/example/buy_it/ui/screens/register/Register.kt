@@ -162,7 +162,7 @@ fun RegisterContent(
                 FormFieldLabel(text = "Nombre completo")
                 TextInput(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = "Ej: Juan Pérez",
+                    placeholder = "Sebastian Angarita",
                     item = uiState.name,
                     onItemChange = { onNameChange(it) }
                 )
@@ -170,7 +170,7 @@ fun RegisterContent(
                 FormFieldLabel(text = stringResource(R.string.nombre_de_usuario))
                 TextInput(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = "Ej: micho_dev",
+                    placeholder = "androidDeveloperSenior",
                     item = uiState.username,
                     onItemChange = { onUsernameChange(it) }
                 )
