@@ -73,18 +73,6 @@ fun Profile(
     ) {
         ProfileCircles()
 
-        if (state.isCurrentUser) {
-            Image(
-                painter = painterResource(R.drawable.settings),
-                contentDescription = stringResource(R.string.ajustes),
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 26.dp, end = 20.dp)
-                    .size(28.dp)
-                    .clickable(onClick = onConfigurationEdit)
-            )
-        }
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,7 +81,31 @@ fun Profile(
             contentPadding = PaddingValues(bottom = 90.dp)
         ) {
             item {
-                Spacer(modifier = Modifier.height(30.dp))
+                if (state.isCurrentUser) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 26.dp, end = 4.dp),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable {
+                                    Log.d("Profile", "Icono configuración presionado")
+                                    onConfigurationEdit()
+                                }
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.settings),
+                                contentDescription = stringResource(R.string.ajustes),
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                } else {
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
 
                 Box(contentAlignment = Alignment.BottomEnd) {
                     PictureWithCircle(profileLink = state.profileImage)
