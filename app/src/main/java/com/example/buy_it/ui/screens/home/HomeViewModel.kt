@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
 
     fun getAllProducts() {
         viewModelScope.launch {
-            productRepository.seedFirestoreProductsIfNeeded()
+            // productRepository.seedFirestoreProductsIfNeeded()
 
             val result = productRepository.getAllProducts()
             Log.d("Home", "All Prods: $result")
