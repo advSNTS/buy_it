@@ -8,6 +8,7 @@ import com.example.buy_it.data.datasource.impl.firestore.UserFirestoreDataSource
 import com.example.buy_it.data.dtos.RegisterUserDto
 import javax.inject.Inject
 import com.example.buy_it.data.datasource.AuthRemoteDataSource
+import com.example.buy_it.data.dtos.UserDTO
 
 class UserRepository @Inject constructor(
     private val userRemoteDatasource: UserFirestoreDataSourceImpl,
@@ -79,6 +80,28 @@ class UserRepository @Inject constructor(
             val followingIds = userRemoteDatasource.getFollowingIds(currentUserId)
 
             Result.success(followingIds)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getFollowers(userId: String): Result<List<UserDTO>> {
+        return try {
+            val followerIds = userRemoteDatasource.getFollowerIds(userId)
+            val users = userRemoteDatasource.getUsersByIds(followerIds)
+
+            Result.success(users)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getFollowing(userId: String): Result<List<UserDTO>> {
+        return try {
+            val followingIds = userRemoteDatasource.getFollowingIds(userId)
+            val users = userRemoteDatasource.getUsersByIds(followingIds)
+
+            Result.success(users)
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -11,6 +11,7 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import com.google.firebase.firestore.FieldValue
+import com.example.buy_it.data.dtos.UserDTO
 
 class UserFirestoreDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore,
@@ -155,5 +156,38 @@ class UserFirestoreDataSourceImpl @Inject constructor(
             .await()
 
         return snapshot.documents.map { it.id }
+    }
+
+    override suspend fun getFollowerIds(userId: String): List<String> {
+        val snapshot = db.collection("users")
+            .document(userId)
+            .collection("followers")
+            .get()
+            .await()
+
+        return snapshot.documents.map { it.id }
+    }
+
+    override suspend fun getUsersByIds(userIds: List<String>): List<UserDTO> {
+        if (userIds.isEmpty()) return emptyList()
+
+        val users = mutableListOf<UserDTO>()
+
+        userIds.forEach { userId ->
+            val doc = db.collection("users")
+                .document(userId)
+                .get()
+                .await()
+
+            val user = doc.toObject(UserDTO::class.java)
+
+            if (user != null) {
+                users.add(
+                    user.copy(id = doc.id)
+                )
+            }
+        }
+
+        return users
     }
 }

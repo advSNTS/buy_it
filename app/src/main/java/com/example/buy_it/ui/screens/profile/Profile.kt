@@ -51,12 +51,14 @@ fun Profile(
     onProfileClick: () -> Unit,
     onTrendsClick: () -> Unit,
     onOpenDetail: (String) -> Unit,
+    onFollowersClick: (String) -> Unit = {},
+    onFollowingClick: (String) -> Unit = {},
     profileViewModel: ProfileViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
     val state by profileViewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(userId) {
         profileViewModel.getUserProfile(userId)
         Log.d("Profile", "UserIdCargado: $userId")
         profileViewModel.getUserReviews(userId)
@@ -157,12 +159,18 @@ fun Profile(
 
                     ProfileStatItem(
                         value = state.seguidoresCount,
-                        label = stringResource(R.string.seguidores)
+                        label = stringResource(R.string.seguidores),
+                        modifier = Modifier.clickable {
+                            state.user?.id?.let { onFollowersClick(it) }
+                        }
                     )
 
                     ProfileStatItem(
                         value = state.siguiendoCount,
-                        label = "Siguiendo"
+                        label = "Siguiendo",
+                        modifier = Modifier.clickable {
+                            state.user?.id?.let { onFollowingClick(it) }
+                        }
                     )
                 }
 

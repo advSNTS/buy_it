@@ -7,6 +7,7 @@ import com.example.buy_it.data.dtos.ReviewDTO
 import com.example.buy_it.data.dtos.UserProfileRetrofitDTO
 import com.example.buy_it.data.repository.AuthRepository
 import javax.inject.Inject
+import com.example.buy_it.data.dtos.UserDTO
 
 class UserRetrofitDatasourceImplementation @Inject constructor(
     private val service: UserRetrofitService,
@@ -57,6 +58,14 @@ class UserRetrofitDatasourceImplementation @Inject constructor(
     }
 
     override suspend fun getFollowingIds(userId: String): List<String> {
+        return emptyList()
+    }
+
+    override suspend fun getFollowerIds(userId: String): List<String> {
+        return emptyList()
+    }
+
+    override suspend fun getUsersByIds(userIds: List<String>): List<UserDTO> {
         return emptyList()
     }
 }

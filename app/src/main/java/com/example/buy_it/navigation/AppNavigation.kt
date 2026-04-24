@@ -37,6 +37,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.buy_it.ui.screens.createreview.Createreview
 import com.google.firebase.auth.FirebaseAuth
+import com.example.buy_it.ui.screens.followlist.FollowList
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
@@ -62,7 +63,6 @@ sealed class Screen(val route: String) {
         fun createRoute(userId: String) = "userProfile/$userId"
     }
     object CreateReview : Screen("createreview")
-
     object ReviewEditorScreen : Screen("review_editor/{productId}?reviewId={reviewId}") {
         fun createRoute(productId: String, reviewId: String? = null): String {
             return if (reviewId == null) {
@@ -72,15 +72,16 @@ sealed class Screen(val route: String) {
             }
         }
     }
+    object FollowList : Screen("followList/{userId}/{type}") {
+        fun createRoute(userId: String, type: String) = "followList/$userId/$type"
+    }
 }
 
 @Composable
 fun AppNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier
-
 ){
-
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route,
@@ -157,6 +158,12 @@ fun AppNavigation(
                 },
                 onOpenDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
+                },
+                onFollowersClick = { id ->
+                    navController.navigate(Screen.FollowList.createRoute(id, "followers"))
+                },
+                onFollowingClick = { id ->
+                    navController.navigate(Screen.FollowList.createRoute(id, "following"))
                 },
                 userId = currentUserId,
             )
@@ -314,7 +321,15 @@ fun AppNavigation(
                 onHomeClick = { navController.navigate(Screen.Home.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
                 onTrendsClick = { navController.navigate(Screen.Trends.route) },
-                onOpenDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) }
+                onOpenDetail = { id ->
+                    navController.navigate(Screen.Detail.createRoute(id))
+                },
+                onFollowersClick = { id ->
+                    navController.navigate(Screen.FollowList.createRoute(id, "followers"))
+                },
+                onFollowingClick = { id ->
+                    navController.navigate(Screen.FollowList.createRoute(id, "following"))
+                }
             )
         }
 
@@ -334,8 +349,27 @@ fun AppNavigation(
                 modifier = Modifier.fillMaxSize()
             )
         }
-    }
 
+        composable(
+            route = Screen.FollowList.route,
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("type") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId").orEmpty()
+            val type = backStackEntry.arguments?.getString("type").orEmpty()
+
+            FollowList(
+                userId = userId,
+                type = type,
+                onBackPressed = { navController.popBackStack() },
+                onUserClick = { selectedUserId ->
+                    navController.navigate(Screen.UserProfile.createRoute(selectedUserId))
+                }
+            )
+        }
+    }
 }
 
 @Composable
