@@ -1,6 +1,7 @@
 package com.example.buy_it.ui.screens.register
 
 data class RegisterState(
+    val name: String = "",
     val username: String = "",
     val email: String = "",
     val password: String = "",

@@ -27,9 +27,9 @@ class UserRepository @Inject constructor(
         return reviewRepository.getReviewsByUserId(userId)
     }
 
-    suspend fun registerUser(username: String, userId: String): Result<Unit> {
+    suspend fun registerUser(username: String, name: String, userId: String): Result<Unit> {
         return try {
-            val registerUserDto = RegisterUserDto(username)
+            val registerUserDto = RegisterUserDto(username, name)
             userRemoteDatasource.registerUser(registerUserDto, userId)
             Log.d("TAG", "usuario registrado, id: $userId")
             Result.success(Unit)
