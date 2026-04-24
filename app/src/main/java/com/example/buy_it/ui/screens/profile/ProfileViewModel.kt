@@ -36,12 +36,17 @@ class ProfileViewModel @Inject constructor(
                 val userProfileInfo = result.getOrNull()
                 if (userProfileInfo != null) {
                     val isCurrentUser = userId == authRepository.currentUser?.uid
+                    val profileImageUrl = if (isCurrentUser) {
+                        authRepository.currentUser?.photoUrl?.toString() ?: userProfileInfo.pfpURL
+                    } else {
+                        userProfileInfo.pfpURL
+                    }
+
                     _uiState.value = _uiState.value.copy(
                         user = userProfileInfo,
                         isCurrentUser = isCurrentUser,
                         memberSince = "Desde ${userProfileInfo.createdAt.year}",
-                        profileImage = authRepository.currentUser?.photoUrl?.toString()
-                            ?: userProfileInfo.pfpURL.ifEmpty { null },
+                        profileImage = profileImageUrl.ifEmpty { null },
                         seguidoresCount = userProfileInfo.followersCount.toString(),
                         siguiendoCount = userProfileInfo.followingCount.toString(),
                         isFollowing = userProfileInfo.followed
@@ -62,6 +67,10 @@ class ProfileViewModel @Inject constructor(
                 android.util.Log.e("ProfileViewModel", "getUserReviews error: ${result.exceptionOrNull()?.message}")
             }
         }
+    }
+
+    fun isReviewOwner(reviewUserId: String): Boolean {
+        return authRepository.currentUser?.uid == reviewUserId
     }
 
     fun followOrUnfollowUser() {

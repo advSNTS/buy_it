@@ -73,7 +73,6 @@ fun Detail(
                         imageRes = product.image,
                         range = product.range,
                         description = product.description,
-                        likePercent = product.likePercent,
                         ratingsCount = product.ratingsCount,
                         onClickArrow = onSeeStores
                     )
@@ -88,7 +87,9 @@ fun Detail(
                         info = review,
                         onCommentClick = onOpenComments,
                         onClick = {
-                            onEditReview(productId, review.id)
+                            if (detailViewModel.isReviewOwner(review.userId)) {
+                                onEditReview(productId, review.id)
+                            }
                         },
                         onUserClick = { detailViewModel.onUserClicked(review.userId) },
                         onLikeClick = {

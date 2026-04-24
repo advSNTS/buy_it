@@ -76,6 +76,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
 
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.haze)
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

@@ -26,6 +26,10 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(username = value, errorMessage = "") }
     }
 
+    fun onNameChange(value: String) {
+        _uiState.update { it.copy(name = value, errorMessage = "") }
+    }
+
     fun onEmailChange(value: String) {
         _uiState.update { it.copy(email = value, errorMessage = "") }
     }
@@ -53,11 +57,11 @@ class RegisterViewModel @Inject constructor(
     fun onRegister() {
         val state = _uiState.value
         if (
+            state.name.isBlank() ||
             state.username.isBlank() ||
             state.email.isBlank() ||
             state.password.isBlank() ||
-            state.confirmPassword.isBlank() ||
-            !state.acceptedTerms
+            state.confirmPassword.isBlank()
         ) {
             _uiState.update { it.copy(mostrarMensaje = true, errorMessage = "Todos los campos son obligatorios") }
         } else if (state.password != state.confirmPassword) {
@@ -72,7 +76,8 @@ class RegisterViewModel @Inject constructor(
 
                     userRepository.registerUser(
                         username = state.username,
-                        userId = userId!!
+                        name = state.name,
+                        userId = userId
                     )
 
 

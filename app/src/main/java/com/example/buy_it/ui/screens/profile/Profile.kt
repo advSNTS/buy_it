@@ -18,9 +18,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +36,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.buy_it.R
 import com.example.buy_it.data.ProductInfo
@@ -69,18 +75,6 @@ fun Profile(
     ) {
         ProfileCircles()
 
-        if (state.isCurrentUser) {
-            Image(
-                painter = painterResource(R.drawable.settings),
-                contentDescription = stringResource(R.string.ajustes),
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 26.dp, end = 20.dp)
-                    .size(28.dp)
-                    .clickable(onClick = onConfigurationEdit)
-            )
-        }
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +83,31 @@ fun Profile(
             contentPadding = PaddingValues(bottom = 90.dp)
         ) {
             item {
-                Spacer(modifier = Modifier.height(30.dp))
+                if (state.isCurrentUser) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 26.dp, end = 4.dp),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable {
+                                    Log.d("Profile", "Icono configuración presionado")
+                                    onConfigurationEdit()
+                                }
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.settings),
+                                contentDescription = stringResource(R.string.ajustes),
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                } else {
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
 
                 Box(contentAlignment = Alignment.BottomEnd) {
                     PictureWithCircle(profileLink = state.profileImage)
@@ -110,15 +128,16 @@ fun Profile(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Image(
-                                    painter = painterResource(R.drawable.edit),
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
                                     contentDescription = stringResource(R.string.editar_perfil),
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(18.dp),
+                                    tint = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
-                                    text = "Editar perfil",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.SemiBold,
+                                    text = "Editar",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
@@ -227,7 +246,7 @@ fun Profile(
                         ratingsCount = review.comments
                     ),
                     onClick = {
-                        if (state.isCurrentUser) {
+                        if (profileViewModel.isReviewOwner(review.userId)) {
                             onOpenDetail(review.productId) // O onEditReview si existiera
                         } else {
                             onOpenDetail(review.productId)

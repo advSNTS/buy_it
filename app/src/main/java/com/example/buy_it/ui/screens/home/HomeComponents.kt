@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Comment
-import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -102,7 +101,6 @@ fun ProductCard(
             Spacer(modifier = Modifier.height(20.dp))
 
             PostInfo(
-                percentageLikes = productInfo.likePercent,
                 range = productInfo.range,
                 comments = productInfo.ratingsCount
             )
@@ -112,7 +110,6 @@ fun ProductCard(
 
 @Composable
 fun PostInfo(
-    percentageLikes: Int,
     range: String,
     comments: Int,
     modifier: Modifier = Modifier
@@ -125,33 +122,10 @@ fun PostInfo(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(containerColor)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            .padding(horizontal = 20.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Likes
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = Icons.Outlined.ThumbUp,
-                contentDescription = "Likes",
-                tint = contentColor,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = "$percentageLikes%",
-                color = contentColor,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        // Divider (Opcional, ahora usamos un badge para el rango)
-        VerticalDivider(
-            modifier = Modifier.height(16.dp),
-            color = contentColor.copy(alpha = 0.3f)
-        )
-
         // Range como Badge
         Surface(
             color = contentColor,
@@ -162,14 +136,9 @@ fun PostInfo(
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
             )
         }
-
-        VerticalDivider(
-            modifier = Modifier.height(16.dp),
-            color = contentColor.copy(alpha = 0.3f)
-        )
 
         // Comments
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -179,9 +148,9 @@ fun PostInfo(
                 tint = contentColor,
                 modifier = Modifier.size(20.dp)
             )
-            Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = comments.toString(),
+                text = "$comments reseñas",
                 color = contentColor,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold

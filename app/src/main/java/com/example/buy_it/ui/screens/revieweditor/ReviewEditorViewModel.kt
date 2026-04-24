@@ -115,7 +115,8 @@ class ReviewEditorViewModel @Inject constructor(
                             isLoading = false,
                             errorMessage = if (isOwner) null else "No puedes editar ni eliminar la reseña de otro usuario.",
                             isEditMode = true,
-                            canEditOrDelete = isOwner
+                            canEditOrDelete = isOwner,
+                            navigateBack = !isOwner
                         )
                     )
                 }

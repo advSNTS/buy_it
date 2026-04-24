@@ -1,16 +1,20 @@
 package com.example.buy_it.ui.screens.register
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,19 +22,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
 import com.example.buy_it.ui.components.FondoBlancoRegister
 import com.example.buy_it.ui.components.MainButton
-import com.example.buy_it.ui.components.PanelGlass
 import com.example.buy_it.ui.components.PasswordInput
 import com.example.buy_it.ui.components.TextInput
 import com.example.buy_it.ui.theme.Buy_itTheme
@@ -46,6 +54,7 @@ fun Register(
 
     RegisterContent(
         uiState = uiState,
+        onNameChange = viewModel::onNameChange,
         onUsernameChange = viewModel::onUsernameChange,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
@@ -65,6 +74,7 @@ fun Register(
 @Composable
 fun RegisterContent(
     uiState: RegisterState,
+    onNameChange: (String) -> Unit,
     onUsernameChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
@@ -102,10 +112,12 @@ fun RegisterContent(
     ) {
         FondoBlancoRegister()
 
-        PanelGlass(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 18.dp)
+                .fillMaxWidth(0.92f)
+                .fillMaxHeight(0.92f)
+                .clip(RoundedCornerShape(32.dp))
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.15f))
         )
 
         Image(
@@ -113,81 +125,106 @@ fun RegisterContent(
             contentDescription = stringResource(R.string.volver),
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 26.dp, top = 28.dp)
-                .height(28.dp)
+                .padding(start = 24.dp, top = 24.dp)
+                .size(32.dp)
                 .clickable { onBackClicked() }
         )
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 34.dp, vertical = 34.dp)
+                .padding(horizontal = 28.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(56.dp))
+            Spacer(modifier = Modifier.height(72.dp))
 
             Text(
                 text = stringResource(R.string.crear_cuenta),
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Regístrate para empezar a compartir opiniones",
+                text = "Únete y empieza a compartir opiniones",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(18.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                FormFieldLabel(text = stringResource(R.string.nombre_de_usuario))
+                FormFieldLabel(text = "Nombre completo")
                 TextInput(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = stringResource(R.string.nombre_de_usuario),
-                    item = uiState.username,
-                    onItemChange = { onUsernameChange(it) }
+                    placeholder = "Sebastian Angarita",
+                    item = uiState.name,
+                    onItemChange = { onNameChange(it) }
                 )
 
-                FormFieldLabel(text = stringResource(R.string.email))
-                TextInput(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = stringResource(R.string.email),
-                    item = uiState.email,
-                    onItemChange = { onEmailChange(it) }
-                )
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        FormFieldLabel(text = "Usuario")
+                        TextInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "micho_dev",
+                            item = uiState.username,
+                            onItemChange = { onUsernameChange(it) }
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1.2f)) {
+                        FormFieldLabel(text = stringResource(R.string.email))
+                        TextInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "ejemplo@correo.com",
+                            item = uiState.email,
+                            onItemChange = { onEmailChange(it) }
+                        )
+                    }
+                }
 
-                FormFieldLabel(text = stringResource(R.string.contrasenna))
-                PasswordInput(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = stringResource(R.string.contrasenna),
-                    item = uiState.password,
-                    onItemChange = { onPasswordChange(it) },
-                    icono = iconoPassword,
-                    mostrar = uiState.mostrarPassword,
-                    onMostrarPassword = { onToggleMostrarPassword() }
-                )
-
-                FormFieldLabel(text = "Confirmar contraseña")
-                PasswordInput(
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = "Confirmar contraseña",
-                    item = uiState.confirmPassword,
-                    onItemChange = { onConfirmPasswordChange(it) },
-                    icono = iconoConfirmPassword,
-                    mostrar = uiState.mostrarConfirmPassword,
-                    onMostrarPassword = { onToggleMostrarConfirmPassword() }
-                )
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        FormFieldLabel(text = stringResource(R.string.contrasenna))
+                        PasswordInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "******",
+                            item = uiState.password,
+                            onItemChange = { onPasswordChange(it) },
+                            icono = iconoPassword,
+                            mostrar = uiState.mostrarPassword,
+                            onMostrarPassword = { onToggleMostrarPassword() }
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        FormFieldLabel(text = "Confirmar")
+                        PasswordInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "******",
+                            item = uiState.confirmPassword,
+                            onItemChange = { onConfirmPasswordChange(it) },
+                            icono = iconoConfirmPassword,
+                            mostrar = uiState.mostrarConfirmPassword,
+                            onMostrarPassword = { onToggleMostrarConfirmPassword() }
+                        )
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             CheckAndText(
                 estado = uiState.acceptedTerms,
@@ -196,26 +233,27 @@ fun RegisterContent(
             )
 
             if (uiState.mostrarMensaje && uiState.errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = uiState.errorMessage,
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.labelSmall,
+                    textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(56.dp),
                 text = stringResource(R.string.crear_cuenta),
                 onClick = onRegister
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -240,6 +278,7 @@ fun RegisterPreview() {
     Buy_itTheme {
         RegisterContent(
             uiState = RegisterState(),
+            onNameChange = {},
             onUsernameChange = {},
             onEmailChange = {},
             onPasswordChange = {},
