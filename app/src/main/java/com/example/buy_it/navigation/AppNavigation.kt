@@ -200,19 +200,8 @@ fun AppNavigation(
         composable(route = Screen.Home.route) {
             val homeViewModel: HomeViewModel = hiltViewModel()
             Home(
-                onNotificationClick = { /* TODO */ },
-                onHomeClick = { /* Ya estamos aquí */ },
-                onProfileClick = {
-                    navController.navigate(Screen.Profile.route)
-                },
-                onTrendsClick = {
-                    navController.navigate(Screen.Trends.route)
-                },
                 onOpenDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
-                },
-                onAddReview = { id ->
-                    navController.navigate(Screen.ReviewEditorScreen.createRoute(id))
                 },
                 homeViewModel = homeViewModel
             )
@@ -249,7 +238,6 @@ fun AppNavigation(
             Detail(
                 productId = productId,
                 onBackPressed = { navController.popBackStack() },
-                onNotificationClick = { /* TODO */ },
                 onOpenComments = {
                     navController.navigate(Screen.Comments.createRoute(productId))
                 },

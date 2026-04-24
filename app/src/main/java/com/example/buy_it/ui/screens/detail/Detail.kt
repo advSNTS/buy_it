@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 fun Detail(
     productId: String,
     onBackPressed: () -> Unit,
-    onNotificationClick: () -> Unit,
     onOpenComments: () -> Unit,
     onSeeStores: () -> Unit,
     onOpenReviewEditor: (String) -> Unit,
@@ -56,9 +55,7 @@ fun Detail(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             DetailTopBar(
-                title = "Ver detalle de producto",
-                onBackPressed = onBackPressed,
-                onNotificationClick = onNotificationClick
+                onBackPressed = onBackPressed
             )
 
             LazyColumn(
