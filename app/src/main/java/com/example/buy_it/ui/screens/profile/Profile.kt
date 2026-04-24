@@ -238,7 +238,7 @@ fun Profile(
                         ratingsCount = review.comments
                     ),
                     onClick = {
-                        if (state.isCurrentUser) {
+                        if (profileViewModel.isReviewOwner(review.userId)) {
                             onOpenDetail(review.productId) // O onEditReview si existiera
                         } else {
                             onOpenDetail(review.productId)

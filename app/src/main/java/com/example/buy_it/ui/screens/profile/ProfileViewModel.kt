@@ -69,6 +69,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun isReviewOwner(reviewUserId: String): Boolean {
+        return authRepository.currentUser?.uid == reviewUserId
+    }
+
     fun followOrUnfollowUser() {
         val targetUserId = _uiState.value.user?.id ?: return
 

@@ -31,6 +31,10 @@ class DetailViewModel @Inject constructor(
         _uiState.update { it.copy(navigateToProfileUserId = null) }
     }
 
+    fun isReviewOwner(reviewUserId: String): Boolean {
+        return authRepository.currentUser?.uid == reviewUserId
+    }
+
     fun loadProductDetail(productId: String) {
         _uiState.update { it.copy(isLoading = true) }
 
