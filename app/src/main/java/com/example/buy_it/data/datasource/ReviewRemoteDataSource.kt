@@ -2,7 +2,7 @@ package com.example.buy_it.data.datasource
 
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.ReviewDTO
-
+import kotlinx.coroutines.flow.Flow
 interface ReviewRemoteDataSource {
 
     suspend fun getAllReviews(): List<ReviewDTO>
@@ -27,4 +27,9 @@ interface ReviewRemoteDataSource {
     ): List<ReviewDTO>
 
     suspend fun getReviewsByUserIds(userIds: List<String>): List<ReviewDTO>
+
+    fun listenReviewsByProductId(
+        productId: String,
+        currentUserId: String?
+    ): Flow<List<ReviewDTO>>
 }

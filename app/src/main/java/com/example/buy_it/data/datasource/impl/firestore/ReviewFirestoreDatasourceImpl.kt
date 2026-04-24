@@ -9,6 +9,10 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import com.google.firebase.firestore.FieldValue
 import com.example.buy_it.data.dtos.UserDTO
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 
 class ReviewFirestoreDatasourceImpl @Inject constructor(
     private val db: FirebaseFirestore
@@ -158,5 +162,33 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
         }
 
         return result
+    }
+
+    override fun listenReviewsByProductId(
+        productId: String,
+        currentUserId: String?
+    ): Flow<List<ReviewDTO>> = callbackFlow {
+        val listener = db.collection("reviews")
+            .whereEqualTo("productId", productId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    launch {
+                        val reviews = snapshot.documents.mapNotNull { doc ->
+                            mapReviewDocument(doc, currentUserId)
+                        }
+
+                        trySend(reviews)
+                    }
+                }
+            }
+
+        awaitClose {
+            listener.remove()
+        }
     }
 }

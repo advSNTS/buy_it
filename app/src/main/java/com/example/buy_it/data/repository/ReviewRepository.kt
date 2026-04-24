@@ -9,6 +9,8 @@ import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.toReviewInfo
 import retrofit2.HttpException
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class ReviewRepository @Inject constructor(
     private val reviewRemoteDataSource: ReviewFirestoreDatasourceImpl,
@@ -163,5 +165,15 @@ class ReviewRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    fun listenReviewsByProductId(productId: String): Flow<List<ReviewInfo>> {
+        val currentUserId = authRemoteDataSource.currentUser?.uid
+
+        return reviewRemoteDataSource
+            .listenReviewsByProductId(productId, currentUserId)
+            .map { reviews ->
+                reviews.map { it.toReviewInfo() }
+            }
     }
 }

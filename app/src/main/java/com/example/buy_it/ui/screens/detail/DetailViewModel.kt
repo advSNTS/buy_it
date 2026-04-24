@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.buy_it.data.repository.ReviewRepository
-
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -22,6 +24,7 @@ class DetailViewModel @Inject constructor(
         currentUserId = authRepository.currentUser?.uid
     ))
     val uiState: StateFlow<DetailState> = _uiState
+    private var reviewsJob: Job? = null
 
     fun onUserClicked(userId: String) {
         _uiState.update { it.copy(navigateToProfileUserId = userId) }
@@ -40,13 +43,15 @@ class DetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val productResult = productRepository.getProductById(productId)
-            val reviewsResult = reviewRepository.getReviewsByProductId(productId)
 
-            _uiState.update { it.copy(
-                product = productResult.getOrNull(),
-                reviews = reviewsResult.getOrDefault(emptyList()),
-                isLoading = false
-            ) }
+            _uiState.update {
+                it.copy(
+                    product = productResult.getOrNull(),
+                    isLoading = false
+                )
+            }
+
+            listenReviews(productId)
         }
     }
 
@@ -76,6 +81,25 @@ class DetailViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun listenReviews(productId: String) {
+        reviewsJob?.cancel()
+
+        reviewsJob = viewModelScope.launch {
+            reviewRepository.listenReviewsByProductId(productId)
+                .catch { error ->
+                    android.util.Log.e(
+                        "DetailViewModel",
+                        "Error escuchando reviews: ${error.message}"
+                    )
+                }
+                .collectLatest { reviews ->
+                    _uiState.update {
+                        it.copy(reviews = reviews)
+                    }
+                }
         }
     }
 }

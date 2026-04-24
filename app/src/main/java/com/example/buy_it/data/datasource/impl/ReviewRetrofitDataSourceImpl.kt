@@ -48,4 +48,11 @@ class ReviewRetrofitDataSourceImplementation @Inject constructor(
     override suspend fun getReviewsByUserIds(userIds: List<String>): List<ReviewDTO> {
         return emptyList()
     }
+
+    override fun listenReviewsByProductId(
+        productId: String,
+        currentUserId: String?
+    ): kotlinx.coroutines.flow.Flow<List<ReviewDTO>> {
+        return kotlinx.coroutines.flow.flowOf(emptyList())
+    }
 }
