@@ -56,6 +56,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 data class DrawerItem(
     val title: String,
@@ -77,7 +79,20 @@ fun BuyIt(
 ){
     FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
         if (task.isSuccessful) {
-            Log.d("Token", task.result)
+            val token = task.result
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+            Log.d("Token", token)
+
+            if (!userId.isNullOrBlank()) {
+                FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .set(
+                        mapOf("fcmToken" to token),
+                        SetOptions.merge()
+                    )
+            }
         } else {
             Log.d("Token", "Error al obtener el token")
         }
