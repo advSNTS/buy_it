@@ -101,7 +101,6 @@ fun ProductHeaderCard(
     imageRes: String,
     range: String,
     description: String,
-    likePercent: Int,
     ratingsCount: Int,
     modifier: Modifier = Modifier,
     onClickArrow: () -> Unit = {},
@@ -172,30 +171,12 @@ fun ProductHeaderCard(
             }
 
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.ThumbUp,
-                    contentDescription = "Likes",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(26.dp)
-                )
-
-                Spacer(Modifier.width(8.dp))
-
-                Text(
-                    text = "$likePercent%",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(Modifier.width(8.dp))
-
                 Text(
                     text = "$ratingsCount calificaciones",
                     color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.padding(bottom = 2.dp)
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
