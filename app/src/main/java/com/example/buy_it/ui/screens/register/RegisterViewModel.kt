@@ -56,8 +56,7 @@ class RegisterViewModel @Inject constructor(
             state.username.isBlank() ||
             state.email.isBlank() ||
             state.password.isBlank() ||
-            state.confirmPassword.isBlank() ||
-            !state.acceptedTerms
+            state.confirmPassword.isBlank()
         ) {
             _uiState.update { it.copy(mostrarMensaje = true, errorMessage = "Todos los campos son obligatorios") }
         } else if (state.password != state.confirmPassword) {
@@ -72,7 +71,7 @@ class RegisterViewModel @Inject constructor(
 
                     userRepository.registerUser(
                         username = state.username,
-                        userId = userId!!
+                        userId = userId
                     )
 
 
