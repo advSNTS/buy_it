@@ -31,7 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.buy_it.R
 import com.example.buy_it.ui.components.CheckAndText
@@ -167,43 +169,59 @@ fun RegisterContent(
                     onItemChange = { onNameChange(it) }
                 )
 
-                FormFieldLabel(text = stringResource(R.string.nombre_de_usuario))
-                TextInput(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = "androidDeveloperSenior",
-                    item = uiState.username,
-                    onItemChange = { onUsernameChange(it) }
-                )
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        FormFieldLabel(text = "Usuario")
+                        TextInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "micho_dev",
+                            item = uiState.username,
+                            onItemChange = { onUsernameChange(it) }
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1.2f)) {
+                        FormFieldLabel(text = stringResource(R.string.email))
+                        TextInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "ejemplo@correo.com",
+                            item = uiState.email,
+                            onItemChange = { onEmailChange(it) }
+                        )
+                    }
+                }
 
-                FormFieldLabel(text = stringResource(R.string.email))
-                TextInput(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = "ejemplo@correo.com",
-                    item = uiState.email,
-                    onItemChange = { onEmailChange(it) }
-                )
-
-                FormFieldLabel(text = stringResource(R.string.contrasenna))
-                PasswordInput(
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = "Mínimo 6 caracteres",
-                    item = uiState.password,
-                    onItemChange = { onPasswordChange(it) },
-                    icono = iconoPassword,
-                    mostrar = uiState.mostrarPassword,
-                    onMostrarPassword = { onToggleMostrarPassword() }
-                )
-
-                FormFieldLabel(text = "Confirmar contraseña")
-                PasswordInput(
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = "Repite tu contraseña",
-                    item = uiState.confirmPassword,
-                    onItemChange = { onConfirmPasswordChange(it) },
-                    icono = iconoConfirmPassword,
-                    mostrar = uiState.mostrarConfirmPassword,
-                    onMostrarPassword = { onToggleMostrarConfirmPassword() }
-                )
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        FormFieldLabel(text = stringResource(R.string.contrasenna))
+                        PasswordInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "******",
+                            item = uiState.password,
+                            onItemChange = { onPasswordChange(it) },
+                            icono = iconoPassword,
+                            mostrar = uiState.mostrarPassword,
+                            onMostrarPassword = { onToggleMostrarPassword() }
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        FormFieldLabel(text = "Confirmar")
+                        PasswordInput(
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "******",
+                            item = uiState.confirmPassword,
+                            onItemChange = { onConfirmPasswordChange(it) },
+                            icono = iconoConfirmPassword,
+                            mostrar = uiState.mostrarConfirmPassword,
+                            onMostrarPassword = { onToggleMostrarConfirmPassword() }
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
