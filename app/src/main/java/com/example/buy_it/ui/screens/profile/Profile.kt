@@ -243,7 +243,7 @@ fun Profile(
                         description = review.review,
                         likePercent = review.percentageLikes,
                         range = review.range,
-                        ratingsCount = review.likesCount
+                        ratingsCount = review.comments
                     ),
                     onClick = {
                         if (profileViewModel.isReviewOwner(review.userId)) {
@@ -251,8 +251,7 @@ fun Profile(
                         } else {
                             onOpenDetail(review.productId)
                         }
-                    },
-                    isLikeCount = true
+                    }
                 )
             }
         }
