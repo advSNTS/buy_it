@@ -140,16 +140,6 @@ fun LoginContent(
                         estado = state.isRememberMeChecked,
                         onEstadoChange = { onRememberMeChanged() }
                     )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        text = stringResource(R.string.olvido_su_contrasenna),
-                        textDecoration = TextDecoration.Underline,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable { /* TODO */ }
-                    )
                 }
 
                 if (state.mostrarMensaje && state.errorMessage.isNotEmpty()) {
@@ -182,45 +172,6 @@ fun LoginContent(
                     text = stringResource(R.string.crear_cuenta),
                     onClick = onRegisterButtonPressed
                 )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
-                    )
-                    Text(
-                        text = "  Otras opciones  ",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    LoginOption(
-                        modifier = Modifier.size(60.dp),
-                        backgroundGlass = painterResource(R.drawable.elipse4),
-                        loginIcon = painterResource(R.drawable.googlewhite)
-                    )
-                    LoginOption(
-                        modifier = Modifier.size(60.dp),
-                        backgroundGlass = painterResource(R.drawable.elipse5),
-                        loginIcon = painterResource(R.drawable.apple)
-                    )
-                }
             }
         }
     }

@@ -54,47 +54,31 @@ import com.example.buy_it.R
 
 @Composable
 fun DetailTopBar(
-    title: String,
     onBackPressed: () -> Unit,
-    onNotificationClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 10.dp, top = 8.dp, bottom = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
+        Surface(
+            onClick = onBackPressed,
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            modifier = Modifier.size(40.dp),
+            shadowElevation = 2.dp
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Volver",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable(onClick = onBackPressed),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Spacer(Modifier.width(10.dp))
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.outline,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium
-            )
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Volver",
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
-
-        Icon(
-            imageVector = Icons.Default.NotificationsNone,
-            contentDescription = "Notificaciones",
-            modifier = Modifier
-                .size(24.dp)
-                .clickable(onClick = onNotificationClick),
-            tint = MaterialTheme.colorScheme.primary
-        )
     }
 }
 
@@ -127,24 +111,34 @@ fun ProductHeaderCard(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center
             ) {
-                AsyncImage(
-                    contentDescription = "User image",
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(imageRes)
-                        .crossfade(true)
-                        .build(),
-                    error = painterResource(id = R.drawable.user_image_icon),
-                    placeholder = painterResource(id = R.drawable.loading_img),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(220.dp).clip(CircleShape)
-                )
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.size(240.dp),
+                    shadowElevation = 4.dp,
+                    border = androidx.compose.foundation.BorderStroke(
+                        width = 4.dp,
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                    )
+                ) {
+                    AsyncImage(
+                        contentDescription = "Product image",
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(imageRes)
+                            .crossfade(true)
+                            .build(),
+                        error = painterResource(id = R.drawable.user_image_icon),
+                        placeholder = painterResource(id = R.drawable.loading_img),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
 
             Text(

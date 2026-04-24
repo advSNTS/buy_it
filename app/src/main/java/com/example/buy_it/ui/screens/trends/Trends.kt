@@ -14,9 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.buy_it.ui.components.MainBackground
-import com.example.buy_it.data.ProductInfo
 import com.example.buy_it.ui.screens.home.ProductCard
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -40,7 +38,7 @@ fun Trends(
                 .padding(horizontal = 14.dp, vertical = 10.dp)
         ) {
             Text(
-                text = "Actividad de seguidos",
+                text = "Catálogo de productos",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -59,15 +57,15 @@ fun Trends(
                 ) {
                     CircularProgressIndicator()
                 }
-            } else if (state.filteredReviews.isEmpty()) {
+            } else if (state.filteredProducts.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = if (state.searchQuery.isEmpty())
-                            "No hay actividad reciente de tus seguidos."
-                        else "No se encontraron reseñas.",
+                            "No hay productos disponibles."
+                        else "No se encontraron productos para tu búsqueda.",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -78,19 +76,10 @@ fun Trends(
                     contentPadding = PaddingValues(top = 16.dp, bottom = 90.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    items(state.filteredReviews) { review ->
+                    items(state.filteredProducts) { product ->
                         ProductCard(
-                            productInfo = ProductInfo(
-                                id = review.productId,
-                                name = review.product,
-                                image = review.imgProd,
-                                description = review.review,
-                                likePercent = review.percentageLikes,
-                                range = review.range,
-                                ratingsCount = review.likesCount
-                            ),
-                            onClick = { onOpenDetail(review.productId) },
-                            isLikeCount = true
+                            productInfo = product,
+                            onClick = { onOpenDetail(product.id) }
                         )
                     }
                 }
@@ -110,7 +99,7 @@ private fun SearchBar(
         modifier = Modifier.fillMaxWidth(),
         placeholder = {
             Text(
-                "Buscar por producto o usuario",
+                "Buscar producto",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },

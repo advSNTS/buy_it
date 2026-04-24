@@ -127,7 +127,7 @@ fun RegisterContent(
                 .align(Alignment.TopStart)
                 .padding(start = 24.dp, top = 24.dp)
                 .size(32.dp)
-                .clickable { onBackClicked() }
+                .clickable { onBackScreen() }
         )
 
         Column(

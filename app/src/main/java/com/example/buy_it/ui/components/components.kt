@@ -21,8 +21,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.PersonPin
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -550,8 +552,8 @@ fun HomeIcon(
         modifier = modifier.size(30.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = stringResource(R.string.inicio),
+            imageVector = Icons.Default.People,
+            contentDescription = "Seguidos",
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.size(30.dp)
         )
@@ -587,7 +589,7 @@ fun BuscarIcon(
     ) {
         Icon(
             imageVector = Icons.Default.Search,
-            contentDescription = "Buscar",
+            contentDescription = "Descubrimientos",
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.size(30.dp)
         )
@@ -605,7 +607,7 @@ fun ProfileIcon(
         modifier = modifier.size(30.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.PersonPin,
+            imageVector = Icons.Default.Person,
             contentDescription = "Perfil",
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
@@ -636,7 +638,6 @@ fun BarNav(
     modifier: Modifier = Modifier,
     onHomeClick: () -> Unit = {},
     onBuscarClick: () -> Unit = {},
-    onAddClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
 
@@ -656,7 +657,6 @@ fun BarNav(
         verticalAlignment = Alignment.CenterVertically
     ) {
         HomeIcon(onClick = onHomeClick)
-        AddIcon(onClick = onAddClick)
         BuscarIcon(onClick = onBuscarClick)
         ProfileIcon(onClick = onProfileClick)
     }
