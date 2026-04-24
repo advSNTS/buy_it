@@ -105,9 +105,10 @@ fun Trends(
                                 description = review.review,
                                 likePercent = review.percentageLikes,
                                 range = review.range,
-                                ratingsCount = review.comments
+                                ratingsCount = review.likesCount
                             ),
-                            onClick = { onOpenDetail(review.productId) }
+                            onClick = { onOpenDetail(review.productId) },
+                            isLikeCount = true
                         )
                     }
                 }
