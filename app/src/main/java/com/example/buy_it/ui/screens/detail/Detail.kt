@@ -90,7 +90,10 @@ fun Detail(
                         onClick = {
                             onEditReview(productId, review.id)
                         },
-                        onUserClick = { detailViewModel.onUserClicked(review.userId) }
+                        onUserClick = { detailViewModel.onUserClicked(review.userId) },
+                        onLikeClick = {
+                            detailViewModel.onReviewLikeClicked(review.id)
+                        }
                     )
                 }
 

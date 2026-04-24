@@ -12,11 +12,13 @@ data class ReviewDTO(
     val like: Boolean = false,
     val comment: String = "",
     val comments: Int = 0,
+    val likesCount: Int = 0,
+    var likedByCurrentUser: Boolean = false,
     val createdAt: Long = 0L,
     val user: UserDTO? = null,
     val product: ProductDTO? = null
 ) {
-    constructor() : this("", "", "", false, "", 0, 0L, null, null)
+    constructor() : this("", "", "", false, "", 0, 0, false, 0L, null, null)
 }
 
 fun ReviewDTO.toReviewInfo(): ReviewInfo {
@@ -41,6 +43,8 @@ fun ReviewDTO.toReviewInfo(): ReviewInfo {
         percentageLikes = product?.percentageLike ?: 0,
         date = reviewDate,
         range = product?.range ?: "",
-        comments = comments
+        comments = comments,
+        likesCount = likesCount,
+        likedByCurrentUser = likedByCurrentUser
     )
 }

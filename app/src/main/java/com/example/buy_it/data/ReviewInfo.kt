@@ -15,5 +15,7 @@ data class ReviewInfo(
     val percentageLikes: Int,
     val date: LocalDate,
     val range: String,
-    val comments: Int
+    val comments: Int,
+    val likesCount: Int = 0,
+    val likedByCurrentUser: Boolean = false
 )

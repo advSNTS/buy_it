@@ -121,10 +121,32 @@ class ReviewRepository @Inject constructor(
 
     suspend fun getReviewsByProductId(productId: String): Result<List<ReviewInfo>> {
         return try {
-            val reviewDTOs = reviewRemoteDataSource.getReviewsByProductId(productId)
+            val currentUserId = authRemoteDataSource.currentUser?.uid
+
+            val reviewDTOs = reviewRemoteDataSource.getReviewsByProductId(
+                productId = productId,
+                currentUserId = currentUserId
+            )
+
             val reviewsInfo = reviewDTOs.map { it.toReviewInfo() }
+
             Log.d("reviews", "Id: $productId, Reviews: $reviewsInfo")
             Result.success(reviewsInfo)
+        } catch (e: HttpException) {
+            Result.failure(e)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun sendReviewLike(reviewId: String): Result<Unit> {
+        return try {
+            val currentUserId = authRemoteDataSource.currentUser?.uid
+                ?: throw Exception("No hay un usuario autenticado")
+
+            reviewRemoteDataSource.sendReviewLike(reviewId, currentUserId)
+
+            Result.success(Unit)
         } catch (e: HttpException) {
             Result.failure(e)
         } catch (e: Exception) {

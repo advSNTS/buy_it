@@ -222,6 +222,7 @@ fun ReviewMiniCard(
     onCommentClick: () -> Unit,
     onClick: () -> Unit,
     onUserClick: (String) -> Unit,
+    onLikeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -259,6 +260,30 @@ fun ReviewMiniCard(
                 lineHeight = 24.sp
             )
 
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ThumbUp,
+                    contentDescription = "Like review",
+                    tint = if (info.likedByCurrentUser) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.outline
+                    },
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clickable { onLikeClick() }
+                )
+
+                Spacer(Modifier.width(6.dp))
+
+                Text(
+                    text = "${info.likesCount}",
+                    color = MaterialTheme.colorScheme.outline,
+                    fontSize = 13.sp
+                )
+            }
         }
     }
 }

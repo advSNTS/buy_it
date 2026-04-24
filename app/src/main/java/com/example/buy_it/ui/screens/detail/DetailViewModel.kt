@@ -10,11 +10,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.buy_it.data.repository.ReviewRepository
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val reviewRepository: ReviewRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow(DetailState(
         currentUserId = authRepository.currentUser?.uid
@@ -34,13 +36,42 @@ class DetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val productResult = productRepository.getProductById(productId)
-            val reviewsResult = productRepository.getProductReviews(productId)
+            val reviewsResult = reviewRepository.getReviewsByProductId(productId)
 
             _uiState.update { it.copy(
                 product = productResult.getOrNull(),
                 reviews = reviewsResult.getOrDefault(emptyList()),
                 isLoading = false
             ) }
+        }
+    }
+
+    fun onReviewLikeClicked(reviewId: String) {
+        viewModelScope.launch {
+            val result = reviewRepository.sendReviewLike(reviewId)
+
+            if (result.isSuccess) {
+                _uiState.update { state ->
+                    state.copy(
+                        reviews = state.reviews.map { review ->
+                            if (review.id == reviewId) {
+                                val alreadyLiked = review.likedByCurrentUser
+
+                                review.copy(
+                                    likedByCurrentUser = !alreadyLiked,
+                                    likesCount = if (alreadyLiked) {
+                                        (review.likesCount - 1).coerceAtLeast(0)
+                                    } else {
+                                        review.likesCount + 1
+                                    }
+                                )
+                            } else {
+                                review
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ import com.example.buy_it.data.dtos.ReviewDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import com.google.firebase.firestore.FieldValue
+import com.example.buy_it.data.dtos.UserDTO
 
 class ReviewFirestoreDatasourceImpl @Inject constructor(
     private val db: FirebaseFirestore
@@ -14,12 +16,9 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
 
     override suspend fun getAllReviews(): List<ReviewDTO> {
         val snapshot = db.collection("reviews").get().await()
-        Log.d("reviews-firestore", "Total reviews: ${snapshot.size()}")
 
         return snapshot.documents.mapNotNull { doc ->
-            val dto = doc.toObject(ReviewDTO::class.java)
-            Log.d("reviews-firestore", "Doc ${doc.id}: $dto")
-            dto?.copy(id = doc.id)
+            mapReviewDocument(doc)
         }
     }
 
@@ -36,27 +35,29 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
             .get()
             .await()
 
-        Log.d("reviews-firestore", "Reviews por userId=$userId: ${snapshot.size()}")
-
         return snapshot.documents.mapNotNull { doc ->
-            val dto = doc.toObject(ReviewDTO::class.java)
-            Log.d("reviews-firestore", "Doc ${doc.id}: $dto")
-            dto?.copy(id = doc.id)
+            mapReviewDocument(doc)
         }
     }
 
     override suspend fun getReviewsByProductId(productId: String): List<ReviewDTO> {
+        return getReviewsByProductId(
+            productId = productId,
+            currentUserId = null
+        )
+    }
+
+    override suspend fun getReviewsByProductId(
+        productId: String,
+        currentUserId: String?
+    ): List<ReviewDTO> {
         val snapshot = db.collection("reviews")
             .whereEqualTo("productId", productId)
             .get()
             .await()
 
-        Log.d("reviews-firestore", "Reviews por productId=$productId: ${snapshot.size()}")
-
         return snapshot.documents.mapNotNull { doc ->
-            val dto = doc.toObject(ReviewDTO::class.java)
-            Log.d("reviews-firestore", "Doc ${doc.id}: $dto")
-            dto?.copy(id = doc.id)
+            mapReviewDocument(doc, currentUserId)
         }
     }
 
@@ -81,5 +82,60 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
             .document(id)
             .delete()
             .await()
+    }
+
+    override suspend fun sendReviewLike(reviewId: String, userId: String) {
+        val reviewRef = db.collection("reviews").document(reviewId)
+        val likeRef = reviewRef.collection("likes").document(userId)
+
+        db.runTransaction { transaction ->
+            val likeDoc = transaction.get(likeRef)
+
+            if (likeDoc.exists()) {
+                transaction.delete(likeRef)
+                transaction.update(reviewRef, "likesCount", FieldValue.increment(-1))
+            } else {
+                transaction.set(
+                    likeRef,
+                    mapOf("createdAt" to FieldValue.serverTimestamp())
+                )
+                transaction.update(reviewRef, "likesCount", FieldValue.increment(1))
+            }
+        }.await()
+    }
+
+    private suspend fun mapReviewDocument(
+        doc: com.google.firebase.firestore.DocumentSnapshot,
+        currentUserId: String? = null
+    ): ReviewDTO? {
+        val baseDto = doc.toObject(ReviewDTO::class.java)?.copy(id = doc.id)
+            ?: return null
+
+        val userDto = if (baseDto.userId.isNotBlank()) {
+            db.collection("users")
+                .document(baseDto.userId)
+                .get()
+                .await()
+                .toObject(UserDTO::class.java)
+        } else {
+            null
+        }
+
+        val likedByCurrentUser = if (!currentUserId.isNullOrBlank()) {
+            db.collection("reviews")
+                .document(doc.id)
+                .collection("likes")
+                .document(currentUserId)
+                .get()
+                .await()
+                .exists()
+        } else {
+            false
+        }
+
+        return baseDto.copy(
+            user = userDto,
+            likedByCurrentUser = likedByCurrentUser
+        )
     }
 }
