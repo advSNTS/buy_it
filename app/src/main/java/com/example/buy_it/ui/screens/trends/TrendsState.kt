@@ -1,9 +1,10 @@
 package com.example.buy_it.ui.screens.trends
 
-import com.example.buy_it.data.TrendInfo
+import com.example.buy_it.data.ReviewInfo
 
 data class TrendsState(
     val searchQuery: String = "",
-    val trends: List<TrendInfo> = emptyList(),
-    val filteredTrends: List<TrendInfo> = emptyList()
+    val reviews: List<ReviewInfo> = emptyList(),
+    val filteredReviews: List<ReviewInfo> = emptyList(),
+    val isLoading: Boolean = false
 )

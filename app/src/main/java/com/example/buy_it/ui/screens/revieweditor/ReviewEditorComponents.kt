@@ -31,46 +31,33 @@ import coil.compose.AsyncImage
 fun ReviewEditorTopBar(
     title: String,
     onBackPressed: () -> Unit,
-    onNotificationClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 12.dp, start = 10.dp, end = 16.dp, bottom = 6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(top = 16.dp, start = 12.dp, end = 16.dp, bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(28.dp)
-                    .clickable { onBackPressed() }
-            )
-            Spacer(Modifier.width(10.dp))
-            Text(
-                text = title,
-                fontSize = 34.sp,
-                fontWeight = FontWeight(800),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-
-        Image(
-            painter = painterResource(R.drawable.campana),
-            contentDescription = "Notificaciones",
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "Back",
             modifier = Modifier
                 .size(28.dp)
-                .clickable(onClick = onNotificationClick)
+                .clickable { onBackPressed() }
+        )
+        Spacer(Modifier.width(14.dp))
+        Text(
+            text = title,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
 
 @Composable
 fun ReviewEditorCard(
-    username: String,
     productName: String,
     productImage: String,
     likeChoice: LikeChoice,
@@ -79,44 +66,16 @@ fun ReviewEditorCard(
     onOpinionChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val shape = RoundedCornerShape(18.dp)
+    val shape = RoundedCornerShape(24.dp)
 
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(8.dp, shape),
+            .shadow(12.dp, shape),
         shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(R.drawable.predet),
-                        contentDescription = "avatar",
-                        modifier = Modifier.size(34.dp).clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(Modifier.width(10.dp))
-                    Text(
-                        text = username,
-                        fontWeight = FontWeight(700),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "More",
-                    tint = MaterialTheme.colorScheme.outline
-                )
-            }
-
-            Spacer(Modifier.height(12.dp))
+        Column(modifier = Modifier.padding(20.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -126,56 +85,74 @@ fun ReviewEditorCard(
                     model = productImage,
                     contentDescription = productName,
                     modifier = Modifier
-                        .size(140.dp)
-                        .clip(RoundedCornerShape(14.dp)),
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(18.dp)),
                     contentScale = ContentScale.Crop
                 )
-                Spacer(Modifier.width(14.dp))
+                Spacer(Modifier.width(16.dp))
                 Text(
                     text = productName,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight(800),
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    lineHeight = 28.sp
                 )
             }
 
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = "¿Qué te parece este producto?",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ChoiceButton(
                     selected = likeChoice == LikeChoice.Like,
                     icon = Icons.Outlined.ThumbUp,
                     label = "Me gusta",
-                    onClick = { onLikeChoiceChange(LikeChoice.Like) }
+                    onClick = { onLikeChoiceChange(LikeChoice.Like) },
+                    modifier = Modifier.weight(1f)
                 )
                 ChoiceButton(
                     selected = likeChoice == LikeChoice.Dislike,
                     icon = Icons.Outlined.ThumbDown,
                     label = "No me gusta",
-                    onClick = { onLikeChoiceChange(LikeChoice.Dislike) }
+                    onClick = { onLikeChoiceChange(LikeChoice.Dislike) },
+                    modifier = Modifier.weight(1f)
                 )
             }
 
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(24.dp))
 
             Text(
-                text = "Escribe tu opinión...",
-                fontWeight = FontWeight(800),
-                color = MaterialTheme.colorScheme.onSurface
+                text = "Tu opinión",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(10.dp))
 
             OutlinedTextField(
                 value = opinion,
                 onValueChange = onOpinionChange,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp),
-                placeholder = { Text("Escribe tu opinión...") },
-                shape = RoundedCornerShape(14.dp)
+                modifier = Modifier.fillMaxWidth().heightIn(min = 140.dp),
+                placeholder = { Text("Escribe aquí tu experiencia con el producto...") },
+                shape = RoundedCornerShape(16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                )
             )
         }
     }
