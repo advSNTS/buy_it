@@ -18,8 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -32,14 +30,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.buy_it.data.TrendInfo
 import com.example.buy_it.ui.components.MainBackground
-import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.text.font.FontWeight
+import com.example.buy_it.data.ProductInfo
+import com.example.buy_it.ui.screens.home.ProductCard
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun Trends(
     onOpenDetail: (String) -> Unit,
-    trendsViewModel: TrendsViewModel,
+    trendsViewModel: TrendsViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     val state by trendsViewModel.uiState.collectAsState()
@@ -50,74 +52,66 @@ fun Trends(
     ) {
         MainBackground()
 
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+                .padding(horizontal = 14.dp, vertical = 10.dp)
         ) {
-            item {
-                SearchBar(
-                    value = state.searchQuery,
-                    onValueChange = { trendsViewModel.onSearchQueryChanged(it) }
-                )
-            }
+            Text(
+                text = "Actividad de seguidos",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
 
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+            SearchBar(
+                value = state.searchQuery,
+                onValueChange = { trendsViewModel.onSearchQueryChanged(it) }
+            )
+
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    SortButton(modifier = Modifier.weight(1f))
-                    FilterButton(modifier = Modifier.weight(1f))
+                    CircularProgressIndicator()
                 }
-            }
-
-            item {
-                Column {
-                    Text(
-                        text = "Tendencias",
-                        fontSize = 32.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Productos con mejor comportamiento reciente",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                }
-            }
-
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+            } else if (state.filteredReviews.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Calificaciones",
-                        color = MaterialTheme.colorScheme.outline,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "Variación",
-                        color = MaterialTheme.colorScheme.outline,
-                        style = MaterialTheme.typography.bodyMedium
+                        text = if (state.searchQuery.isEmpty())
+                            "No hay actividad reciente de tus seguidos."
+                        else "No se encontraron reseñas.",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            }
-
-            items(state.filteredTrends) { item ->
-                TrendCard(
-                    info = item,
-                    onClick = { onOpenDetail(item.id) }
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(90.dp))
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(top = 16.dp, bottom = 90.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    items(state.filteredReviews) { review ->
+                        ProductCard(
+                            productInfo = ProductInfo(
+                                id = review.productId,
+                                name = review.product,
+                                image = review.imgProd,
+                                description = review.review,
+                                likePercent = review.percentageLikes,
+                                range = review.range,
+                                ratingsCount = review.likesCount
+                            ),
+                            onClick = { onOpenDetail(review.productId) },
+                            isLikeCount = true
+                        )
+                    }
+                }
             }
         }
     }
@@ -134,7 +128,7 @@ private fun SearchBar(
         modifier = Modifier.fillMaxWidth(),
         placeholder = {
             Text(
-                "Buscar producto",
+                "Buscar por producto o usuario",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
@@ -157,156 +151,4 @@ private fun SearchBar(
             cursorColor = MaterialTheme.colorScheme.primary
         )
     )
-}
-
-@Composable
-private fun SortButton(
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable { }
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Ordenar por",
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(Modifier.width(8.dp))
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-            contentDescription = "Ordenar",
-            tint = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
-private fun FilterButton(
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable { }
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Icon(
-            imageVector = Icons.Default.Tune,
-            contentDescription = "Filtros",
-            tint = MaterialTheme.colorScheme.primary
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(
-            text = "Filtros",
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
-fun TrendCard(
-    info: TrendInfo,
-    onClick: () -> Unit
-) {
-    val shape = RoundedCornerShape(22.dp)
-    val isUp = info.deltaPercent >= 0
-
-    androidx.compose.material3.Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = shape,
-        colors = androidx.compose.material3.CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 6.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            androidx.compose.material3.Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = androidx.compose.material3.CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 1.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = androidx.compose.ui.res.painterResource(info.image),
-                    contentDescription = info.name,
-                    modifier = Modifier
-                        .width(64.dp)
-                        .height(64.dp)
-                        .padding(8.dp),
-                    contentScale = androidx.compose.ui.layout.ContentScale.Fit
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    text = info.name,
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.ThumbUp,
-                            contentDescription = "Calificación positiva",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-
-                        Text(
-                            text = "${info.ratingPercent}%",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
-                    val pillColor =
-                        if (isUp) MaterialTheme.colorScheme.tertiaryContainer
-                        else MaterialTheme.colorScheme.errorContainer
-
-                    val pillTextColor =
-                        if (isUp) MaterialTheme.colorScheme.onTertiaryContainer
-                        else MaterialTheme.colorScheme.onErrorContainer
-
-                    Box(
-                        modifier = Modifier
-                            .background(pillColor, RoundedCornerShape(14.dp))
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                    ) {
-                        Text(
-                            text = if (isUp) "↑ +${info.deltaPercent}%" else "↓ ${info.deltaPercent}%",
-                            color = pillTextColor,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-            }
-        }
-    }
 }

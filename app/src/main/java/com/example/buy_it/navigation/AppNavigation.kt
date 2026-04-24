@@ -304,8 +304,7 @@ fun AppNavigation(
                         ?.savedStateHandle
                         ?.set("refresh_detail", true)
                     navController.popBackStack()
-                },
-                onNotificationClick = { /* TODO */ }
+                }
             )
         }
 
@@ -314,12 +313,25 @@ fun AppNavigation(
             arguments = listOf(navArgument("userId") { type = NavType.StringType })
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId").orEmpty()
+            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+
             Profile(
                 userId = userId,
-                onProfileEdit = { },
-                onConfigurationEdit = { },
+                onProfileEdit = {
+                    navController.navigate(Screen.EditInfo.route)
+                },
+                onConfigurationEdit = {
+                    navController.navigate(Screen.Configuration.route)
+                },
                 onHomeClick = { navController.navigate(Screen.Home.route) },
-                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onProfileClick = {
+                    if (userId == currentUserId) {
+                        // Ya estamos en nuestro perfil, un poco redundante si es pero pues se logra la logica
+                        //Entonces el fin justifica el medio :)
+                    } else {
+                        navController.navigate(Screen.Profile.route)
+                    }
+                },
                 onTrendsClick = { navController.navigate(Screen.Trends.route) },
                 onOpenDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))

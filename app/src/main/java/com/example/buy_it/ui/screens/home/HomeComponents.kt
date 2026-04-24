@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Comment
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,6 +39,7 @@ import com.example.buy_it.ui.components.ProfileAsyncImage
 fun ProductCard(
     productInfo: ProductInfo,
     onClick: () -> Unit = {},
+    isLikeCount: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -102,7 +104,8 @@ fun ProductCard(
 
             PostInfo(
                 range = productInfo.range,
-                comments = productInfo.ratingsCount
+                comments = productInfo.ratingsCount,
+                isLikeCount = isLikeCount
             )
         }
     }
@@ -112,6 +115,7 @@ fun ProductCard(
 fun PostInfo(
     range: String,
     comments: Int,
+    isLikeCount: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val contentColor = MaterialTheme.colorScheme.primary
@@ -140,17 +144,17 @@ fun PostInfo(
             )
         }
 
-        // Comments
+        // Info (Comments or Likes)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.Comment,
-                contentDescription = "Comments",
+                imageVector = if (isLikeCount) Icons.Outlined.ThumbUp else Icons.AutoMirrored.Filled.Comment,
+                contentDescription = if (isLikeCount) "Likes" else "Comments",
                 tint = contentColor,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "$comments reseñas",
+                text = if (isLikeCount) "$comments likes" else "$comments reseñas",
                 color = contentColor,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold

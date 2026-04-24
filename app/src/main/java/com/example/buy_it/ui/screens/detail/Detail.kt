@@ -106,13 +106,11 @@ fun Detail(
             }
         }
 
-        ReviewInputBar(
+        AddReviewButton(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
-            text = "Reseñar...",
-            onSend = { onOpenReviewEditor(productId) },
-            onLike = { onOpenReviewEditor(productId) }
+            onClick = { onOpenReviewEditor(productId) }
         )
     }
 }

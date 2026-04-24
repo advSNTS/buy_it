@@ -23,7 +23,6 @@ fun ReviewEditor(
     productId: String = "",
     reviewId: String? = null,
     onBackPressed: () -> Unit,
-    onNotificationClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ReviewEditorViewModel = hiltViewModel(),
 ) {
@@ -53,8 +52,7 @@ fun ReviewEditor(
         ) {
             ReviewEditorTopBar(
                 title = if (uiState.isEditMode) "Editar reseña" else "Escribir reseña",
-                onBackPressed = onBackPressed,
-                onNotificationClick = onNotificationClick
+                onBackPressed = onBackPressed
             )
 
             when {
@@ -79,7 +77,6 @@ fun ReviewEditor(
 
                 else -> {
                     ReviewEditorCard(
-                        username = "@tu",
                         productName = uiState.productName,
                         productImage = uiState.productImage,
                         likeChoice = uiState.likeChoice,
