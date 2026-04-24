@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -47,6 +46,7 @@ import com.example.buy_it.ui.components.ProfileCircles
 import com.example.buy_it.ui.screens.editinfo.PictureWithCircle
 import com.example.buy_it.ui.screens.home.ProductCard
 import com.example.buy_it.ui.theme.Buy_itTheme
+import androidx.compose.material3.Button
 
 @Composable
 fun Profile(
@@ -73,15 +73,17 @@ fun Profile(
     ) {
         ProfileCircles()
 
-        Image(
-            painter = painterResource(R.drawable.settings),
-            contentDescription = stringResource(R.string.ajustes),
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 26.dp, end = 20.dp)
-                .size(28.dp)
-                .clickable(onClick = onConfigurationEdit)
-        )
+        if (state.isCurrentUser) {
+            Image(
+                painter = painterResource(R.drawable.settings),
+                contentDescription = stringResource(R.string.ajustes),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 26.dp, end = 20.dp)
+                    .size(28.dp)
+                    .clickable(onClick = onConfigurationEdit)
+            )
+        }
 
         LazyColumn(
             modifier = Modifier
@@ -93,7 +95,41 @@ fun Profile(
             item {
                 Spacer(modifier = Modifier.height(30.dp))
 
-                PictureWithCircle(profileLink = state.profileImage)
+                Box(contentAlignment = Alignment.BottomEnd) {
+                    PictureWithCircle(profileLink = state.profileImage)
+
+                    if (state.isCurrentUser) {
+                        Card(
+                            modifier = Modifier
+                                .offset(x = 10.dp, y = (-4).dp)
+                                .clickable(onClick = onProfileEdit),
+                            shape = RoundedCornerShape(18.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.editar_perfil),
+                                    modifier = Modifier.size(18.dp),
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = "Editar",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -110,29 +146,6 @@ fun Profile(
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.secondary
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    OutlinedButton(
-                        onClick = onProfileEdit,
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
-                        ),
-                        modifier = Modifier.offset(y=-200.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Editar perfil",
-                            style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(18.dp))
@@ -148,10 +161,32 @@ fun Profile(
                         value = state.memberSince,
                         label = "Miembro"
                     )
+
                     ProfileStatItem(
                         value = state.seguidoresCount,
                         label = stringResource(R.string.seguidores)
                     )
+
+                    ProfileStatItem(
+                        value = state.siguiendoCount,
+                        label = "Siguiendo"
+                    )
+                }
+
+                if (!state.isCurrentUser) {
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Button(
+                        onClick = { profileViewModel.followOrUnfollowUser() }
+                    ) {
+                        Text(
+                            text = if (state.isFollowing) {
+                                "Dejar de seguir"
+                            } else {
+                                "Seguir"
+                            }
+                        )
+                    }
                 }
 
                 if (state.isCurrentUser) {
