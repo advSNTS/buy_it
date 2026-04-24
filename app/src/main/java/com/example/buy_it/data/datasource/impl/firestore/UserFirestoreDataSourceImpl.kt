@@ -2,7 +2,7 @@ package com.example.buy_it.data.datasource.impl.firestore
 
 import android.util.Log
 import com.example.buy_it.data.datasource.UserRemoteDatasource
-import com.example.buy_it.data.datasource.impl.UserRetrofitDatasourceImplementation
+import com.example.buy_it.data.datasource.impl.retrofit.UserRetrofitDatasourceImplementation
 import com.example.buy_it.data.dtos.RegisterUserDto
 import com.example.buy_it.data.dtos.ReviewDTO
 import com.example.buy_it.data.dtos.UserProfileFirestoreDTO

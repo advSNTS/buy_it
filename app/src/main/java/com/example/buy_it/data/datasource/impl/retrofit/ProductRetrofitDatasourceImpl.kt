@@ -1,4 +1,4 @@
-package com.example.buy_it.data.datasource.impl
+package com.example.buy_it.data.datasource.impl.retrofit
 
 import com.example.buy_it.data.datasource.ProductRemoteDataSource
 import com.example.buy_it.data.datasource.services.ProductRetrofitService

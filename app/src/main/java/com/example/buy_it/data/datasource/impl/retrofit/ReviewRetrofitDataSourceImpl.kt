@@ -1,10 +1,12 @@
-package com.example.buy_it.data.datasource.impl
+package com.example.buy_it.data.datasource.impl.retrofit
 
 import android.util.Log
 import com.example.buy_it.data.datasource.ReviewRemoteDataSource
 import com.example.buy_it.data.datasource.services.ReviewRetrofitService
 import com.example.buy_it.data.dtos.CreateReviewDTO
 import com.example.buy_it.data.dtos.ReviewDTO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class ReviewRetrofitDataSourceImplementation @Inject constructor(
@@ -52,7 +54,7 @@ class ReviewRetrofitDataSourceImplementation @Inject constructor(
     override fun listenReviewsByProductId(
         productId: String,
         currentUserId: String?
-    ): kotlinx.coroutines.flow.Flow<List<ReviewDTO>> {
-        return kotlinx.coroutines.flow.flowOf(emptyList())
+    ): Flow<List<ReviewDTO>> {
+        return flowOf(emptyList())
     }
 }
