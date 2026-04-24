@@ -146,4 +146,14 @@ class UserFirestoreDataSourceImpl @Inject constructor(
             }
         }.await()
     }
+
+    override suspend fun getFollowingIds(userId: String): List<String> {
+        val snapshot = db.collection("users")
+            .document(userId)
+            .collection("following")
+            .get()
+            .await()
+
+        return snapshot.documents.map { it.id }
+    }
 }

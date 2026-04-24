@@ -12,6 +12,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 
 @Composable
 fun Home(
@@ -32,6 +37,23 @@ fun Home(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = { homeViewModel.toggleFollowingFilter() }
+                ) {
+                    Text(
+                        text = if (state.isFollowingFilterActive) {
+                            "Ver todos"
+                        } else {
+                            "Usuarios que sigo"
+                        }
+                    )
+                }
+            }
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(

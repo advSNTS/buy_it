@@ -138,4 +138,25 @@ class ReviewFirestoreDatasourceImpl @Inject constructor(
             likedByCurrentUser = likedByCurrentUser
         )
     }
+
+    override suspend fun getReviewsByUserIds(userIds: List<String>): List<ReviewDTO> {
+        if (userIds.isEmpty()) return emptyList()
+
+        val result = mutableListOf<ReviewDTO>()
+
+        userIds.chunked(10).forEach { chunk ->
+            val snapshot = db.collection("reviews")
+                .whereIn("userId", chunk)
+                .get()
+                .await()
+
+            val reviews = snapshot.documents.mapNotNull { doc ->
+                mapReviewDocument(doc)
+            }
+
+            result.addAll(reviews)
+        }
+
+        return result
+    }
 }

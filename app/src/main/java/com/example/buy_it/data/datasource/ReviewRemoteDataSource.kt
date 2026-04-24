@@ -25,4 +25,6 @@ interface ReviewRemoteDataSource {
         productId: String,
         currentUserId: String?
     ): List<ReviewDTO>
+
+    suspend fun getReviewsByUserIds(userIds: List<String>): List<ReviewDTO>
 }

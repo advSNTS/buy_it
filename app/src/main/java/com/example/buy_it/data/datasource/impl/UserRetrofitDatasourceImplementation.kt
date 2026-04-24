@@ -55,4 +55,8 @@ class UserRetrofitDatasourceImplementation @Inject constructor(
         targetUserId: String
     ) {
     }
+
+    override suspend fun getFollowingIds(userId: String): List<String> {
+        return emptyList()
+    }
 }
